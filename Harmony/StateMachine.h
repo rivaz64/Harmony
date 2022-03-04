@@ -10,7 +10,11 @@ namespace Harmony{
 class StateMachine
 {
  public:
-
+  
+  /**
+   * @brief changes this state machine to a new state
+   * @param newState the state to where is changing
+  */
   void
   ChangeToState(int newState);
   
