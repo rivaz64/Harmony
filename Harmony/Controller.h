@@ -1,18 +1,22 @@
 #pragma once
 
 #include "ForDecHarmony.h"
+#include "BlackBoard.h"
 
 namespace Harmony{
 
 /**
- * @brief interface class for all the types of state machines
+ * @brief a state machine that controlls a pawn
 */
 class Controller
 {
  public:
   
   Controller(const vector<State*>& states) :
-    m_states(states){}
+    m_states(states)
+  {
+    m_actualState = states[0];
+  }
 
   /**
    * @brief changes this state machine to a new state
@@ -25,7 +29,7 @@ class Controller
    * @brief updates the state machine
   */
   void
-  update();
+  update(float delta);
 
   /**
    * @brief reacts to a recived message
@@ -39,6 +43,12 @@ class Controller
     return m_pawn;
   }
   
+ public:
+  /**
+   * @brief the things this controller remembers
+  */
+  BlackBoard m_memory;
+
  protected:
 
   /**
@@ -56,7 +66,7 @@ class Controller
   */
   Pawn* m_pawn;
 
-
+  friend class Manager;
 };
 
 }

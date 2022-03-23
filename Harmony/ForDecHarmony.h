@@ -16,6 +16,7 @@ class Controller;
 class State;
 class Message;
 class BlackBoard;
+class Action;
 
 inline
 void 

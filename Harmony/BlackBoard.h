@@ -4,6 +4,9 @@
 
 namespace Harmony{
 
+/**
+ * @brief a blackboard
+*/
 class BlackBoard
 {
  public:

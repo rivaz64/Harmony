@@ -1,9 +1,13 @@
 #pragma once
 
 #include "ForDecHarmony.h"
+#include "Action.h"
 
 namespace Harmony{
 
+/**
+ * @brief a state for the state machine
+*/
 class State
 {
  public:
@@ -27,9 +31,13 @@ class State
    * @param  
   */
   virtual void
-  onUpdate(Controller*){}
+  onUpdate(Controller*,float delta);
 
+ private:
 
+  Action* m_action;
+
+  friend class Manager;
 };
 
 }

@@ -1,14 +1,23 @@
 #pragma once
-#include "State.h"
+#include "Action.h"
 
 namespace Harmony{
 
+/**
+ * @brief action of go to a point directly
+*/
 class GoToPoint :
-  public State
+  public Action
 {
   public:
+
   void
-  onUpdate(Controller* controller) override;
+  update(Controller* controller,float delta) override;
+
+  /**
+   * @brief the radius at wich it has arrived
+  */
+  float aceptanceRadius;
 };
 
 }

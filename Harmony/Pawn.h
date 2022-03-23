@@ -5,6 +5,9 @@
 
 namespace Harmony{
 
+/**
+ * @brief the interface class for what is going to be controlled
+*/
 class Pawn
 {
  public:
@@ -23,6 +26,13 @@ class Pawn
   getVelocity();
 
   /**
+   * @brief gets the maximum velocity of this pawn can go
+   * @return 
+  */
+  virtual float
+  getMaxVelocity();
+
+  /**
    * @brief gets the direction of this pawn
    * @return 
   */
@@ -30,25 +40,18 @@ class Pawn
   getDirection();
 
   /**
-   * @brief sets the position of this pawn
+   * @brief acelerates the pawn in a certain direction;
    * @return 
   */
-  virtual Vector2f
-  setPosition(const Vector2f&){}
+  virtual void
+  acelerate(const Vector2f&);
 
   /**
-   * @brief sets the velocity of this pawn
+   * @brief rotates the pawn in a certain direction;
    * @return 
   */
-  virtual Vector2f
-  setVelocity(const Vector2f&){}
-
-  /**
-   * @brief sets the direction of this pawn
-   * @return 
-  */
-  virtual Vector2f
-  setDirection(const Vector2f&){}
+  virtual void
+  rotate(float);
 
  private:
   
@@ -56,6 +59,8 @@ class Pawn
    * @brief this is controlling this pawn
   */
   Controller* m_controller; 
+
+  friend class Manager;
 };
 
 }

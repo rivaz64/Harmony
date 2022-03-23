@@ -12,9 +12,9 @@ Controller::ChangeToState(int newState)
 }
 
 void 
-Controller::update()
+Controller::update(float delta)
 {
-  m_actualState->onUpdate(this);
+  m_actualState->onUpdate(this,delta);
 }
 
 }

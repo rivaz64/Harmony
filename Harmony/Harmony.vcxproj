@@ -139,19 +139,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Action.h" />
     <ClInclude Include="BlackBoard.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="ForDecHarmony.h" />
     <ClInclude Include="GoToPoint.h" />
+    <ClInclude Include="LookTo.h" />
+    <ClInclude Include="Manager.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Vector2f.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Action.cpp" />
     <ClCompile Include="BlackBoard.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="GoToPoint.cpp" />
+    <ClCompile Include="LookTo.cpp" />
+    <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="State.cpp" />
