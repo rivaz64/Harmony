@@ -140,14 +140,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Action.h" />
+    <ClInclude Include="AngleUtilities.h" />
     <ClInclude Include="BlackBoard.h" />
     <ClInclude Include="Controller.h" />
+    <ClInclude Include="Debuger.h" />
     <ClInclude Include="Delegate.h" />
-    <ClInclude Include="ForDecHarmony.h" />
     <ClInclude Include="GoToPoint.h" />
     <ClInclude Include="LookTo.h" />
     <ClInclude Include="Manager.h" />
     <ClInclude Include="Pawn.h" />
+    <ClInclude Include="Prerequisites.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Vector2f.h" />
   </ItemGroup>

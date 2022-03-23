@@ -18,9 +18,5 @@ class Message;
 class BlackBoard;
 class Action;
 
-inline
-void 
-print(const Harmony::string& str){
-  std::cout<<str<<std::endl;
-}
+
 }

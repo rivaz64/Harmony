@@ -1,6 +1,10 @@
 #include "Pawn.h"
 #include "Vector2f.h"
 
+#ifdef _DEBUG
+#include "Debuger.h"
+#endif
+
 namespace Harmony{
 
 Vector2f 

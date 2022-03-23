@@ -1,6 +1,10 @@
 #pragma once
 
-#include "ForDecHarmony.h"
+#include "Prerequisites.h"
+
+#ifdef _DEBUG
+#include "Debuger.h"
+#endif
 
 namespace Harmony{
 
@@ -21,7 +25,7 @@ class BlackBoard
   {
    
     if( m_data.find(name) != m_data.end()){
-       #ifdef _DEBUG
+      #ifdef _DEBUG
       print("key "+name+" allready exists");
       #endif
       return;
