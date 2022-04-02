@@ -2,8 +2,20 @@
 
 #include "Prerequisites.h"
 #include "BlackBoard.h"
+#include "Delegate.h"
 
 namespace Harmony{
+
+enum class Messages
+{
+  OnFinish
+};
+
+struct TransitionDesciption{
+  uint fromState;
+  uint message;
+  uint toState;
+};
 
 /**
  * @brief a state machine that controlls a pawn
@@ -12,18 +24,16 @@ class Controller
 {
  public:
   
-  Controller(const vector<State*>& states) :
-    m_states(states)
-  {
-    m_actualState = states[0];
-  }
+  Controller(const vector<State*>& states,
+             const vector<TransitionDesciption>& defaultReactions,
+             const vector<TransitionDesciption>& specificReactions);
 
   /**
    * @brief changes this state machine to a new state
    * @param newState the state to where is changing
   */
   void
-  ChangeToState(int newState);
+  ChangeToState(uint newState);
 
   /**
    * @brief updates the state machine
@@ -35,8 +45,8 @@ class Controller
    * @brief reacts to a recived message
    * @param msg 
   */
-  virtual void
-  onMessage(const Message& msg){}
+  void
+  message(uint msg);
 
   inline Pawn*
   getPawn(){

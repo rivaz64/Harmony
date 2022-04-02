@@ -4,17 +4,17 @@
 #include "Controller.h"
 #include "GoToPoint.h"
 #include "LookTo.h"
-
 namespace Harmony{
+
+enum class STATES{
+	GoToPoint=0,
+	LookTo
+};
 
 Manager::Manager()
 {
-	actions.insert({"GoToPoint",new GoToPoint});
-	actions.insert({"LookTo",new LookTo});
-	states.insert({"GoToPoint",new State});
-	states.insert({"LookTo",new State});
-	states["GoToPoint"]->m_action = actions["GoToPoint"];
-	states["LookTo"]->m_action = actions["LookTo"];
+	states.insert({"GoToPoint",new GoToPoint});
+	states.insert({"LookTo",new LookTo});
 }
 
 void
@@ -23,11 +23,16 @@ Manager::addPawn(Pawn* pawn, PAWNS::E type)
 	switch (type)
 	{
 	case PAWNS::GOER:
-		controllers.push_back(new Controller({states["GoToPoint"]})); 
+		controllers.push_back(new Controller({states["GoToPoint"]},{},{})); 
 		break;
 
 	case PAWNS::VIEW:
-		controllers.push_back(new Controller({states["LookTo"]})); 
+		controllers.push_back(new Controller({states["LookTo"]},{},{})); 
+		break;
+
+	case PAWNS::CHANGER:
+		controllers.push_back(new Controller({states["GoToPoint"],states["LookTo"]},
+																				 {{0,(uint)Messages::OnFinish,(uint)STATES::LookTo}},{})); 
 		break;
 
 	default:

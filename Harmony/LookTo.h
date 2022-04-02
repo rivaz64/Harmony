@@ -1,5 +1,5 @@
 #pragma once
-#include "Action.h"
+#include "State.h"
 
 namespace Harmony{
 
@@ -7,7 +7,7 @@ namespace Harmony{
  * @brief the pawn stayis in place and looks to an objective
 */
 class LookTo :
-  public Action
+  public State
 {
  public:
   void

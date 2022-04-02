@@ -1,10 +1,11 @@
 #include "Prerequisites.h"
 
-#include "BlackBoard.h"
+//#include "Delegate.h"
+//#include "Debuger.h"
 
-void main(){
- // Harmony::BlackBoard bb;
- // bb.addVariableOfType<Harmony::string>("test");
- // bb.setVariableAs<Harmony::string>("test","working");
- // Harmony::print(*bb.getVariableAs<Harmony::string>("test"));
+
+
+int main(int argc, char* argv[])
+{
+
 }

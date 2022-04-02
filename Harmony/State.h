@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Prerequisites.h"
-#include "Action.h"
+#include "Transition.h"
 
 namespace Harmony{
 
@@ -31,13 +31,20 @@ class State
    * @param  
   */
   virtual void
-  onUpdate(Controller*,float delta);
+  update(Controller*,float delta){}
+
+  virtual void
+  onMessage(uint msg);
 
  private:
 
-  Action* m_action;
+  /**
+   * @brief the mapping of how the agent is going to react acording to a message
+  */
+  map<uint,Transition> m_reactions;
 
   friend class Manager;
+  friend class Controller;
 };
 
 }

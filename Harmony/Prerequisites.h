@@ -9,6 +9,7 @@ namespace Harmony{
 using std::vector;
 using std::map;
 using std::string;
+using uint = unsigned int;
 
 class Vector2f;
 class Pawn;

@@ -1,5 +1,5 @@
 #pragma once
-#include "Action.h"
+#include "State.h"
 
 namespace Harmony{
 
@@ -7,7 +7,7 @@ namespace Harmony{
  * @brief action of go to a point directly
 */
 class GoToPoint :
-  public Action
+  public State
 {
   public:
 

@@ -6,7 +6,8 @@ namespace Harmony{
 namespace PAWNS{
 enum E{
   GOER=0,
-  VIEW
+  VIEW,
+  CHANGER
 };
 }
 
@@ -36,7 +37,6 @@ class Manager
  private:
   vector<Controller*> controllers;
   map<string,State*> states;
-  map<string,Action*> actions;
 
 };
 

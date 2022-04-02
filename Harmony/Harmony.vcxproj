@@ -116,6 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,7 +140,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Action.h" />
     <ClInclude Include="AngleUtilities.h" />
     <ClInclude Include="BlackBoard.h" />
     <ClInclude Include="Controller.h" />
@@ -151,10 +151,10 @@
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Prerequisites.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="Transition.h" />
     <ClInclude Include="Vector2f.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Action.cpp" />
     <ClCompile Include="BlackBoard.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="GoToPoint.cpp" />
@@ -163,6 +163,7 @@
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="Transition.cpp" />
     <ClCompile Include="Vector2f.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

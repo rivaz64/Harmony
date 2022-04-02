@@ -20,7 +20,7 @@ GoToPoint::update(Controller* controller,float delta)
   auto distance = *pointToGo-position;
 
   if(distance.magnitud()<aceptanceRadius){
-    //onArrive();
+    controller->message(static_cast<uint>(Messages::OnFinish));
   }
 
   auto desiredVelocity = distance.normalized()*pawn->getMaxVelocity();

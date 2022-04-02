@@ -1,11 +1,12 @@
 #include "State.h"
 
+
 namespace Harmony{
 
 void 
-State::onUpdate(Controller* controller, float delta)
+State::onMessage(uint msg)
 {
-  m_action->update(controller,delta);
+  m_reactions[msg].execute();
 }
 
 }
