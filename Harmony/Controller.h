@@ -48,9 +48,38 @@ class Controller
   void
   message(uint msg);
 
+  /**
+   * @brief gives a new sence to this controller
+   * @param id 
+   * @param sence 
+  */
+  void
+  addDetector(uint id,Detector* sence);
+
+  /**
+   * @brief stops detecting with this sence
+   * @param id 
+   * @param sence 
+  */
+  void
+  deactiveSence(uint id);
+
+  /**
+   * @brief starts detecting with this sence
+   * @param id 
+   * @param sence 
+  */
+  void
+  activeSence(uint id);
+
   inline Pawn*
   getPawn(){
     return m_pawn;
+  }
+
+  inline void
+  setPawn(Pawn* pawn){
+    m_pawn = pawn;
   }
   
  public:
@@ -70,6 +99,16 @@ class Controller
    * @brief all the states this machine can be in
   */
   vector<State*> m_states;
+
+  /**
+   * @brief all the ways the controller can feel the world
+  */
+  map<uint,Detector*> m_sences;
+
+  /**
+   * @brief this are the ways the actor is activly feeling the world
+  */
+  map<uint,Detector*> m_activeSences;
 
   /**
    * @brief the pawn that is being controlled

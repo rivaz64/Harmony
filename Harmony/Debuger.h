@@ -12,6 +12,12 @@ print(const string& v){
 
 inline
 void 
+print(const uint v){
+  std::cout<<v<<std::endl;
+}
+
+inline
+void 
 print(const int v){
   std::cout<<v<<std::endl;
 }

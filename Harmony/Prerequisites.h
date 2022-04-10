@@ -17,7 +17,7 @@ class Controller;
 class State;
 class Message;
 class BlackBoard;
-class Action;
-
+class Transition;
+class Detector;
 
 }
