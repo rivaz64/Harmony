@@ -1,7 +1,18 @@
 #include "Transition.h"
+#include "Controller.h"
+namespace Harmony{
+
+void 
+Transition::init(Controller* controller)
+{
+  m_delegate = Delegate<uint>::from_method<Controller,&Controller::ChangeToState>(controller);
+}
 
 void
-Harmony::Transition::execute()
+Transition::execute()
 {
-  (*this)(m_newState);
+  m_delegate(m_newState);
 }
+
+}
+

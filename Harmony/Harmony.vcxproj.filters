@@ -57,10 +57,10 @@
     <ClInclude Include="Detector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="World.h">
+    <ClInclude Include="Wander.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vision.h">
+    <ClInclude Include="flags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -98,10 +98,7 @@
     <ClCompile Include="Detector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vision.cpp">
+    <ClCompile Include="Wander.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

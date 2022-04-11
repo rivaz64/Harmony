@@ -8,6 +8,7 @@ namespace Harmony{
 
 using std::vector;
 using std::map;
+using std::pair;
 using std::string;
 using uint = unsigned int;
 

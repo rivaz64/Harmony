@@ -146,6 +146,7 @@
     <ClInclude Include="Debuger.h" />
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="Detector.h" />
+    <ClInclude Include="flags.h" />
     <ClInclude Include="GoToPoint.h" />
     <ClInclude Include="LookTo.h" />
     <ClInclude Include="Manager.h" />
@@ -154,8 +155,7 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="Transition.h" />
     <ClInclude Include="Vector2f.h" />
-    <ClInclude Include="Vision.h" />
-    <ClInclude Include="World.h" />
+    <ClInclude Include="Wander.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BlackBoard.cpp" />
@@ -169,8 +169,7 @@
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Transition.cpp" />
     <ClCompile Include="Vector2f.cpp" />
-    <ClCompile Include="Vision.cpp" />
-    <ClCompile Include="World.cpp" />
+    <ClCompile Include="Wander.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

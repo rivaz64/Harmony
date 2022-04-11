@@ -4,12 +4,10 @@
 #include "Controller.h"
 #include "GoToPoint.h"
 #include "LookTo.h"
+#include "flags.h"
 namespace Harmony{
 
-enum class STATES{
-	GoToPoint=0,
-	LookTo
-};
+
 
 Manager::Manager()
 {
@@ -32,7 +30,8 @@ Manager::addPawn(Pawn* pawn, PAWNS::E type)
 
 	case PAWNS::CHANGER:
 		controllers.push_back(new Controller({states["GoToPoint"],states["LookTo"]},
-																				 {{0,(uint)Messages::OnFinish,(uint)STATES::LookTo}},{})); 
+																				 {{0,(uint)Messages::OnFinish,Transition((uint)STATES::LookTo)}},{})); 
+
 		break;
 
 	default:

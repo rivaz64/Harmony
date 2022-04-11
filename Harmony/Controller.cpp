@@ -1,12 +1,13 @@
 #include "Controller.h"
 #include "State.h"
 #include "Detector.h"
+#include "Transition.h"
 
 namespace Harmony{
 
 Controller::Controller(const vector<State*>& states,
-             const vector<TransitionDesciption>& defaultReactions,
-             const vector<TransitionDesciption>& specificReactions) :
+             vector<TransitionDesciption> defaultReactions,
+             vector<TransitionDesciption> specificReactions) :
   m_states(states)                                  
 {
   m_actualState = states[0];
@@ -14,7 +15,8 @@ Controller::Controller(const vector<State*>& states,
   map<uint,Transition> defaults;
 
   for(auto& desc : defaultReactions){
-    defaults.insert({desc.message,Transition(this,desc.toState)});
+    desc.toState.init(this);
+    defaults.insert({desc.message,desc.toState});
   }
 
   for(auto& state: states){
@@ -22,7 +24,8 @@ Controller::Controller(const vector<State*>& states,
   }
 
   for(TransitionDesciption desc : specificReactions){
-    m_states[desc.fromState]->m_reactions[desc.message] = Transition(this,desc.toState);
+    desc.toState.init(this);
+    m_states[desc.fromState]->m_reactions[desc.message] = desc.toState;
   }
 
 
@@ -39,6 +42,9 @@ Controller::ChangeToState(uint newState)
 void 
 Controller::update(float delta)
 {
+  for(auto& sence : m_activeSences){
+    sence.second->update(delta);
+  }
   m_actualState->update(this,delta);
 }
 
@@ -46,6 +52,22 @@ void
 Controller::message(uint msg)
 {
   m_actualState->onMessage(msg);
+}
+
+void 
+Controller::addTransition(uint state, uint message, const Transition& newTransition)
+{
+  auto& reactions = m_states[state]->m_reactions;
+  if(reactions.find(message) == reactions.end()){
+    reactions.insert({message,newTransition});
+  }
+  #ifdef _DEBUG
+  else{
+    print("state allready reacts to this transition");
+    print(state);
+    print(message);
+  }
+  #endif
 }
 
 void 
