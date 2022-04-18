@@ -7,7 +7,8 @@ namespace PAWNS{
 enum E{
   GOER=0,
   VIEW,
-  CHANGER
+  CHANGER,
+  WANDERER
 };
 }
 

@@ -5,6 +5,8 @@
 #include "GoToPoint.h"
 #include "LookTo.h"
 #include "flags.h"
+#include "Reaction.h"
+#include "AIController.h"
 namespace Harmony{
 
 
@@ -18,27 +20,42 @@ Manager::Manager()
 void
 Manager::addPawn(Pawn* pawn, PAWNS::E type)
 {
+	AIController* newControl = nullptr;
 	switch (type)
 	{
 	case PAWNS::GOER:
-		controllers.push_back(new Controller({states["GoToPoint"]},{},{})); 
+		newControl = new AIController({states["GoToPoint"]}); 
 		break;
 
 	case PAWNS::VIEW:
-		controllers.push_back(new Controller({states["LookTo"]},{},{})); 
+		newControl = new AIController({states["LookTo"]}); 
 		break;
 
 	case PAWNS::CHANGER:
-		controllers.push_back(new Controller({states["GoToPoint"],states["LookTo"]},
-																				 {{0,(uint)Messages::OnFinish,Transition((uint)STATES::LookTo)}},{})); 
+		newControl = new AIController({states["GoToPoint"],states["LookTo"]});
+		newControl->init({
+		{0,
+		(uint)Messages::OnFinish,
+		Transition((uint)STATES::LookTo,newControl)}}
+		,{}); 
 
 		break;
+
+	case PAWNS::WANDERER:
+
+		newControl = new AIController({states["GoToPoint"]});
+		newControl->init({
+		{0,
+		(uint)Messages::OnFinish,
+		Delegate<>::create<Reaction,AIController,&AIController::newRandomPointToGo>(newControl)}}
+		,{}); 
 
 	default:
 		break;
 	}
-  pawn->m_controller = controllers[controllers.size()-1];
-	pawn->m_controller->m_pawn = pawn;
+	controllers.push_back(newControl);
+  pawn->m_controller = newControl;controllers[controllers.size()-1];
+	newControl->m_pawn = pawn;
 }
 
 void 

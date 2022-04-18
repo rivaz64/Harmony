@@ -9,6 +9,9 @@ class Wander :
 {
   Wander() :
     Transition((uint)STATES::GoToPoint){}
+
+  void
+  execute() override;
 };
 
 }

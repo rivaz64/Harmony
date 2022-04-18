@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AIController.h" />
     <ClInclude Include="AngleUtilities.h" />
     <ClInclude Include="BlackBoard.h" />
     <ClInclude Include="Controller.h" />
@@ -152,12 +153,14 @@
     <ClInclude Include="Manager.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Prerequisites.h" />
+    <ClInclude Include="Reaction.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Transition.h" />
     <ClInclude Include="Vector2f.h" />
     <ClInclude Include="Wander.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AIController.cpp" />
     <ClCompile Include="BlackBoard.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Detector.cpp" />
@@ -165,6 +168,7 @@
     <ClCompile Include="LookTo.cpp" />
     <ClCompile Include="Manager.cpp" />
     <ClCompile Include="Pawn.cpp" />
+    <ClCompile Include="Reaction.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Transition.cpp" />

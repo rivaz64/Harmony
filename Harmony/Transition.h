@@ -2,13 +2,15 @@
 
 #include "Prerequisites.h"
 #include "Delegate.h"
+#include "Controller.h"
 
 namespace Harmony{
 
 /**
  * @brief a way to change states in a certain event
 */
-class Transition
+class Transition:
+  public Delegate<uint>
 {
  public:
   Transition() = default;
@@ -18,22 +20,19 @@ class Transition
    * @param controller the controller that is using this transicion
    * @param newState the state that is going to be in
   */
-  Transition(uint newState) :
-    m_newState(newState)
+  Transition(uint newState, Controller* control) :
+    Delegate<uint>(Delegate<uint>::create<Transition,Controller,&Controller::ChangeToState>(control,newState))
   {}
 
-  /**
-   * @brief inits this execution to a specific controller
-   * @param controller 
-  */
-  void
-  init(Controller* controller);
+  Transition(uint newState):
+    m_newState(newState){}
+
 
   /**
    * @brief changes to the new state
   */
   void
-  execute();
+  execute() override;
 
  protected:
   
@@ -41,11 +40,6 @@ class Transition
    * @brief the new state to go to
   */
   uint m_newState;
-
-  /**
-   * @brief the one in charge of changing the state
-  */
-  Delegate<uint> m_delegate;
 };
 
 }

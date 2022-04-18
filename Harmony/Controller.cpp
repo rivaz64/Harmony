@@ -5,30 +5,29 @@
 
 namespace Harmony{
 
-Controller::Controller(const vector<State*>& states,
-             vector<TransitionDesciption> defaultReactions,
-             vector<TransitionDesciption> specificReactions) :
+Controller::Controller(const vector<State*>& states) :
   m_states(states)                                  
 {
   m_actualState = states[0];
+}
 
-  map<uint,Transition> defaults;
+void 
+Controller::init(vector<delegatorDesciption> defaultReactions, 
+                 vector<delegatorDesciption> specificReactions)
+{
+  map<uint,Delegator> defaults;
 
   for(auto& desc : defaultReactions){
-    desc.toState.init(this);
     defaults.insert({desc.message,desc.toState});
   }
 
-  for(auto& state: states){
+  for(auto& state: m_states){
     state->m_reactions = defaults;
   }
 
-  for(TransitionDesciption desc : specificReactions){
-    desc.toState.init(this);
+  for(auto& desc : specificReactions){
     m_states[desc.fromState]->m_reactions[desc.message] = desc.toState;
   }
-
-
 }
 
 void
@@ -52,22 +51,6 @@ void
 Controller::message(uint msg)
 {
   m_actualState->onMessage(msg);
-}
-
-void 
-Controller::addTransition(uint state, uint message, const Transition& newTransition)
-{
-  auto& reactions = m_states[state]->m_reactions;
-  if(reactions.find(message) == reactions.end()){
-    reactions.insert({message,newTransition});
-  }
-  #ifdef _DEBUG
-  else{
-    print("state allready reacts to this transition");
-    print(state);
-    print(message);
-  }
-  #endif
 }
 
 void 

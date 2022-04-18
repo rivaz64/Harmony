@@ -2,7 +2,7 @@
 
 #include "Prerequisites.h"
 #include "BlackBoard.h"
-#include "Transition.h"
+#include "Delegate.h"
 
 namespace Harmony{
 
@@ -11,10 +11,10 @@ enum class Messages
   OnFinish
 };
 
-struct TransitionDesciption{
+struct delegatorDesciption{
   uint fromState;
   uint message;
-  Transition toState;
+  Delegator toState;
 };
 
 /**
@@ -24,9 +24,11 @@ class Controller
 {
  public:
   
-  Controller(const vector<State*>& states,
-             vector<TransitionDesciption> defaultReactions,
-             vector<TransitionDesciption> specificReactions);
+  Controller(const vector<State*>& states);
+
+  void
+  init(vector<delegatorDesciption> defaultReactions,
+       vector<delegatorDesciption> specificReactions);
 
   /**
    * @brief changes this state machine to a new state
@@ -47,13 +49,6 @@ class Controller
   */
   void
   message(uint msg);
-
-  /**
-   * @brief adds a new way to react to a message
-   * @param newTransition 
-  */
-  void
-  addTransition(uint state, uint message, const Transition& newTransition);
 
   /**
    * @brief gives a new sence to this controller
