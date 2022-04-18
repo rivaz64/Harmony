@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <memory>
 
 namespace Harmony{
 

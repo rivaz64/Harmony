@@ -1,7 +1,8 @@
 #pragma once
 #ifndef DELEGATE_HPP
 # define DELEGATE_HPP
-#include <memory>
+#include "Prerequisites.h"
+#include "Debuger.h"
 namespace Harmony{
 
 /**
@@ -11,7 +12,10 @@ class Delegator
 {
  public:
   virtual void
-  execute() {}
+  execute() 
+  {
+    print("void execution");
+  }
 };
 
 /**
