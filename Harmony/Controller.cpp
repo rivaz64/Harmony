@@ -11,11 +11,19 @@ Controller::Controller(const vector<State*>& states) :
   m_actualState = states[0];
 }
 
+Controller::~Controller()
+{
+  size_t numStates = m_states.size();
+  for(size_t i=0;i<numStates;++i){
+    delete m_states[i];
+  }
+}
+
 void 
 Controller::init(vector<delegatorDesciption> defaultReactions, 
                  vector<delegatorDesciption> specificReactions)
 {
-  map<uint,Delegator> defaults;
+  map<uint,Delegator*> defaults;
 
   for(auto& desc : defaultReactions){
     defaults.insert({desc.message,desc.toState});

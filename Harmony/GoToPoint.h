@@ -17,7 +17,7 @@ class GoToPoint :
   /**
    * @brief the radius at wich it has arrived
   */
-  float aceptanceRadius;
+  float aceptanceRadius = 6;
 };
 
 }

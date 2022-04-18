@@ -2,7 +2,8 @@
 
 namespace Harmony{
 
-void Reaction::execute()
+void 
+Reaction::execute()
 {
   (*this)();
 }

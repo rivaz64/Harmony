@@ -21,6 +21,8 @@ class Manager
 
   Manager();
 
+  ~Manager();
+
   /**
    * @brief adds a pawn to be controlled by harmony
    * @param  

@@ -12,7 +12,7 @@ AIController::newRandomPointToGo()
   auto newPoint = location+direction*m_wanderDelta;
   auto randAngle = (float)rand()/(float)RAND_MAX;
   auto wanderPoint = Vector2f(cos(randAngle),sin(randAngle))*m_wanderRadius+newPoint;
-
+  m_memory.addVariableOfType<Vector2f>("pointToGo");
   m_memory.setVariableAs<Vector2f>("pointToGo",wanderPoint);
 }
 

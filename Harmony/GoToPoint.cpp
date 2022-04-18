@@ -14,6 +14,7 @@ GoToPoint::update(Controller* controller,float delta)
   auto pointToGo = controller->m_memory.getVariableAs<Vector2f>("pointToGo");
 
   if(!pointToGo){
+    controller->message(static_cast<uint>(Messages::OnFinish));
     return;
   }
 

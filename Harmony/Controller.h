@@ -14,7 +14,7 @@ enum class Messages
 struct delegatorDesciption{
   uint fromState;
   uint message;
-  Delegator toState;
+  Delegator* toState;
 };
 
 /**
@@ -25,6 +25,9 @@ class Controller
  public:
   
   Controller(const vector<State*>& states);
+
+  virtual 
+  ~Controller();
 
   void
   init(vector<delegatorDesciption> defaultReactions,

@@ -17,6 +17,14 @@ Manager::Manager()
 	states.insert({"LookTo",new LookTo});
 }
 
+Manager::~Manager()
+{
+	size_t numControllers = controllers.size();
+  for(size_t i=0;i<numControllers;++i){
+    delete controllers[i];
+  }
+}
+
 void
 Manager::addPawn(Pawn* pawn, PAWNS::E type)
 {
@@ -36,9 +44,8 @@ Manager::addPawn(Pawn* pawn, PAWNS::E type)
 		newControl->init({
 		{0,
 		(uint)Messages::OnFinish,
-		Transition((uint)STATES::LookTo,newControl)}}
+		new Transition((uint)STATES::LookTo,newControl)}}
 		,{}); 
-
 		break;
 
 	case PAWNS::WANDERER:
@@ -47,14 +54,14 @@ Manager::addPawn(Pawn* pawn, PAWNS::E type)
 		newControl->init({
 		{0,
 		(uint)Messages::OnFinish,
-		Delegate<>::create<Reaction,AIController,&AIController::newRandomPointToGo>(newControl)}}
+		Delegate<>::createPtr<Reaction,AIController,&AIController::newRandomPointToGo>(newControl)}}
 		,{}); 
 
 	default:
 		break;
 	}
 	controllers.push_back(newControl);
-  pawn->m_controller = newControl;controllers[controllers.size()-1];
+  pawn->m_controller = newControl;
 	newControl->m_pawn = pawn;
 }
 

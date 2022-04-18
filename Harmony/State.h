@@ -41,7 +41,7 @@ class State
   /**
    * @brief the mapping of how the agent is going to react acording to a message
   */
-  map<uint,Delegator> m_reactions;
+  map<uint,Delegator*> m_reactions;
 
   friend class Manager;
   friend class Controller;
