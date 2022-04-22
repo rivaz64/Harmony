@@ -7,12 +7,6 @@
 
 namespace Harmony{
 
-using std::vector;
-using std::map;
-using std::pair;
-using std::string;
-using uint = unsigned int;
-
 class Vector2f;
 class Pawn;
 class Controller;
@@ -21,5 +15,13 @@ class Message;
 class BlackBoard;
 class Transition;
 class Detector;
+
+using std::vector;
+using std::map;
+using std::pair;
+using std::string;
+using uint = unsigned int;
+
+using Dimencion = Vector2f;
 
 }

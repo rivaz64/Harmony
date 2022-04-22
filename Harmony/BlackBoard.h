@@ -25,9 +25,6 @@ class BlackBoard
   {
    
     if( m_data.find(name) != m_data.end()){
-      #ifdef _DEBUG
-      print("key "+name+" allready exists");
-      #endif
       return;
     }
     
@@ -46,9 +43,6 @@ class BlackBoard
   {
     
     if( m_data.find(name) == m_data.end()){
-      #ifdef _DEBUG
-      print("key "+name+" does not exists");
-      #endif
       return nullptr;
     }
     
@@ -68,9 +62,6 @@ class BlackBoard
   {
     
     if( m_data.find(name) == m_data.end()){
-      #ifdef _DEBUG
-      print("key "+name+" does not exists");
-      #endif
       return;
     }
     *reinterpret_cast<T*>(m_data[name]) = value;

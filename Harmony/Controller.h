@@ -6,10 +6,18 @@
 
 namespace Harmony{
 
-enum class Messages
+enum class MESSAGES
 {
-  OnFinish
+  OnFinish,
+  OnSeen
 };
+
+enum class STATES
+{
+  Wander,
+  Pursue
+};
+
 
 struct delegatorDesciption{
   uint fromState;
@@ -24,7 +32,7 @@ class Controller
 {
  public:
   
-  Controller(const vector<State*>& states);
+  Controller(const map<uint,State*>& states);
 
   virtual 
   ~Controller();
@@ -77,6 +85,27 @@ class Controller
   void
   activeSence(uint id);
 
+  /**
+   * @brief chooses a new random location to go if the controller does not have a location to go
+  */
+  void
+  newRandomPointToGo();
+
+  /**
+   * @brief goes to a point using the system the controller has
+   * @param point 
+  */
+  virtual void
+  goToPoint(const Dimencion& point);
+
+  /**
+   * @brief gets a random point that can be reached from a certain radius
+   * @param point 
+   * @param radius 
+  */
+  virtual Dimencion
+  reachablePointInRadius(const Dimencion& point, float radius);
+
   inline Pawn*
   getPawn(){
     return m_pawn;
@@ -103,7 +132,7 @@ class Controller
   /**
    * @brief all the states this machine can be in
   */
-  vector<State*> m_states;
+  map<uint,State*> m_states;
 
   /**
    * @brief all the ways the controller can feel the world
@@ -119,6 +148,9 @@ class Controller
    * @brief the pawn that is being controlled
   */
   Pawn* m_pawn;
+
+  float m_wanderDelta = 36;
+  float m_wanderRadius = 18;
 
   friend class Manager;
 };

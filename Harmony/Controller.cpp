@@ -2,13 +2,14 @@
 #include "State.h"
 #include "Detector.h"
 #include "Transition.h"
+#include "Pawn.h"
 
 namespace Harmony{
 
-Controller::Controller(const vector<State*>& states) :
+Controller::Controller(const map<uint,State*>& states) :
   m_states(states)                                  
 {
-  m_actualState = states[0];
+  m_actualState = states.begin()->second;
 }
 
 Controller::~Controller()
@@ -30,7 +31,7 @@ Controller::init(vector<delegatorDesciption> defaultReactions,
   }
 
   for(auto& state: m_states){
-    state->m_reactions = defaults;
+    state.second->m_reactions = defaults;
   }
 
   for(auto& desc : specificReactions){
@@ -97,6 +98,28 @@ Controller::activeSence(uint id)
   #endif
 }
 
-
+void 
+Controller::newRandomPointToGo()
+{
+  auto location = m_pawn->getPosition();
+  auto direction = m_pawn->getDirection();
+  auto newPoint = location+direction*m_wanderDelta;
+  auto wanderPoint = reachablePointInRadius(newPoint,m_wanderRadius);
+  m_memory.addVariableOfType<Dimencion>("pointToGo");
+  m_memory.setVariableAs<Dimencion>("pointToGo",wanderPoint);
 }
 
+void
+Controller::goToPoint(const Dimencion& point)
+{
+  print("goToPoint does nothing");
+}
+
+Dimencion 
+Controller::reachablePointInRadius(const Dimencion& point, float radius)
+{
+  print("reachablePointInRadius nothing");
+  return Dimencion();
+}
+
+}
