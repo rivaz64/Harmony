@@ -53,6 +53,16 @@ class Pawn
   virtual void
   rotate(float);
 
+  inline Controller*
+  getController(){
+    return m_controller;
+  }
+
+  inline void
+  setController(Controller* controller){
+    m_controller = controller;
+  }
+
  private:
   
   /**

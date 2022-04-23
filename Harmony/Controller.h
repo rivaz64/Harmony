@@ -62,30 +62,6 @@ class Controller
   message(uint msg);
 
   /**
-   * @brief gives a new sence to this controller
-   * @param id 
-   * @param sence 
-  */
-  void
-  addDetector(uint id,Detector* sence);
-
-  /**
-   * @brief stops detecting with this sence
-   * @param id 
-   * @param sence 
-  */
-  void
-  deactiveSence(uint id);
-
-  /**
-   * @brief starts detecting with this sence
-   * @param id 
-   * @param sence 
-  */
-  void
-  activeSence(uint id);
-
-  /**
    * @brief chooses a new random location to go if the controller does not have a location to go
   */
   void
