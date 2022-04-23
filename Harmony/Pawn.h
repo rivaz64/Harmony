@@ -15,14 +15,14 @@ class Pawn
    * @brief gets the position of this pawn
    * @return 
   */
-  virtual Vector2f
+  virtual Dimencion
   getPosition();
 
   /**
    * @brief gets the velocity of this pawn
    * @return 
   */
-  virtual Vector2f
+  virtual Dimencion
   getVelocity();
 
   /**
@@ -36,7 +36,7 @@ class Pawn
    * @brief gets the direction of this pawn
    * @return 
   */
-  virtual Vector2f
+  virtual Dimencion
   getDirection();
 
   /**
@@ -44,7 +44,7 @@ class Pawn
    * @return 
   */
   virtual void
-  acelerate(const Vector2f&);
+  acelerate(const Dimencion&);
 
   /**
    * @brief rotates the pawn in a certain direction;

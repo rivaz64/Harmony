@@ -67,6 +67,8 @@ class Delegate :
       T* p = static_cast<T*>(object_ptr);
       return (p->*TMethod)(std::forward<_Types>(_Args)...); 
   }
+
+  
 };
 
 }

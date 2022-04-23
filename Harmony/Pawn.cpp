@@ -7,21 +7,22 @@
 
 namespace Harmony{
 
-Vector2f 
+Dimencion 
 Pawn::getPosition()
 {
    #ifdef _DEBUG
    print("get position not implemented");
    #endif
-  return Vector2f::ZERO;
+  return Dimencion();
 }
 
-Vector2f Pawn::getVelocity()
+Dimencion
+Pawn::getVelocity()
 {
   #ifdef _DEBUG
   print("get velocity not implemented");
   #endif
-  return Vector2f::ZERO;
+  return Dimencion();
 }
 
 float
@@ -33,16 +34,17 @@ Pawn::getMaxVelocity()
   return 0.0f;
 }
 
-Vector2f Pawn::getDirection()
+Dimencion 
+Pawn::getDirection()
 {
   #ifdef _DEBUG
   print("get direction not implemented");
   #endif
-  return Vector2f::ZERO;
+  return Dimencion();
 }
 
 void 
-Pawn::acelerate(const Vector2f&)
+Pawn::acelerate(const Dimencion&)
 {
   #ifdef _DEBUG
   print("acelerate not implemented");

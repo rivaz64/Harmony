@@ -24,10 +24,6 @@ class Transition:
     Delegate<uint>(Delegate<uint>::create<Transition,Controller,&Controller::ChangeToState>(control,newState))
   {}
 
-  Transition(uint newState):
-    m_newState(newState){}
-
-
   /**
    * @brief changes to the new state
   */
@@ -36,10 +32,15 @@ class Transition:
 
  protected:
   
+  Transition(uint newState):
+    m_newState(newState){}
+
   /**
    * @brief the new state to go to
   */
   uint m_newState;
+
+  friend class Delegate<uint>;
 };
 
 }
