@@ -145,7 +145,6 @@
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Debuger.h" />
     <ClInclude Include="Delegate.h" />
-    <ClInclude Include="Detector.h" />
     <ClInclude Include="GoToPoint.h" />
     <ClInclude Include="LookTo.h" />
     <ClInclude Include="Manager.h" />
@@ -159,7 +158,6 @@
   <ItemGroup>
     <ClCompile Include="BlackBoard.cpp" />
     <ClCompile Include="Controller.cpp" />
-    <ClCompile Include="Detector.cpp" />
     <ClCompile Include="GoToPoint.cpp" />
     <ClCompile Include="LookTo.cpp" />
     <ClCompile Include="Manager.cpp" />

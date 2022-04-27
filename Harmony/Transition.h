@@ -13,7 +13,6 @@ class Transition:
   public Delegate<uint>
 {
  public:
-  Transition() = default;
 
   /**
    * @brief 
@@ -21,7 +20,8 @@ class Transition:
    * @param newState the state that is going to be in
   */
   Transition(uint newState, Controller* control) :
-    Delegate<uint>(Delegate<uint>::create<Transition,Controller,&Controller::ChangeToState>(control,newState))
+    Delegate<uint>(Delegate<uint>::create<Transition,Controller,&Controller::ChangeToState>(control)),
+    m_newState(newState)
   {}
 
   /**
@@ -32,8 +32,7 @@ class Transition:
 
  protected:
   
-  Transition(uint newState):
-    m_newState(newState){}
+  Transition() = default;
 
   /**
    * @brief the new state to go to

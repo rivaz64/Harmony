@@ -20,8 +20,8 @@ Controller::~Controller()
 }
 
 void 
-Controller::init(vector<delegatorDesciption> defaultReactions, 
-                 vector<delegatorDesciption> specificReactions)
+Controller::init(vector<DelegatorDesciption> defaultReactions, 
+                 vector<DelegatorDesciption> specificReactions)
 {
   map<uint,Delegator*> defaults;
 

@@ -4,8 +4,10 @@
 #include "Vector2f.h"
 
 namespace Harmony{
-  
+
+#ifndef PI
 static const float PI = 3.1415926536;
+#endif
 
 /**
  * @brief gets the angle of a vector
@@ -13,8 +15,21 @@ static const float PI = 3.1415926536;
  * @return 
 */
 inline float
-VectorToAngle(const Vector2f& v){
+VectorToAngle(const Dimencion& v){
+  #ifdef UNREAL_HARMONY
+  return atan2f(v.Y,v.X);
+  #else
   return atan2f(v.y,v.x);
+  #endif
+}
+
+inline Dimencion
+AngleToVector(float v){
+  #ifdef UNREAL_HARMONY
+  return Dimencion(cos(v),sin(v),0);
+  #else
+  return Dimencion(cos(v),sin(v));
+  #endif
 }
 
 /**

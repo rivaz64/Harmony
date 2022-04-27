@@ -11,8 +11,8 @@ LookTo::update(Controller* controller, float delta)
   auto pawn = controller->getPawn();
   auto position = pawn->getPosition();
   auto direction = VectorToAngle(pawn->getDirection());
+  auto pointToGo = controller->m_memory.getVariableAs<Dimencion>("pointToGo");
 
-  auto pointToGo = controller->m_memory.getVariableAs<Vector2f>("pointToGo");
   if(!pointToGo){
     return;
   }

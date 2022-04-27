@@ -18,7 +18,7 @@ GoToPoint::update(Controller* controller,float delta)
 
   auto distance = *pointToGo-position;
 
-  if(distance.magnitud()<aceptanceRadius){
+  if(size(distance)<aceptanceRadius){
     controller->message(static_cast<uint>(MESSAGES::OnFinish));
   }
 

@@ -5,7 +5,7 @@ namespace Harmony{
 void
 Transition::execute()
 {
-  (*this)(m_newState+0);
+  (*this)(m_newState);
 }
 
 }

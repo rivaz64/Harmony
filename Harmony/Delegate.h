@@ -32,25 +32,25 @@ class Delegate :
   {}
 
   template <class DelegatorType, class T,void (T::*TMethod)(_Types...)>
-  static DelegatorType create(T* object_ptr, _Types... _Args)
+  static DelegatorType create(T* object_ptr)
   {
-      DelegatorType d(std::forward<_Types>(_Args)...);
+      DelegatorType d;
       d.object_ptr = object_ptr;
       d.stub_ptr = &method_stub<T, TMethod>; 
       return d;
   }
 
   template <class DelegatorType, class T,void (T::*TMethod)(_Types...)>
-  static DelegatorType* createPtr(T* object_ptr, _Types... _Args)
+  static DelegatorType* createPtr(T* object_ptr)
   {
-      auto* d = new DelegatorType(std::forward<_Types>(_Args)...);
+      auto* d = new DelegatorType();
       d->object_ptr = object_ptr;
       d->stub_ptr = &method_stub<T, TMethod>; 
       return d;
   }
 
   void 
-  operator()(_Types&&... _Args) const
+  operator()(_Types... _Args) const
   {
       return (*stub_ptr)(object_ptr, std::forward<_Types>(_Args)...);
   }

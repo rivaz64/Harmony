@@ -15,11 +15,12 @@ enum class MESSAGES
 enum class STATES
 {
   Wander,
-  Pursue
+  Pursue,
+  Attack
 };
 
 
-struct delegatorDesciption{
+struct DelegatorDesciption{
   uint fromState;
   uint message;
   Delegator* toState;
@@ -38,8 +39,8 @@ class Controller
   ~Controller();
 
   void
-  init(vector<delegatorDesciption> defaultReactions,
-       vector<delegatorDesciption> specificReactions);
+  init(vector<DelegatorDesciption> defaultReactions,
+       vector<DelegatorDesciption> specificReactions);
 
   /**
    * @brief changes this state machine to a new state
@@ -81,6 +82,12 @@ class Controller
   */
   virtual Dimencion
   reachablePointInRadius(const Dimencion& point, float radius);
+
+  /**
+   * @brief to recive a mesage and do not react
+  */
+  void
+  nothing(){}
 
   inline Pawn*
   getPawn(){
