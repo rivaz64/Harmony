@@ -41,9 +41,9 @@ Controller::init(vector<DelegatorDesciption> defaultReactions,
 void
 Controller::ChangeToState(uint newState)
 {
-  m_actualState->onExit(this);
+  m_actualState->onMessage((uint)MESSAGES::OnExit);
   m_actualState = m_states[newState];
-  m_actualState->onEnter(this);
+  m_actualState->onMessage((uint)MESSAGES::OnEnter);
 }
 
 void 

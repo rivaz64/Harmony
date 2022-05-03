@@ -8,6 +8,8 @@ namespace Harmony{
 
 enum class MESSAGES
 {
+  OnEnter,
+  OnExit,
   OnFinish,
   OnSeen
 };

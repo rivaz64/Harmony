@@ -154,6 +154,7 @@
     <ClInclude Include="State.h" />
     <ClInclude Include="Transition.h" />
     <ClInclude Include="Vector2f.h" />
+    <ClInclude Include="VectorUtilities.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BlackBoard.cpp" />

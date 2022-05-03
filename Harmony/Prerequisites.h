@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include <memory>
-
+#include "Vector2f.h"
 #ifdef UNREAL_HARMONY
 #include "CoreMinimal.h"
 #endif

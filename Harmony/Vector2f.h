@@ -225,6 +225,57 @@ class Vector2f
     return v1.x * v2.x + v1.y * v2.y;
   }
 
+  /**
+   * @brief cross product of two vectors
+   * @param v1
+   * @param v2
+   * @return
+  */
+  FORCEINLINE static float
+  cross(const Vector2f& v1, const Vector2f& v2) {
+    return v1.x * v2.y - v1.y * v2.x;
+  }
+
+  /**
+   * @brief calculates the intersection of to lines
+   * @param v1 start line 1
+   * @param v2 end line 1
+   * @param v3 start line 2
+   * @param v4 end line 2
+   * @param out intersection
+   * @return if they intersect
+  */
+  FORCEINLINE static bool
+  Intersect(Vector2f v1,
+    Vector2f v2,
+    Vector2f v3,
+    Vector2f v4,
+    Vector2f& out)
+  {
+    //http://mathworld.wolfram.com/Line-LineIntersection.html
+
+    auto detL1 = cross(v1,v2);
+    auto detL2 = cross(v3,v4);
+    auto m12 = v1-v2;
+    auto m34 = v3-v4;
+
+    float xnom = cross(Vector2f(detL1, m12.x), Vector2f(detL2, m34.x));
+    float ynom = cross(Vector2f(detL1, m12.y), Vector2f(detL2, m34.y));
+    float denom = cross(m12,m34);
+
+    if(denom == 0.0)//Lines don't seem to cross
+    {
+        out.x = NAN;
+        out.y = NAN;
+        return false;
+    }
+
+    out.x = xnom / denom;   
+    out.y = ynom / denom;
+
+    return true;
+  }
+
  public:
 
   static const Vector2f ZERO;
