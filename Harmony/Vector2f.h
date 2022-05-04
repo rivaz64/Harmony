@@ -246,7 +246,7 @@ class Vector2f
    * @return if they intersect
   */
   FORCEINLINE static bool
-  Intersect(Vector2f v1,
+  intersect(Vector2f v1,
     Vector2f v2,
     Vector2f v3,
     Vector2f v4,

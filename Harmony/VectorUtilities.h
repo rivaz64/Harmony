@@ -8,6 +8,7 @@ template<typename T>
 inline T
 average(const vector<T>& list){
   T ans;
+  memset(&ans,0,sizeof(T));
   for(auto& i : list){
     ans += i;
   }
