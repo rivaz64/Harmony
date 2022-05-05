@@ -8,6 +8,7 @@ namespace Harmony{
 
 enum class MESSAGES
 {
+  OnUpdate,
   OnEnter,
   OnExit,
   OnFinish,
@@ -69,6 +70,18 @@ class Controller
   */
   void
   newRandomPointToGo();
+
+  /**
+   * @brief separates this from a group
+  */
+  void
+  separate();
+
+  void
+  goToPoint();
+
+  void
+  lookTo();
 
   /**
    * @brief goes to a point using the system the controller has

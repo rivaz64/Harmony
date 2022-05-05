@@ -148,6 +148,7 @@
     <ClInclude Include="GoToPoint.h" />
     <ClInclude Include="LookTo.h" />
     <ClInclude Include="Manager.h" />
+    <ClInclude Include="NavMesh.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Prerequisites.h" />
     <ClInclude Include="Reaction.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="GoToPoint.cpp" />
     <ClCompile Include="LookTo.cpp" />
     <ClCompile Include="Manager.cpp" />
+    <ClCompile Include="NavMesh.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Reaction.cpp" />
     <ClCompile Include="Source.cpp" />

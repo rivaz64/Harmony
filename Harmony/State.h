@@ -12,13 +12,6 @@ class State
 {
  public:
 
-  /**
-   * @brief function executed while in this state
-   * @param  
-  */
-  virtual void
-  update(Controller*,float delta){}
-
   virtual void
   onMessage(uint msg);
 

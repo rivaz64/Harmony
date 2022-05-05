@@ -47,4 +47,10 @@ angleBetween(float v1, float v2){
   return angleInRange(v2-v1);
 }
 
+inline Vector2f
+randomAngle(){
+  auto randAngle = ((float)rand()/(float)RAND_MAX)*2.f*PI;
+  return Vector2f(cos(randAngle),sin(randAngle));
+}
+
 }

@@ -2,6 +2,7 @@
 #include "State.h"
 #include "Transition.h"
 #include "Pawn.h"
+#include "AngleUtilities.h"
 
 namespace Harmony{
 
@@ -49,7 +50,7 @@ Controller::ChangeToState(uint newState)
 void 
 Controller::update(float delta)
 {
-  m_actualState->update(this,delta);
+  m_actualState->onMessage((uint)MESSAGES::OnUpdate);
 }
 
 void 
@@ -67,6 +68,59 @@ Controller::newRandomPointToGo()
   auto wanderPoint = reachablePointInRadius(newPoint,m_wanderRadius);
   m_memory.addVariableOfType<Dimencion>("pointToGo");
   m_memory.setVariableAs<Dimencion>("pointToGo",wanderPoint);
+}
+
+void
+Controller::separate()
+{
+  auto pawn = getPawn();
+  auto pos = pawn->getPosition();
+  auto viewed = m_memory.getVariableAs<Harmony::vector<Harmony::Vector2f>>("viewed");
+  if(!viewed){
+    return;
+  }
+  for(auto& view : *viewed){
+    auto vec = pos-view;
+    vec = vec.normalized()*(1.f/vec.magnitud());
+    pawn->acelerate(vec);
+  }
+}
+
+void 
+Controller::goToPoint()
+{
+  auto position = m_pawn->getPosition();
+  auto pointToGo = m_memory.getVariableAs<Dimencion>("pointToGo");
+
+  if(!pointToGo){
+    message(static_cast<uint>(MESSAGES::OnFinish));
+    return;
+  }
+
+  auto distance = *pointToGo-position;
+
+  if(size(distance) < *m_memory.getVariableAs<float>("aceptanceRadius")){
+    message(static_cast<uint>(MESSAGES::OnFinish));
+  }
+
+  goToPoint(*pointToGo);
+}
+
+void Controller::lookTo()
+{
+  auto pawn = getPawn();
+  auto position = pawn->getPosition();
+  auto direction = VectorToAngle(pawn->getDirection());
+  auto pointToGo = m_memory.getVariableAs<Dimencion>("pointToGo");
+
+  if(!pointToGo){
+    return;
+  }
+
+  float directionToGo = VectorToAngle(*pointToGo-position);
+  float rotation = directionToGo-direction;
+
+  pawn->rotate(rotation);
 }
 
 void
