@@ -26,7 +26,7 @@ enum class STATES
 struct DelegatorDesciption{
   uint fromState;
   uint message;
-  Delegator* toState;
+  vector<Delegator*> toState;
 };
 
 /**

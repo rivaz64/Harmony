@@ -13,7 +13,10 @@ State::onMessage(uint msg)
     return;
   }
   #endif
-  m_reactions[msg]->execute();
+  for(auto& reaction : m_reactions[msg]){
+    reaction->execute();
+  }
+  
 }
 
 }

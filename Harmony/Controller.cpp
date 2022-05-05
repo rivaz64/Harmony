@@ -24,7 +24,7 @@ void
 Controller::init(vector<DelegatorDesciption> defaultReactions, 
                  vector<DelegatorDesciption> specificReactions)
 {
-  map<uint,Delegator*> defaults;
+  map<uint,vector<Delegator*>> defaults;
 
   for(auto& desc : defaultReactions){
     defaults.insert({desc.message,desc.toState});
