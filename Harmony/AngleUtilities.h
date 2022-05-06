@@ -39,7 +39,7 @@ AngleToVector(float v){
 */
 inline float
 angleInRange(float v){
-  return fmodf(v,PI);
+  return fmodf(fmodf(v+PI,PI*2)+PI*2,PI*2)-PI;
 }
 
 inline float

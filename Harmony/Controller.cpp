@@ -37,6 +37,8 @@ Controller::init(vector<DelegatorDesciption> defaultReactions,
   for(auto& desc : specificReactions){
     m_states[desc.fromState]->m_reactions[desc.message] = desc.toState;
   }
+
+  m_actualState->onMessage((uint)MESSAGES::OnEnter);
 }
 
 void
