@@ -52,6 +52,7 @@ Controller::ChangeToState(uint newState)
 void 
 Controller::update(float delta)
 {
+  deltaTime = delta;
   m_actualState->onMessage((uint)MESSAGES::OnUpdate);
 }
 
@@ -77,15 +78,34 @@ Controller::separate()
 {
   auto pawn = getPawn();
   auto pos = pawn->getPosition();
-  auto viewed = m_memory.getVariableAs<Harmony::vector<Harmony::Vector2f>>("viewed");
+  auto viewed = m_memory.getVariableAs<Harmony::vector<Harmony::Pawn*>>("viewed");
   if(!viewed){
     return;
   }
   for(auto& view : *viewed){
-    auto vec = pos-view;
-    vec = vec.normalized()*(1.f/vec.magnitud());
+    auto vec = pos-view->getPosition();
+    vec = vec.normalized()*(7776.f/vec.magnitud());
     pawn->acelerate(vec);
   }
+}
+
+void 
+Controller::align()
+{
+  auto pawn = getPawn();
+  auto pos = pawn->getPosition();
+  auto pawnDir = pawn->getDirection();
+  auto viewed = m_memory.getVariableAs<Harmony::vector<Harmony::Pawn*>>("viewed");
+  if(!viewed){
+    return;
+  }
+  Dimencion dir;
+  memset(&dir,0,sizeof(Dimencion));
+  for(auto& view : *viewed){
+    dir += view->getDirection();
+  }
+  
+  angleBetween(VectorToAngle(pawnDir),VectorToAngle(dir));
 }
 
 void 
@@ -108,7 +128,8 @@ Controller::goToPoint()
   goToPoint(*pointToGo);
 }
 
-void Controller::lookTo()
+void 
+Controller::lookTo()
 {
   auto pawn = getPawn();
   auto position = pawn->getPosition();
@@ -123,6 +144,25 @@ void Controller::lookTo()
   float rotation = directionToGo-direction;
 
   pawn->rotate(rotation);
+}
+
+void 
+Controller::wait()
+{
+  auto& timer = *m_memory.getVariableAs<float>("timer");
+  auto& timeToWait = *m_memory.getVariableAs<float>("timeToWait");
+  timer += deltaTime;
+  if(timer>timeToWait){
+    message(static_cast<uint>(MESSAGES::OnFinish));
+  }
+  
+}
+
+void 
+Controller::restart()
+{
+  auto& timer = *m_memory.getVariableAs<float>("timer");
+  timer = 0;
 }
 
 void

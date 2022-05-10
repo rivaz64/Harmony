@@ -72,16 +72,40 @@ class Controller
   newRandomPointToGo();
 
   /**
-   * @brief separates this from a group
+   * @brief separates from the others to not collide
   */
   void
   separate();
 
+  /**
+   * @brief aligns his direction whit the ones it sees
+  */
+  void
+  align();
+
+  /**
+   * @brief goes to the point goToPoint
+  */
   void
   goToPoint();
 
+  /**
+   * @brief looks to the point goToPoint
+  */
   void
   lookTo();
+
+  /**
+   * @brief ends the action after a certain time
+  */
+  void
+  wait();
+
+  /**
+   * @brief sets the timer to 0
+  */
+  void
+  restart();
 
   /**
    * @brief goes to a point using the system the controller has
@@ -149,6 +173,7 @@ class Controller
 
   float m_wanderDelta = 36;
   float m_wanderRadius = 18;
+  float deltaTime;
 
   friend class Manager;
 };

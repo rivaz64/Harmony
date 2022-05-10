@@ -21,9 +21,6 @@
     <ClInclude Include="Delegate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GoToPoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Pawn.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -34,12 +31,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BlackBoard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Manager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LookTo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Debuger.h">
@@ -71,9 +62,6 @@
     <ClCompile Include="State.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GoToPoint.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Pawn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -87,12 +75,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Manager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="LookTo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Transition.cpp">
