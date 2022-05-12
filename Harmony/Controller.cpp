@@ -76,6 +76,7 @@ Controller::newRandomPointToGo()
 void
 Controller::separate()
 {
+  const auto& separationForze = *m_memory.getVariableAs<float>("separationForze");
   auto pawn = getPawn();
   auto pos = pawn->getPosition();
   auto viewed = m_memory.getVariableAs<Harmony::vector<Harmony::Pawn*>>("viewed");
@@ -83,9 +84,13 @@ Controller::separate()
     return;
   }
   for(auto& view : *viewed){
+    auto multi = ((Vector2f::dot(view->getVelocity().normalized(),pos-view->getPosition())+1.f)/2.f)*.0625f+.9375f;
+    
     auto vec = pos-view->getPosition();
-    vec = vec.normalized()*(7776.f/vec.magnitud());
-    pawn->acelerate(vec);
+    vec = vec.normalized()*(separationForze/vec.magnitud());
+    pawn->acelerate(vec*multi);//*multi);
+    
+    
   }
 }
 
@@ -105,9 +110,28 @@ Controller::align()
     dir += view->getDirection();
   }
   
-  angleBetween(VectorToAngle(pawnDir),VectorToAngle(dir));
+  pawn->rotate(angleBetween(VectorToAngle(pawnDir),VectorToAngle(dir)));
 }
 
+void
+Controller::coher()
+{
+  const auto& cohercionForze = *m_memory.getVariableAs<float>("cohercionForze");
+  auto pawn = getPawn();
+  auto pos = pawn->getPosition();
+  auto pawnDir = pawn->getDirection();
+  auto viewed = m_memory.getVariableAs<Harmony::vector<Harmony::Pawn*>>("viewed");
+  if(!viewed || viewed->size()==0){
+    return;
+  }
+  Dimencion center;
+  memset(&center,0,sizeof(Dimencion));
+  for(auto& view : *viewed){
+    center += view->getPosition();
+  }
+  center /= static_cast<float>(viewed->size());
+  pawn->acelerate((center-pos).normalized()*cohercionForze);
+}
 void 
 Controller::goToPoint()
 {

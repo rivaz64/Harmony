@@ -84,6 +84,12 @@ class Controller
   align();
 
   /**
+   * @brief makes the pawn stay in a group
+  */
+  void
+  coher();
+
+  /**
    * @brief goes to the point goToPoint
   */
   void
