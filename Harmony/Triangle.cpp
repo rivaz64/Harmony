@@ -26,7 +26,7 @@ Triangle::circumcenter()
 }
 
 bool 
-Triangle::hasPoint(const Vector2f& v)
+Triangle::hasPoint(const Vector2f& v) const
 {
    auto ref = &point1;
   for(uint i = 0; i<3; ++i){
@@ -38,15 +38,15 @@ Triangle::hasPoint(const Vector2f& v)
 }
 
 bool 
-Triangle::hasEdge(const Vector2f& v1, const Vector2f& v2)
+Triangle::hasEdge(const Vector2f& v1, const Vector2f& v2) const
 {
-  auto ref = &point1;
-  for(uint i = 0; i<3; ++i){
-    if((v1 == *(ref+i) && v2 == *(ref+(i+1)%3)) || (v2 == *(ref+i) && v1 == *(ref+(i+1)%3))){
-      return true;
-    }
-  }
-  return false;
+  return hasPoint(v1) && hasPoint(v2);
+}
+
+bool 
+Triangle::operator==(const Triangle& tri) const
+{
+  return hasPoint(tri.point1) && hasPoint(tri.point2) && hasPoint(tri.point3);
 }
 
 }

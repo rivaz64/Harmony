@@ -20,7 +20,7 @@ addPoint(const Harmony::Vector2f& point, vector<Triangle>& triangulation){
   }
   auto badTrisNum = badTris.size();
   
-  Harmony::vector<Harmony::Vector2f> polygon;
+  vector<Vector2f> polygon;
   for(int i = 0; i<badTrisNum; ++i){
     auto ref = &badTris[i].point1;
     for(int u = 0; u<3; ++u){
@@ -39,7 +39,7 @@ addPoint(const Harmony::Vector2f& point, vector<Triangle>& triangulation){
     }
   }
   num = 0;
-  Harmony::vector<Harmony::Triangle> temp;
+  vector<Triangle> temp;
   for(auto& n : badTrisId){
     for(num; num<n; ++num){
       temp.push_back(triangulation[num]);
@@ -59,7 +59,7 @@ addPoint(const Harmony::Vector2f& point, vector<Triangle>& triangulation){
 }
 
 void 
-NavMesh::generateFromPoints(const vector<Vector2f>& points)
+delauniTriangulation(const vector<Dimencion>& points, vector<Triangle>& tris)
 {
   vector<Triangle> temp;
   auto center = average(points);
@@ -109,6 +109,61 @@ NavMesh::generateFromPoints(const vector<Vector2f>& points)
       temp.push_back(tris[nume]);
     }
     tris = temp;
+  }
+}
+
+bool
+isPointInFig(const Dimencion& tri,const vector<Dimencion>& fig){
+  return find(fig.begin(),fig.end(),tri) != fig.end();
+}
+
+bool
+isTriInFig(const Triangle& tri,const vector<Dimencion>& fig){
+  return isPointInFig(tri.point1,fig) &&
+         isPointInFig(tri.point2,fig) &&
+         isPointInFig(tri.point3,fig);
+}
+
+bool
+isTriInFigs(const Triangle& tri,const vector<vector<Dimencion>>& figs){
+  for(auto& fig : figs){
+    if(isTriInFig(tri,fig)){
+      return true;
+    }
+  }
+  return false;
+}
+
+void 
+NavMesh::generateFromPoints(const Dimencion& minPoint, 
+                            const Dimencion& maxPoint, 
+                            const vector<vector<Dimencion>>& obstacles)
+{
+  vector<Dimencion> points;
+  vector<Triangle> triangulation;
+  uint numOfPoints = 0;
+  for(auto& obstacle : obstacles){
+    numOfPoints += obstacle.size();
+  }
+  uint actualPoints = 0;
+  points.resize(numOfPoints);
+  for(auto& obstacle : obstacles){
+    uint numOfPointsInObstacle = obstacle.size();
+    memcpy(points.data()+actualPoints,obstacle.data(),sizeof(Dimencion)*numOfPointsInObstacle);
+    actualPoints += numOfPointsInObstacle;
+  }
+  
+  points.push_back(minPoint);
+  points.push_back(maxPoint);
+  points.push_back(Dimencion(minPoint.x,maxPoint.y));
+  points.push_back(Dimencion(maxPoint.x,minPoint.y));
+
+  delauniTriangulation(points,triangulation);
+
+  for(auto& tri : triangulation){
+    if(!isTriInFigs(tri,obstacles)){
+      tris.push_back(tri);
+    }
   }
 }
 

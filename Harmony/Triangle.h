@@ -7,14 +7,14 @@ class Triangle
 {
  public:
 
-  Triangle(Vector2f p1, Vector2f p2, Vector2f p3) :
+  Triangle(Dimencion p1, Dimencion p2, Dimencion p3) :
     point1(p1), point2(p2), point3(p3) {}
 
   /**
    * @brief calculates the circumcenter of this triangle
    * @return 
   */
-  Vector2f
+  Dimencion
   circumcenter();
 
   /**
@@ -23,7 +23,7 @@ class Triangle
    * @return 
   */
   bool
-  hasPoint(const Vector2f& v);
+  hasPoint(const Dimencion& v) const;
 
   /**
    * @brief if an edge beongs to this triangle
@@ -32,13 +32,16 @@ class Triangle
    * @return 
   */
   bool
-  hasEdge(const Vector2f& v1, const Vector2f& v2);
+  hasEdge(const Dimencion& v1, const Dimencion& v2) const;
+
+  bool
+  operator==(const Triangle& tri) const;
 
  public:
   
-  Vector2f point1;
-  Vector2f point2;
-  Vector2f point3;
+  Dimencion point1;
+  Dimencion point2;
+  Dimencion point3;
 };
 
 }

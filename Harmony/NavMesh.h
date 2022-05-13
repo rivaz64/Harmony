@@ -10,7 +10,9 @@ class NavMesh
 
   
   void
-  generateFromPoints(const vector<Vector2f>& points);
+  generateFromPoints(const Dimencion& minPoint, 
+                     const Dimencion& maxPoint, 
+                     const vector<vector<Dimencion>>& obstacles);
 
  public:
 

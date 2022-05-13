@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <memory>
+#include <algorithm>
 #include "Vector2f.h"
 #ifdef UNREAL_HARMONY
 #include "CoreMinimal.h"
@@ -25,6 +26,7 @@ using std::vector;
 using std::map;
 using std::pair;
 using std::string;
+using std::find;
 using uint = unsigned int;
 
 #ifdef UNREAL_HARMONY
