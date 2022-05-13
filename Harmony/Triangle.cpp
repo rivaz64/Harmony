@@ -2,7 +2,13 @@
 
 namespace Harmony{
 
-Vector2f 
+Dimencion 
+Triangle::center()
+{
+  return (point1+point2+point3)/3.f;
+}
+
+Vector2f
 Triangle::circumcenter()
 {
   auto midpoint1 = (point1+point2)/2.f;
@@ -47,6 +53,12 @@ bool
 Triangle::operator==(const Triangle& tri) const
 {
   return hasPoint(tri.point1) && hasPoint(tri.point2) && hasPoint(tri.point3);
+}
+
+bool
+Triangle::areAdjacent(const Triangle& tri) const
+{
+  return hasEdge(tri.point1,tri.point2) || hasEdge(tri.point3,tri.point2) || hasEdge(tri.point1,tri.point3);
 }
 
 }

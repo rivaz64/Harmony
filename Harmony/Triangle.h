@@ -10,6 +10,14 @@ class Triangle
   Triangle(Dimencion p1, Dimencion p2, Dimencion p3) :
     point1(p1), point2(p2), point3(p3) {}
 
+
+  /**
+   * @brief calculates the center of this triangle
+   * @return 
+  */
+  Dimencion
+  center();
+
   /**
    * @brief calculates the circumcenter of this triangle
    * @return 
@@ -36,6 +44,9 @@ class Triangle
 
   bool
   operator==(const Triangle& tri) const;
+
+  bool
+  areAdjacent(const Triangle& tri) const;
 
  public:
   

@@ -3,7 +3,6 @@
 
 namespace Harmony{
 
-
 void
 addPoint(const Harmony::Vector2f& point, vector<Triangle>& triangulation){
   Harmony::vector<Harmony::Triangle> badTris;
@@ -60,57 +59,13 @@ addPoint(const Harmony::Vector2f& point, vector<Triangle>& triangulation){
 
 void 
 delauniTriangulation(const vector<Dimencion>& points, vector<Triangle>& tris)
-{
-  vector<Triangle> temp;
-  auto center = average(points);
-  auto far = farest(points,center);
-  auto farestDir = (far-center).normalized();
-  auto farestSize = (far-center).magnitud();
-  auto other = Harmony::Vector2f(-farestDir.y,farestDir.x)*(farestSize*sqrt(3));
-  
-  Harmony::Triangle originalTri(far*2-center,center*2-far+other,center*2-far-other);
-
-  tris.push_back(originalTri);
-  
-  auto ref = &originalTri.point1;
-  for(int i = 0; i<3; ++i){
-    temp.push_back(Triangle(*(ref+i),*(ref+(i+1)%3),points[0]));
-  }
-
-  tris = temp;
+{ 
   auto numOfPoints = points.size();
   for(int i=1; i<numOfPoints; ++i){
     addPoint(points[i],tris);
   }
-
-  Harmony::vector<int> badTris;
-  
-  ref = &originalTri.point1;
-  int nu; 
-  int nume;
-  for(int i = 0; i<3; ++i){
-    badTris.clear();
-    nu = 0;
-    for(auto& tri : tris){
-      if(tri.hasPoint(*(ref+i))){
-        badTris.push_back(nu);
-      }
-      ++nu;
-    }
-    nume = 0;
-    Harmony::vector<Harmony::Triangle> temp;
-    for(auto& n : badTris){
-      for(nume; nume<n; ++nume){
-        temp.push_back(tris[nume]);
-      }
-      ++nume;
-    }
-    for(nume;nume<tris.size();++nume){
-      temp.push_back(tris[nume]);
-    }
-    tris = temp;
-  }
 }
+
 
 bool
 isPointInFig(const Dimencion& tri,const vector<Dimencion>& fig){
@@ -135,7 +90,7 @@ isTriInFigs(const Triangle& tri,const vector<vector<Dimencion>>& figs){
 }
 
 void 
-NavMesh::generateFromPoints(const Dimencion& minPoint, 
+NavMesh::generate(const Dimencion& minPoint, 
                             const Dimencion& maxPoint, 
                             const vector<vector<Dimencion>>& obstacles)
 {
@@ -152,17 +107,25 @@ NavMesh::generateFromPoints(const Dimencion& minPoint,
     memcpy(points.data()+actualPoints,obstacle.data(),sizeof(Dimencion)*numOfPointsInObstacle);
     actualPoints += numOfPointsInObstacle;
   }
-  
-  points.push_back(minPoint);
-  points.push_back(maxPoint);
-  points.push_back(Dimencion(minPoint.x,maxPoint.y));
-  points.push_back(Dimencion(maxPoint.x,minPoint.y));
+  triangulation.push_back(Triangle(minPoint,maxPoint,Dimencion(minPoint.x,maxPoint.y)));
+  triangulation.push_back(Triangle(minPoint,maxPoint,Dimencion(maxPoint.x,minPoint.y)));
 
   delauniTriangulation(points,triangulation);
 
   for(auto& tri : triangulation){
     if(!isTriInFigs(tri,obstacles)){
-      tris.push_back(tri);
+      tris.push_back({tri,{}});
+    }
+  }
+
+  uint numOfTris = tris.size();
+  
+  for(uint i = 0; i<numOfTris; ++i){
+    for(uint o = 0; o<numOfTris; ++o){
+      if(i==o) continue;
+      if(tris[i].tri.areAdjacent(tris[o].tri)){
+        tris[i].adjacents.push_back(o);
+      }
     }
   }
 }
