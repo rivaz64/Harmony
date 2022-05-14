@@ -38,6 +38,7 @@ class NavMesh
   */
   vector<NavMeshNode> tris;
 
+  //map<Pawn,uint> 
   
 };
 

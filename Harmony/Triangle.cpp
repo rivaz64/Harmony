@@ -1,4 +1,5 @@
 #include "Triangle.h"
+#include "AngleUtilities.h"
 
 namespace Harmony{
 
@@ -59,6 +60,18 @@ bool
 Triangle::areAdjacent(const Triangle& tri) const
 {
   return hasEdge(tri.point1,tri.point2) || hasEdge(tri.point3,tri.point2) || hasEdge(tri.point1,tri.point3);
+}
+
+bool
+Triangle::isPointInside(const Dimencion& point)
+{
+  auto angle1 = VectorToAngle(point1-point);
+  auto angle2 = VectorToAngle(point2-point);
+  auto angle3 = VectorToAngle(point3-point);
+  auto totalAngle = abs(angleBetween(angle1,angle2))+
+                    abs(angleBetween(angle3,angle2))+
+                    abs(angleBetween(angle1,angle3));
+  return abs(totalAngle-PI*2.f) > .01f;
 }
 
 }

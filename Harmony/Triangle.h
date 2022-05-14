@@ -42,11 +42,29 @@ class Triangle
   bool
   hasEdge(const Dimencion& v1, const Dimencion& v2) const;
 
+  /**
+   * @brief if 2 triangles are the same
+   * @param tri 
+   * @return 
+  */
   bool
   operator==(const Triangle& tri) const;
 
+  /**
+   * @brief if 2 triangles have a same edge
+   * @param tri 
+   * @return 
+  */
   bool
   areAdjacent(const Triangle& tri) const;
+
+  /**
+   * @brief if a point is inside the triange
+   * @param point 
+   * @return 
+  */
+  bool 
+  isPointInside(const Dimencion& point);
 
  public:
   
