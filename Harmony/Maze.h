@@ -8,7 +8,7 @@ namespace Harmony{
 */
 
 namespace MAZE_CELL{
-enum E : char
+enum E : unsigned char
 {
   NONE = 0,
   UP = 1,
@@ -17,6 +17,43 @@ enum E : char
   LEFT = 8
 };
 }
+
+class Grid
+{
+ public:
+  
+  Grid(uint x, uint y){
+    sizeX = x;
+    sizeY = y;
+    cells.clear();
+    cells.resize((x*y)/2);
+  }
+
+  inline void
+  setValueAt(uint x,uint y,MAZE_CELL::E value)
+  {
+    auto oneDimPos = x+y*sizeX;
+    cells[oneDimPos/2] = static_cast<MAZE_CELL::E>(cells[oneDimPos/2] | static_cast<MAZE_CELL::E>(value<<((oneDimPos%2)*4)));
+  }
+
+  MAZE_CELL::E
+  getValueAt(uint x,uint y)
+  {
+    auto oneDimPos = x+y*sizeX;
+    return static_cast<MAZE_CELL::E>((cells[oneDimPos/2]>>((oneDimPos%2)*4))%16);
+  }
+
+ public:
+  
+  uint sizeX;
+  uint sizeY;
+
+ private:
+  /**
+   * @brief the grid containing the maze
+  */
+  vector<MAZE_CELL::E> cells;
+};
 
 class Maze
 {
@@ -47,29 +84,14 @@ class Maze
   void
   sidewinder(uint seed, uint hallLength);
 
-  inline void
-  setValueAt(uint x,uint y,MAZE_CELL::E value)
-  {
-    auto oneDimPos = x+y*sizeX;
-    grid[oneDimPos/2] = static_cast<MAZE_CELL::E>(grid[oneDimPos/2] | static_cast<MAZE_CELL::E>(value<<((oneDimPos%2)*4)));
-  }
+  void
+  backtracker(uint seed);
 
-  MAZE_CELL::E
-  getValueAt(uint x,uint y)
-  {
-    auto oneDimPos = x+y*sizeX;
-    return static_cast<MAZE_CELL::E>(grid[oneDimPos/2]>>((oneDimPos%2)*4));
-  }
+  
 
  private:
   
-  /**
-   * @brief the grid containing the maze
-  */
-  vector<MAZE_CELL::E> grid;
-
-  uint sizeX;
-  uint sizeY;
+  Grid grid;
 };
 
 }
