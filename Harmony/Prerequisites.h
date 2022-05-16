@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <list>
 #include <map>
 #include <string>
 #include <iostream>
@@ -23,6 +24,7 @@ class Transition;
 class Detector;
 
 using std::vector;
+using std::list;
 using std::map;
 using std::pair;
 using std::string;

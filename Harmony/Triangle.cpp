@@ -71,7 +71,7 @@ Triangle::isPointInside(const Dimencion& point)
   auto totalAngle = abs(angleBetween(angle1,angle2))+
                     abs(angleBetween(angle3,angle2))+
                     abs(angleBetween(angle1,angle3));
-  return abs(totalAngle-PI*2.f) > .01f;
+  return abs(totalAngle-PI*2.f) < .01f;
 }
 
 }

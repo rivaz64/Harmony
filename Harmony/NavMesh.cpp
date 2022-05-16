@@ -61,7 +61,7 @@ void
 delauniTriangulation(const vector<Dimencion>& points, vector<Triangle>& tris)
 { 
   auto numOfPoints = points.size();
-  for(int i=1; i<numOfPoints; ++i){
+  for(int i=0; i<numOfPoints; ++i){
     addPoint(points[i],tris);
   }
 }
@@ -123,8 +123,63 @@ NavMesh::generate(const Dimencion& minPoint,
   for(uint i = 0; i<numOfTris; ++i){
     for(uint o = 0; o<numOfTris; ++o){
       if(i==o) continue;
-      if(tris[i].tri.areAdjacent(tris[o].tri)){
-        tris[i].adjacents.push_back(o);
+
+      if(tris[i].tri.hasEdge(tris[o].tri.point1,tris[o].tri.point2)){
+        tris[i].adjacents.insert({0,o});
+      }
+      if(tris[i].tri.hasEdge(tris[o].tri.point2,tris[o].tri.point3)){
+        tris[i].adjacents.insert({1,o});
+      }
+      if(tris[i].tri.hasEdge(tris[o].tri.point3,tris[o].tri.point1)){
+        tris[i].adjacents.insert({2,o});
+      }
+      //if(tris[i].tri.areAdjacent(tris[o].tri)){
+      //  tris[i].adjacents.push_back(o);
+      //}
+    }
+  }
+}
+
+vector<uint> NavMesh::findPath(Vector2f start, Vector2f end){
+  uint nodeStart = 0, nodeEnd = 0;
+  auto numOfNodes = tris.size();
+  for(uint i=0; i<numOfNodes; ++i){
+    if(tris[i].tri.isPointInside(start)){
+      nodeStart = i;
+    }
+    if(tris[i].tri.isPointInside(end)){
+      nodeEnd = i;
+    }
+  }
+  return findPath(nodeStart, nodeEnd);
+}
+
+vector<uint>
+NavMesh::findPath(uint start, uint end)
+{
+  //vector<uint> searched;
+  list<uint> forsearch;
+  //node, parent
+  map<uint,uint> paths;
+  forsearch.push_back(end);
+  paths.insert({end,-1});
+  while(forsearch.size()>0){
+    auto searchAtID =*forsearch.begin();
+    if(searchAtID == start){
+      vector<uint> ans;
+      uint actualNode = start;
+      while(actualNode != end){
+        ans.push_back(actualNode);
+        actualNode = paths[actualNode];
+      }
+      return ans;
+    }
+    auto searchAt = tris[searchAtID];
+    forsearch.pop_front();
+    for(auto& node : searchAt.adjacents){
+      if(paths.find(node.second)==paths.end()){
+        forsearch.push_back(node.second);
+        paths.insert({node.second,searchAtID});
       }
     }
   }

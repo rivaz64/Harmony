@@ -23,12 +23,29 @@ class Maze
  public:
 
   /**
-   * @brief generates a maze with the given dimencions
+   * @brief rezises the maze to the given dimencions
    * @param x 
    * @param y 
   */
   void
-  generate(uint x, uint y, uint seed);
+  init(uint x, uint y);
+
+  /**
+   * @brief generates a maze using binary tree
+   * @param seed 
+   * @param probabolityX the probability to go in x
+   * @param probabolityY the probability to go in y
+  */
+  void
+  binaryTree(uint seed, uint probabolityX, uint probabolityY);
+
+  /**
+   * @brief generates a maze using sidewinder
+   * @param seed 
+   * @param hallLength he probability of a wall in X
+  */
+  void
+  sidewinder(uint seed, uint hallLength);
 
   inline void
   setValueAt(uint x,uint y,MAZE_CELL::E value)

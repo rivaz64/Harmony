@@ -273,7 +273,13 @@ class Vector2f
     out.x = xnom / denom;   
     out.y = ynom / denom;
 
-    return true;
+    auto LineLen = (v2-v1).magnitud();
+
+    if((out-v1).magnitud()<LineLen && (out-v2).magnitud()<LineLen){
+      return true;
+    }
+
+    return false;
   }
 
  public:

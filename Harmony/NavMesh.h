@@ -4,7 +4,8 @@
 
 namespace Harmony{
 
-struct NavMeshNode{
+struct NavMeshNode
+{
   /**
    * @brief the triangle representing this node
   */
@@ -13,7 +14,14 @@ struct NavMeshNode{
   /**
    * @brief the nodes that can be reached from this node
   */
-  vector<uint> adjacents;
+  map<uint,uint> adjacents;
+};
+
+struct PathFindNode
+{
+  uint id;
+
+  uint parent;
 };
 
 class NavMesh
@@ -30,6 +38,12 @@ class NavMesh
   generate(const Dimencion& minPoint, 
            const Dimencion& maxPoint, 
            const vector<vector<Dimencion>>& obstacles);
+
+  vector<uint>
+  findPath(Vector2f start, Vector2f end);
+
+  vector<uint>
+  findPath(uint start, uint end);
 
  public:
 
