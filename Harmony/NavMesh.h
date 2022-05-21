@@ -24,7 +24,12 @@ struct PathFindNode
   /**
    * @brief the distance of this node to the objective
   */
-  float distance;
+  float distanceToGoal;
+
+  /**
+   * @brief the distance of this node to the objective
+  */
+  float distanceOfPath;
 };
 
 class NavMesh
