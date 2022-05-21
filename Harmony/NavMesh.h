@@ -21,7 +21,10 @@ struct PathFindNode
 {
   uint id;
 
-  uint parent;
+  /**
+   * @brief the distance of this node to the objective
+  */
+  float distance;
 };
 
 class NavMesh
@@ -39,7 +42,7 @@ class NavMesh
            const Dimencion& maxPoint, 
            const vector<vector<Dimencion>>& obstacles);
 
-  vector<uint>
+  list<Vector2f>
   findPath(Vector2f start, Vector2f end);
 
   vector<uint>
@@ -51,6 +54,7 @@ class NavMesh
    * @brief the tris of the navMesh
   */
   vector<NavMeshNode> tris;
+
 
   //map<Pawn,uint> 
   

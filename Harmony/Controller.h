@@ -114,6 +114,12 @@ class Controller
   restart();
 
   /**
+   * @brief goes to the next point when following a path
+  */
+  void 
+  nextPoint();
+
+  /**
    * @brief goes to a point using the system the controller has
    * @param point 
   */

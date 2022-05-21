@@ -3,6 +3,10 @@
 
 namespace Harmony{
 
+#define CENTER(n) tris[n].tri.center()
+#define DISTANCE(n) (CENTER(n)-centerStart).magnitud()
+#define INSERT_TO_FIND(n) insertToFind({n,DISTANCE(n)},forsearch)
+
 void
 addPoint(const Harmony::Vector2f& point, vector<Triangle>& triangulation){
   Harmony::vector<Harmony::Triangle> badTris;
@@ -123,24 +127,23 @@ NavMesh::generate(const Dimencion& minPoint,
   for(uint i = 0; i<numOfTris; ++i){
     for(uint o = 0; o<numOfTris; ++o){
       if(i==o) continue;
-
-      if(tris[i].tri.hasEdge(tris[o].tri.point1,tris[o].tri.point2)){
+      auto& actualTri = tris[i];
+      auto& comparingTri = tris[o];
+      if(comparingTri.tri.hasEdge(actualTri.tri.point1,actualTri.tri.point2)){
         tris[i].adjacents.insert({0,o});
       }
-      if(tris[i].tri.hasEdge(tris[o].tri.point2,tris[o].tri.point3)){
+      if(comparingTri.tri.hasEdge(actualTri.tri.point2,actualTri.tri.point3)){
         tris[i].adjacents.insert({1,o});
       }
-      if(tris[i].tri.hasEdge(tris[o].tri.point3,tris[o].tri.point1)){
+      if(comparingTri.tri.hasEdge(actualTri.tri.point3,actualTri.tri.point1)){
         tris[i].adjacents.insert({2,o});
       }
-      //if(tris[i].tri.areAdjacent(tris[o].tri)){
-      //  tris[i].adjacents.push_back(o);
-      //}
     }
   }
 }
 
-vector<uint> NavMesh::findPath(Vector2f start, Vector2f end){
+list<Vector2f> 
+NavMesh::findPath(Vector2f start, Vector2f end){
   uint nodeStart = 0, nodeEnd = 0;
   auto numOfNodes = tris.size();
   for(uint i=0; i<numOfNodes; ++i){
@@ -151,20 +154,37 @@ vector<uint> NavMesh::findPath(Vector2f start, Vector2f end){
       nodeEnd = i;
     }
   }
-  return findPath(nodeStart, nodeEnd);
+  list<Vector2f> ans;
+  auto path = findPath(nodeStart, nodeEnd);
+  for(auto& node : path){
+    ans.push_back(tris[node].tri.center());
+  }
+  return ans;
 }
+
+void 
+insertToFind(PathFindNode newNode, list<PathFindNode>& forsearch){
+  for(auto node = forsearch.begin(); node != forsearch.end(); ++node){
+    if(node->distance > newNode.distance){
+      forsearch.insert(node,newNode);
+      return;
+    }
+  }
+  forsearch.push_back(newNode);
+}
+
 
 vector<uint>
 NavMesh::findPath(uint start, uint end)
 {
-  //vector<uint> searched;
-  list<uint> forsearch;
+  list<PathFindNode> forsearch;
   //node, parent
   map<uint,uint> paths;
-  forsearch.push_back(end);
+  auto centerStart = CENTER(start);
+  insertToFind({end,DISTANCE(end)},forsearch);
   paths.insert({end,-1});
   while(forsearch.size()>0){
-    auto searchAtID =*forsearch.begin();
+    auto searchAtID = forsearch.begin()->id;
     if(searchAtID == start){
       vector<uint> ans;
       uint actualNode = start;
@@ -172,13 +192,14 @@ NavMesh::findPath(uint start, uint end)
         ans.push_back(actualNode);
         actualNode = paths[actualNode];
       }
+      ans.push_back(actualNode);
       return ans;
     }
     auto searchAt = tris[searchAtID];
     forsearch.pop_front();
     for(auto& node : searchAt.adjacents){
       if(paths.find(node.second)==paths.end()){
-        forsearch.push_back(node.second);
+        insertToFind({node.second,DISTANCE(node.second)},forsearch);//forsearch.push_back(node.second);
         paths.insert({node.second,searchAtID});
       }
     }

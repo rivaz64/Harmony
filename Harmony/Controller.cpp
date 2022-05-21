@@ -189,6 +189,17 @@ Controller::restart()
   timer = 0;
 }
 
+void 
+Controller::nextPoint()
+{
+  auto& pointToGo = *m_memory.getVariableAs<Vector2f>("pointToGo");
+  auto& path = *m_memory.getVariableAs<list<Vector2f>>("path");
+  if(path.size()>0){
+    pointToGo = path.front();
+    path.pop_front();
+  }
+}
+
 void
 Controller::goToPoint(const Dimencion& point)
 {

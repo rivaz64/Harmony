@@ -172,7 +172,11 @@ class Vector2f
   */
   FORCEINLINE Vector2f const
   normalized() const {
-    return *this / sqrt(x * x + y * y);
+    auto lenght = magnitud();
+    if(lenght<.001){
+     return Vector2f(0,0);
+    }
+    return *this / lenght;
   }
 
   /**

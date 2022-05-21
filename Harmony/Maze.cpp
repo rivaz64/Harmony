@@ -139,6 +139,25 @@ inverse(MAZE_CELL::E dir){
 }
 
 vector<MAZE_CELL::E>
+checkMoves(uint x, uint y, uint sizeX, uint sizeY){
+  vector<MAZE_CELL::E> ans;
+  if(y!=sizeY-1){
+    ans.push_back(MAZE_CELL::UP);
+  }
+  if(x!=sizeX-1){
+    ans.push_back(MAZE_CELL::RIGHT);
+  }
+  if(y!=0){
+    ans.push_back(MAZE_CELL::DOWN);
+  }
+  if(x!=0){
+    ans.push_back(MAZE_CELL::LEFT);
+  }
+
+  return ans;
+}
+
+vector<MAZE_CELL::E>
 checkMoves(uint x, uint y, uint sizeX, uint sizeY, Grid& ocupied){
   vector<MAZE_CELL::E> ans;
   if(y!=sizeY-1 && ocupied.getValueAt(x,y+1)==MAZE_CELL::NONE){
@@ -182,4 +201,36 @@ Maze::backtracker(uint seed)
   }
 }
 
+
+void 
+Maze::aldousBroder(uint seed)
+{
+  srand(seed);
+  uint x = rand()%grid.sizeX;
+  uint y = rand()%grid.sizeY;
+  uint newX = x, newY = y;
+  uint area = grid.sizeX*grid.sizeY;
+  MAZE_CELL::E dir;
+  auto dirs = checkMoves(x,y,grid.sizeX,grid.sizeY);
+  dir = dirs[rand()%dirs.size()];
+  grid.setValueAt(x, y, dir);
+  move(newX, newY, dir);
+  grid.setValueAt(newX,newY, inverse(dir));
+  x = newX;
+  y = newY;
+  for(uint i=1; i<area-1; ++i){
+    while(grid.getValueAt(newX, newY) != MAZE_CELL::NONE){
+      x = newX;
+      y = newY;
+      dirs = checkMoves(x,y,grid.sizeX,grid.sizeY);
+      dir = dirs[rand()%dirs.size()];
+      move(newX, newY, dir);
+    }
+    grid.setValueAt(x, y, dir);
+    grid.setValueAt(newX,newY, inverse(dir));
+
+  }
 }
+
+}
+

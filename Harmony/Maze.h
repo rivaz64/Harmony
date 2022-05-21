@@ -87,6 +87,9 @@ class Maze
   void
   backtracker(uint seed);
 
+  void
+  aldousBroder(uint seed);
+
   
 
  private:
