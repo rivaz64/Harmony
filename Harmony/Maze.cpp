@@ -232,5 +232,79 @@ Maze::aldousBroder(uint seed)
   }
 }
 
+
+struct WilsonNode{
+
+  WilsonNode() = default;
+
+  WilsonNode(uint _x, uint _y, MAZE_CELL::E _dir):
+    x(_x), y(_y), dir(_dir){}
+
+  const bool& 
+  operator==(const WilsonNode& other) const
+  {
+    return x == other.x && y == other.y;
+  }
+
+  uint x;
+  uint y;
+  MAZE_CELL::E dir;
+};
+
+void 
+Maze::wilson(uint seed)
+{
+  srand(seed);
+  uint x = rand()%grid.sizeX;
+  uint y = rand()%grid.sizeY;
+  uint newX = 0, newY = 0;
+  auto dirs = checkMoves(x,y,grid.sizeX,grid.sizeY);
+  auto dir = dirs[rand()%dirs.size()];
+  grid.setValueAt(x, y, dir);
+  move(x, y, dir);
+  grid.setValueAt(x,y, inverse(dir));
+  uint cellsFilled = 2;
+  uint area = grid.sizeX*grid.sizeY;
+  while(cellsFilled<area){
+
+    list<WilsonNode> actualWalk;
+
+    while(grid.getValueAt(x,y) != MAZE_CELL::NONE){
+      x = rand()%grid.sizeX;
+      y = rand()%grid.sizeY;
+    }
+
+    newX = x;
+    newY = y;
+    dirs = checkMoves(x,y,grid.sizeX,grid.sizeY);
+    dir = dirs[rand()%dirs.size()];
+    actualWalk.push_back({newX,newY,dir});
+    move(newX, newY, dir);
+    while(grid.getValueAt(newX,newY) == MAZE_CELL::NONE){
+
+      dirs = checkMoves(newX,newY,grid.sizeX,grid.sizeY);
+      dir = dirs[rand()%dirs.size()];
+      actualWalk.push_back({newX,newY,dir});
+      move(newX, newY, dir);
+      auto finded = find(actualWalk.begin(),actualWalk.end(),WilsonNode(newX,newY,dir));
+      if(finded != actualWalk.end()){
+        newX = finded->x;
+        newY = finded->y;
+        actualWalk.assign(actualWalk.begin(),finded);
+        continue;
+      }
+      
+
+    }
+
+    for(auto& node : actualWalk){
+      grid.setValueAt(x,y,node.dir);
+      move(x,y,node.dir);
+      grid.setValueAt(x,y,inverse(node.dir));
+      ++cellsFilled;
+    }
+  }
+}
+
 }
 

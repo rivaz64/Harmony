@@ -21,6 +21,8 @@ enum E : unsigned char
 class Grid
 {
  public:
+
+ Grid() = default;
   
   Grid(uint x, uint y){
     sizeX = x;
@@ -68,7 +70,7 @@ class Maze
   init(uint x, uint y);
 
   /**
-   * @brief generates a maze using binary tree
+   * @brief in each cell decides if go up or roght
    * @param seed 
    * @param probabolityX the probability to go in x
    * @param probabolityY the probability to go in y
@@ -77,20 +79,33 @@ class Maze
   binaryTree(uint seed, uint probabolityX, uint probabolityY);
 
   /**
-   * @brief generates a maze using sidewinder
+   * @brief makes an horizontal passage and decides in one of the cells of the passage to go up
    * @param seed 
    * @param hallLength he probability of a wall in X
   */
   void
   sidewinder(uint seed, uint hallLength);
 
+  /**
+   * @brief random walk until there is no other place to walk, it returns until it can continue
+   * @param seed 
+  */
   void
   backtracker(uint seed);
 
+  /**
+   * @brief random walk, connects only if the new cell is not in the maze
+   * @param seed 
+  */
   void
   aldousBroder(uint seed);
 
-  
+  /**
+   * @brief select a random cells and does random walk until if gets to the maze
+   * @param seed 
+  */
+  void
+  wilson(uint seed);
 
  private:
   
