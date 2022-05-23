@@ -10,7 +10,7 @@ namespace Harmony{
  * @brief a way to change states in a certain event
 */
 class Transition:
-  public Delegate<uint>
+  public Delegate<STATES::E>
 {
  public:
 
@@ -19,8 +19,8 @@ class Transition:
    * @param controller the controller that is using this transicion
    * @param newState the state that is going to be in
   */
-  Transition(uint newState, Controller* control) :
-    Delegate<uint>(Delegate<uint>::create<Transition,Controller,&Controller::ChangeToState>(control)),
+  Transition(STATES::E newState, Controller* control) :
+    Delegate<STATES::E>(*Delegate<STATES::E>::createPtr<Transition,Controller,&Controller::ChangeToState>(control)),
     m_newState(newState)
   {}
 
@@ -37,9 +37,9 @@ class Transition:
   /**
    * @brief the new state to go to
   */
-  uint m_newState;
+  STATES::E m_newState;
 
-  friend class Delegate<uint>;
+  friend class Delegate<STATES::E>;
 };
 
 }

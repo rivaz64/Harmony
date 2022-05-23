@@ -6,7 +6,8 @@
 
 namespace Harmony{
 
-enum class MESSAGES
+namespace MESSAGES{
+enum E
 {
   OnUpdate,
   OnEnter,
@@ -14,19 +15,35 @@ enum class MESSAGES
   OnFinish,
   OnSeen
 };
+}
 
-enum class STATES
+namespace STATES{
+enum E
 {
   Wander,
   Pursue,
   Attack
 };
+}
 
 
 struct DelegatorDesciption{
-  uint fromState;
-  uint message;
+  STATES::E fromState;
+  MESSAGES::E message;
   vector<Delegator*> toState;
+};
+
+struct Memory{
+
+  /**
+   * @brief the time left before forgeting
+  */
+  float timeLeft;
+
+  /**
+   * @brief the message to be executing
+  */
+  vector<MESSAGES::E> msg;
 };
 
 /**
@@ -36,7 +53,7 @@ class Controller
 {
  public:
   
-  Controller(const map<uint,State*>& states);
+  Controller(const map<STATES::E,State*>& states);
 
   virtual 
   ~Controller();
@@ -50,7 +67,7 @@ class Controller
    * @param newState the state to where is changing
   */
   void
-  ChangeToState(uint newState);
+  ChangeToState(STATES::E newState);
 
   /**
    * @brief updates the state machine
@@ -63,7 +80,7 @@ class Controller
    * @param msg 
   */
   void
-  message(uint msg);
+  message(MESSAGES::E msg);
 
   /**
    * @brief chooses a new random location to go if the controller does not have a location to go
@@ -152,9 +169,14 @@ class Controller
   
  public:
   /**
-   * @brief the things this controller remembers
+   * @brief the variables of this controller
   */
-  BlackBoard m_memory;
+  BlackBoard m_variables;
+
+  /**
+   * @brief what is remembered
+  */
+  list<Memory> m_memory;
 
  protected:
 
@@ -166,17 +188,7 @@ class Controller
   /**
    * @brief all the states this machine can be in
   */
-  map<uint,State*> m_states;
-
-  /**
-   * @brief all the ways the controller can feel the world
-  */
-  map<uint,Detector*> m_sences;
-
-  /**
-   * @brief this are the ways the actor is activly feeling the world
-  */
-  map<uint,Detector*> m_activeSences;
+  map<STATES::E,State*> m_states;
 
   /**
    * @brief the pawn that is being controlled

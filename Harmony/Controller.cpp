@@ -6,7 +6,7 @@
 
 namespace Harmony{
 
-Controller::Controller(const map<uint,State*>& states) :
+Controller::Controller(const map<STATES::E,State*>& states) :
   m_states(states)                                  
 {
   m_actualState = states.begin()->second;
@@ -14,10 +14,11 @@ Controller::Controller(const map<uint,State*>& states) :
 
 Controller::~Controller()
 {
-  size_t numStates = m_states.size();
-  for(size_t i=0;i<numStates;++i){
-    delete m_states[i];
+  for(auto& state : m_states){
+    delete state.second;
+    state.second = nullptr;
   }
+  
 }
 
 void 
@@ -38,26 +39,41 @@ Controller::init(vector<DelegatorDesciption> defaultReactions,
     m_states[desc.fromState]->m_reactions[desc.message] = desc.toState;
   }
 
-  m_actualState->onMessage((uint)MESSAGES::OnEnter);
+  m_actualState->onMessage(MESSAGES::OnEnter);
 }
 
 void
-Controller::ChangeToState(uint newState)
+Controller::ChangeToState(STATES::E newState)
 {
-  m_actualState->onMessage((uint)MESSAGES::OnExit);
+  m_actualState->onMessage(MESSAGES::OnExit);
   m_actualState = m_states[newState];
-  m_actualState->onMessage((uint)MESSAGES::OnEnter);
+  m_actualState->onMessage(MESSAGES::OnEnter);
 }
 
 void 
 Controller::update(float delta)
 {
   deltaTime = delta;
-  m_actualState->onMessage((uint)MESSAGES::OnUpdate);
+
+  for(auto memory = m_memory.begin(); memory != m_memory.end(); ++memory){
+
+    for(auto& msg : memory->msg){
+      m_actualState->onMessage(msg);
+    }
+    
+    memory->timeLeft -= delta;
+    if(memory->timeLeft < 0){
+      auto forDelete = memory;
+      --memory;
+      m_memory.erase(forDelete);
+    }
+  }
+
+  m_actualState->onMessage(MESSAGES::OnUpdate);
 }
 
 void 
-Controller::message(uint msg)
+Controller::message(MESSAGES::E msg)
 {
   m_actualState->onMessage(msg);
 }
@@ -69,17 +85,17 @@ Controller::newRandomPointToGo()
   auto direction = m_pawn->getDirection();
   auto newPoint = location+direction*m_wanderDelta;
   auto wanderPoint = reachablePointInRadius(newPoint,m_wanderRadius);
-  m_memory.addVariableOfType<Dimencion>("pointToGo");
-  m_memory.setVariableAs<Dimencion>("pointToGo",wanderPoint);
+  m_variables.addVariableOfType<Dimencion>("pointToGo");
+  m_variables.setVariableAs<Dimencion>("pointToGo",wanderPoint);
 }
 
 void
 Controller::separate()
 {
-  const auto& separationForze = *m_memory.getVariableAs<float>("separationForze");
+  const auto& separationForze = *m_variables.getVariableAs<float>("separationForze");
   auto pawn = getPawn();
   auto pos = pawn->getPosition();
-  auto viewed = m_memory.getVariableAs<Harmony::vector<Harmony::Pawn*>>("viewed");
+  auto viewed = m_variables.getVariableAs<Harmony::vector<Harmony::Pawn*>>("viewed");
   if(!viewed){
     return;
   }
@@ -100,7 +116,7 @@ Controller::align()
   auto pawn = getPawn();
   auto pos = pawn->getPosition();
   auto pawnDir = pawn->getDirection();
-  auto viewed = m_memory.getVariableAs<Harmony::vector<Harmony::Pawn*>>("viewed");
+  auto viewed = m_variables.getVariableAs<Harmony::vector<Harmony::Pawn*>>("viewed");
   if(!viewed){
     return;
   }
@@ -116,11 +132,11 @@ Controller::align()
 void
 Controller::coher()
 {
-  const auto& cohercionForze = *m_memory.getVariableAs<float>("cohercionForze");
+  const auto& cohercionForze = *m_variables.getVariableAs<float>("cohercionForze");
   auto pawn = getPawn();
   auto pos = pawn->getPosition();
   auto pawnDir = pawn->getDirection();
-  auto viewed = m_memory.getVariableAs<Harmony::vector<Harmony::Pawn*>>("viewed");
+  auto viewed = m_variables.getVariableAs<Harmony::vector<Harmony::Pawn*>>("viewed");
   if(!viewed || viewed->size()==0){
     return;
   }
@@ -136,17 +152,17 @@ void
 Controller::goToPoint()
 {
   auto position = m_pawn->getPosition();
-  auto pointToGo = m_memory.getVariableAs<Dimencion>("pointToGo");
+  auto pointToGo = m_variables.getVariableAs<Dimencion>("pointToGo");
 
   if(!pointToGo){
-    message(static_cast<uint>(MESSAGES::OnFinish));
+    message(MESSAGES::OnFinish);
     return;
   }
 
   auto distance = *pointToGo-position;
 
-  if(size(distance) < *m_memory.getVariableAs<float>("aceptanceRadius")){
-    message(static_cast<uint>(MESSAGES::OnFinish));
+  if(size(distance) < *m_variables.getVariableAs<float>("aceptanceRadius")){
+    message(MESSAGES::OnFinish);
   }
 
   goToPoint(*pointToGo);
@@ -158,7 +174,7 @@ Controller::lookTo()
   auto pawn = getPawn();
   auto position = pawn->getPosition();
   auto direction = VectorToAngle(pawn->getDirection());
-  auto pointToGo = m_memory.getVariableAs<Dimencion>("pointToGo");
+  auto pointToGo = m_variables.getVariableAs<Dimencion>("pointToGo");
 
   if(!pointToGo){
     return;
@@ -173,11 +189,11 @@ Controller::lookTo()
 void 
 Controller::wait()
 {
-  auto& timer = *m_memory.getVariableAs<float>("timer");
-  auto& timeToWait = *m_memory.getVariableAs<float>("timeToWait");
+  auto& timer = *m_variables.getVariableAs<float>("timer");
+  auto& timeToWait = *m_variables.getVariableAs<float>("timeToWait");
   timer += deltaTime;
   if(timer>timeToWait){
-    message(static_cast<uint>(MESSAGES::OnFinish));
+    message(MESSAGES::OnFinish);
   }
   
 }
@@ -185,15 +201,15 @@ Controller::wait()
 void 
 Controller::restart()
 {
-  auto& timer = *m_memory.getVariableAs<float>("timer");
+  auto& timer = *m_variables.getVariableAs<float>("timer");
   timer = 0;
 }
 
 void 
 Controller::nextPoint()
 {
-  auto& pointToGo = *m_memory.getVariableAs<Vector2f>("pointToGo");
-  auto& path = *m_memory.getVariableAs<list<Vector2f>>("path");
+  auto& pointToGo = *m_variables.getVariableAs<Vector2f>("pointToGo");
+  auto& path = *m_variables.getVariableAs<list<Vector2f>>("path");
   if(path.size()>0){
     pointToGo = path.front();
     path.pop_front();

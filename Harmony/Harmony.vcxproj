@@ -146,6 +146,7 @@
     <ClInclude Include="Debuger.h" />
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="Maze.h" />
+    <ClInclude Include="Memory.h" />
     <ClInclude Include="NavMesh.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Prerequisites.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="BlackBoard.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Maze.cpp" />
+    <ClCompile Include="Memory.cpp" />
     <ClCompile Include="NavMesh.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Reaction.cpp" />

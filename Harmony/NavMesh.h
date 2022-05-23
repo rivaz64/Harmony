@@ -53,6 +53,9 @@ class NavMesh
   vector<uint>
   findPath(uint start, uint end);
 
+  void
+  update();
+
  public:
 
   /**
@@ -61,7 +64,7 @@ class NavMesh
   vector<NavMeshNode> tris;
 
 
-  //map<Pawn,uint> 
+  vector<Pawn*> pawns; 
   
 };
 

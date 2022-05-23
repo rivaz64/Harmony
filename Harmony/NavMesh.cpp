@@ -1,4 +1,5 @@
 #include "NavMesh.h"
+#include "Pawn.h"
 #include "VectorUtilities.h"
 
 namespace Harmony{
@@ -205,6 +206,16 @@ NavMesh::findPath(uint start, uint end)
         paths.insert({node.second,searchAtID});
       }
     }
+  }
+}
+
+void 
+NavMesh::update()
+{
+  for(auto& pawn : pawns){
+    auto position = pawn->getPosition();
+    auto velocity = pawn->getVelocity();
+
   }
 }
 
