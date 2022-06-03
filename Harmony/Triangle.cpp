@@ -3,7 +3,23 @@
 
 namespace Harmony{
 
-Dimencion 
+Triangle::Triangle(Dimencion p1, Dimencion p2, Dimencion p3) 
+  //point1(p1), point2(p2), point3(p3) 
+{ 
+  point1 = p1;
+  auto v1 = (p2-p1);
+  auto v2 = (p3-p1);
+  if(Vector2f::cross(v1,v2)>0.0f){
+    point2 = p2;
+    point3 = p3;
+  }
+  else{
+    point2 = p3;
+    point3 = p2;
+  }
+}
+
+Dimencion
 Triangle::center()
 {
   return (point1+point2+point3)/3.f;
@@ -71,7 +87,25 @@ Triangle::isPointInside(const Dimencion& point)
   auto totalAngle = abs(angleBetween(angle1,angle2))+
                     abs(angleBetween(angle3,angle2))+
                     abs(angleBetween(angle1,angle3));
-  return abs(totalAngle-PI*2.f) < .01f;
+  return abs(totalAngle-PI*2.f) < .0001f;
+}
+
+Dimencion
+Triangle::normalOfEdgeToInside(uint n)
+{
+  auto ref = &point1;
+  auto vec = *(ref+(n+1)%3)-*(ref+n);
+  vec.normalize();
+  return Dimencion(-vec.y,vec.x);
+}
+
+Dimencion 
+Triangle::normalOfEdgeToOutside(uint n)
+{
+  auto ref = &point1;
+  auto vec = *(ref+(n+1)%3)-*(ref+n);
+  vec.normalize();
+  return Dimencion(vec.y,-vec.x);
 }
 
 }

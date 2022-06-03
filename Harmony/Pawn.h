@@ -19,6 +19,13 @@ class Pawn
   getPosition();
 
   /**
+   * @brief gets the position of this pawn the previus tick
+   * @return 
+  */
+  virtual Dimencion
+  getPrevPosition();
+
+  /**
    * @brief gets the velocity of this pawn
    * @return 
   */

@@ -6,7 +6,6 @@
 
 #pragma once
 
-#define FORCEINLINE inline
 #include <cmath>
 
 namespace Harmony {
@@ -35,7 +34,8 @@ class Vector2f
    * @param v 
    * @return 
   */
-  FORCEINLINE bool const
+
+  inline bool const
   operator==(const Vector2f& v) const {
     return x == v.x && y == v.y;
   }
@@ -45,7 +45,7 @@ class Vector2f
    * @param v
    * @return
   */
-  FORCEINLINE Vector2f const
+  inline Vector2f const
   operator+(const Vector2f& v) const {
     return { x + v.x , y + v.y };
   }
@@ -55,7 +55,7 @@ class Vector2f
    * @param v
    * @return
   */
-  FORCEINLINE Vector2f const
+  inline Vector2f const
   operator+(float v) const {
     return { x + v , y + v };
   }
@@ -64,7 +64,7 @@ class Vector2f
    * @brief adds the vector v to this one
    * @param v
   */
-  FORCEINLINE Vector2f&
+  inline Vector2f&
   operator+=(const Vector2f& v) {
     x += v.x;
     y += v.y;
@@ -76,7 +76,7 @@ class Vector2f
    * @param v
    * @return
   */
-  FORCEINLINE Vector2f const
+  inline Vector2f const
   operator-(const Vector2f& v) const {
     return { x - v.x , y - v.y };
   }
@@ -86,7 +86,7 @@ class Vector2f
    * @param v
    * @return
   */
-  FORCEINLINE Vector2f const
+  inline Vector2f const
   operator-(float v) const {
     return { x - v , y - v };
   }
@@ -95,7 +95,7 @@ class Vector2f
    * @brief substract vector v from this
    * @param v
   */
-  FORCEINLINE Vector2f&
+  inline Vector2f&
   operator-=(const Vector2f& v) {
     x -= v.x;
     y -= v.y;
@@ -107,7 +107,7 @@ class Vector2f
    * @param v
    * @return
   */
-  FORCEINLINE Vector2f const
+  inline Vector2f const
   operator*(float v) const {
     return { x * v , y * v };
   }
@@ -117,7 +117,7 @@ class Vector2f
    * @param v
   */
 
-  FORCEINLINE Vector2f&
+  inline Vector2f&
   operator*=(float v) {
     x *= v;
     y *= v;
@@ -129,7 +129,7 @@ class Vector2f
    * @param v
    * @return
   */
-  FORCEINLINE Vector2f const
+  inline Vector2f const
   operator/(float v) const {
     v = 1.f / v;
     return { x * v , y * v };
@@ -139,7 +139,7 @@ class Vector2f
    * @brief divide the length vector the vector by v
    * @param v
   */
-  FORCEINLINE Vector2f&
+  inline Vector2f&
   operator/=(float v) {
     v = 1.f / v;
     x *= v;
@@ -152,7 +152,7 @@ class Vector2f
    * @param v 
    * @return 
   */
-  FORCEINLINE Vector2f
+  inline Vector2f
   operator*(const Vector2f& v) {
     return { x * v.x,y * v.y };
   }
@@ -161,7 +161,7 @@ class Vector2f
    * @brief the lenght of the vector
    * @return
   */
-  FORCEINLINE float const
+  inline float const
   magnitud() const {
     return std::sqrt(x * x + y * y);
   }
@@ -170,7 +170,7 @@ class Vector2f
    * @brief the unitary form of the vector
    * @return
   */
-  FORCEINLINE Vector2f const
+  inline Vector2f const
   normalized() const {
     auto lenght = magnitud();
     if(lenght<.001){
@@ -183,7 +183,7 @@ class Vector2f
   * @brief makes this vector have a magnitud of 1
   * @return
   */
-  FORCEINLINE void
+  inline void
   normalize() {
     *this  /= sqrt(x * x + y * y);
   }
@@ -193,7 +193,7 @@ class Vector2f
    * @param v
    * @return
   */
-  FORCEINLINE Vector2f const
+  inline Vector2f const
   project(const Vector2f& v) const {
     return v * (dot(*this,v) / dot(v,v));
   }
@@ -202,7 +202,7 @@ class Vector2f
    * @brief the direction in radians of the vector
    * @return
   */
-  FORCEINLINE float const
+  inline float const
   getDirection() const {
     return atan2(x, y);
   }
@@ -211,7 +211,7 @@ class Vector2f
    * @brief changes the direction of the vector to r in radians and the lenght stays the same
    * @return
   */
-  FORCEINLINE void 
+  inline void 
   setDirection(float r) {
     float l = magnitud();
     x = l * cos(r);
@@ -224,7 +224,7 @@ class Vector2f
    * @param v2
    * @return
   */
-  FORCEINLINE static float
+  inline static float
   dot(const Vector2f& v1, const Vector2f& v2) {
     return v1.x * v2.x + v1.y * v2.y;
   }
@@ -235,9 +235,10 @@ class Vector2f
    * @param v2
    * @return
   */
-  FORCEINLINE static float
+  inline static float
   cross(const Vector2f& v1, const Vector2f& v2) {
-    return v1.x * v2.y - v1.y * v2.x;
+    return static_cast<double>(v1.x) * static_cast<double>(v2.y)
+         - static_cast<double>(v1.y) * static_cast<double>(v2.x);
   }
 
   /**
@@ -249,7 +250,7 @@ class Vector2f
    * @param out intersection
    * @return if they intersect
   */
-  FORCEINLINE static bool
+  inline static bool
   intersect(Vector2f v1,
     Vector2f v2,
     Vector2f v3,

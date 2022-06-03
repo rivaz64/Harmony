@@ -1,6 +1,7 @@
 #include "NavMesh.h"
 #include "Pawn.h"
 #include "VectorUtilities.h"
+#include "Controller.h"
 
 namespace Harmony{
 
@@ -144,19 +145,33 @@ NavMesh::generate(const Dimencion& minPoint,
   }
 }
 
-list<Vector2f> 
-NavMesh::findPath(Vector2f start, Vector2f end){
-  uint nodeStart = 0, nodeEnd = 0;
+bool 
+NavMesh::nodeOfPoint(const Dimencion& point,uint& node)
+{
   auto numOfNodes = tris.size();
   for(uint i=0; i<numOfNodes; ++i){
-    if(tris[i].tri.isPointInside(start)){
-      nodeStart = i;
-    }
-    if(tris[i].tri.isPointInside(end)){
-      nodeEnd = i;
+    if(tris[i].tri.isPointInside(point)){
+      node = i;
+      return true;
     }
   }
-  list<Vector2f> ans;
+  return false;
+}
+
+void
+NavMesh::addPawn(Pawn* pawn)
+{
+  uint node = 0;
+  nodeOfPoint(pawn->getPosition(),node);
+  pawns.insert({pawn,node});
+}
+
+list<Dimencion> 
+NavMesh::findPath(Dimencion start, Dimencion end){
+  uint nodeStart = 0, nodeEnd = 0;
+  nodeOfPoint(start,nodeStart);
+  nodeOfPoint(end,nodeEnd);
+  list<Dimencion> ans;
   auto path = findPath(nodeStart, nodeEnd);
   for(auto& node : path){
     ans.push_back(tris[node].tri.center());
@@ -209,12 +224,72 @@ NavMesh::findPath(uint start, uint end)
   }
 }
 
-void 
-NavMesh::update()
+
+uint 
+NavMesh::goToNewNode(const Dimencion& originalPos,
+                     const Dimencion& destiny, 
+                     uint actualNodeId, 
+                     Dimencion& obstacle, 
+                     Dimencion& normal)
 {
-  for(auto& pawn : pawns){
+  auto prevNodeId = actualNodeId;
+  auto actualNode = tris[actualNodeId];
+  while(!actualNode.tri.isPointInside(destiny)){  
+    auto ref = &actualNode.tri.point1;
+    bool advancing = false;;
+    for(uint i = 0; i<3; ++i){
+      if(Vector2f::intersect(*(ref+i),*(ref+(1+i)%3),originalPos,destiny,obstacle)){
+        advancing = true;
+        if(actualNode.adjacents.find(i) == actualNode.adjacents.end()){
+          normal = actualNode.tri.normalOfEdgeToInside(i);
+          return -1;
+        }
+        if(prevNodeId == actualNode.adjacents[i]){
+          continue;
+        }
+        prevNodeId = actualNodeId;
+        actualNodeId = actualNode.adjacents[i];
+        actualNode = tris[actualNodeId];
+        break;
+      }
+    }
+    if(!advancing){
+      uint ans;
+      nodeOfPoint(destiny,ans);
+      return ans;
+    }
+  }
+  return actualNodeId;
+}
+
+float sign (Dimencion p1, Dimencion p2, Dimencion p3)
+{
+  return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+}
+
+
+void 
+NavMesh::update(float deltaTime)
+{
+  for(auto& data : pawns){
+    auto pawn = data.first;
     auto position = pawn->getPosition();
+    auto prevPosition = pawn->getPrevPosition();
     auto velocity = pawn->getVelocity();
+    Dimencion newPos;
+    Dimencion collicion;
+    Dimencion normal;
+
+    //sets the pawn to its node in the navmesh
+    data.second = goToNewNode(prevPosition,position,data.second,collicion,normal);
+
+    //todo: multiplicar velocity por variable
+    newPos = position+velocity;
+
+    if(goToNewNode(position,newPos,data.second,collicion,normal) == -1){
+      pawn->getController()->m_variables.setVariableAs<Dimencion>("pointToGo",collicion+normal*216.f);
+      pawn->getController()->message(MESSAGES::OnObstacle);
+    }
 
   }
 }

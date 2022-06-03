@@ -55,18 +55,21 @@ Controller::update(float delta)
 {
   deltaTime = delta;
 
-  for(auto memory = m_memory.begin(); memory != m_memory.end(); ++memory){
+  for(auto memories = m_memory.begin(); memories != m_memory.end(); ++memories){
+    for(auto memory = memories->second.begin(); memory != memories->second.end(); ++memory){
+      auto mem = *memory;
+      m_actualState->onMessage(mem->msg);
+      mem->timeLeft -= delta;
+      if(mem->timeLeft < 0){
+        auto forDelete = memory;
+        --memory;
+        memories->second.erase(forDelete);
+      }
+    }
 
-    for(auto& msg : memory->msg){
-      m_actualState->onMessage(msg);
-    }
+
     
-    memory->timeLeft -= delta;
-    if(memory->timeLeft < 0){
-      auto forDelete = memory;
-      --memory;
-      m_memory.erase(forDelete);
-    }
+    
   }
 
   m_actualState->onMessage(MESSAGES::OnUpdate);
@@ -79,6 +82,15 @@ Controller::message(MESSAGES::E msg)
 }
 
 void 
+Controller::remember(MEMENTOS::E type, Memento* memory)
+{
+  if(m_memory.find(type) == m_memory.end()){
+    m_memory.insert({type,{}});
+  }
+  m_memory[type].push_back(memory);
+}
+
+void
 Controller::newRandomPointToGo()
 {
   auto location = m_pawn->getPosition();
@@ -153,7 +165,7 @@ Controller::goToPoint()
 {
   auto position = m_pawn->getPosition();
   auto pointToGo = m_variables.getVariableAs<Dimencion>("pointToGo");
-
+  auto& aceptanceRadius = *m_variables.getVariableAs<float>("aceptanceRadius");
   if(!pointToGo){
     message(MESSAGES::OnFinish);
     return;
@@ -161,7 +173,7 @@ Controller::goToPoint()
 
   auto distance = *pointToGo-position;
 
-  if(size(distance) < *m_variables.getVariableAs<float>("aceptanceRadius")){
+  if(size(distance) < aceptanceRadius){
     message(MESSAGES::OnFinish);
   }
 

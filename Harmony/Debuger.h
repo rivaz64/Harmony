@@ -31,7 +31,7 @@ print(const float v){
 inline
 void 
 print(const Vector2f& v){
-  std::cout<<v.x<<" "<<v.y<<std::endl;
+  std::cout<<v.x<<" , "<<v.y<<std::endl;
 }
 
 }

@@ -13,19 +13,28 @@ enum E
   OnEnter,
   OnExit,
   OnFinish,
-  OnSeen
+  OnSeen,
+  OnObstacle
 };
 }
 
 namespace STATES{
 enum E
 {
+  None,
   Wander,
   Pursue,
   Attack
 };
 }
 
+namespace MEMENTOS{
+enum E
+{
+  Obstacle,
+  Pawn
+};
+}
 
 struct DelegatorDesciption{
   STATES::E fromState;
@@ -33,17 +42,26 @@ struct DelegatorDesciption{
   vector<Delegator*> toState;
 };
 
-struct Memory{
-
+struct Memento{
   /**
    * @brief the time left before forgeting
   */
   float timeLeft;
 
   /**
-   * @brief the message to be executing
+   * @brief how to react if remembering this
   */
-  vector<MESSAGES::E> msg;
+  MESSAGES::E msg;
+};
+
+template<class T>
+struct Memory: 
+  Memento
+{
+  /**
+   * @brief the thing that is being remember
+  */
+  T memory;
 };
 
 /**
@@ -81,6 +99,13 @@ class Controller
   */
   void
   message(MESSAGES::E msg);
+
+  /**
+   * @brief remembers something for a certain time
+   * @param memory 
+  */
+  void
+  remember(MEMENTOS::E type , Memento* memory);
 
   /**
    * @brief chooses a new random location to go if the controller does not have a location to go
@@ -173,11 +198,6 @@ class Controller
   */
   BlackBoard m_variables;
 
-  /**
-   * @brief what is remembered
-  */
-  list<Memory> m_memory;
-
  protected:
 
   /**
@@ -194,6 +214,11 @@ class Controller
    * @brief the pawn that is being controlled
   */
   Pawn* m_pawn;
+
+  /**
+   * @brief what is remembered
+  */
+  map<MEMENTOS::E,list<Memento*>> m_memory;
 
   float m_wanderDelta = 36;
   float m_wanderRadius = 18;

@@ -15,6 +15,7 @@
 namespace Harmony{
 
 class Vector2f;
+class Object;
 class Pawn;
 class Controller;
 class State;

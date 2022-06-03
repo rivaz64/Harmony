@@ -17,6 +17,15 @@ Pawn::getPosition()
 }
 
 Dimencion
+Pawn::getPrevPosition()
+{
+  #ifdef _DEBUG
+   print("get previus position not implemented");
+   #endif
+   return Dimencion();
+}
+
+Dimencion
 Pawn::getVelocity()
 {
   #ifdef _DEBUG

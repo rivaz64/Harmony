@@ -47,14 +47,61 @@ class NavMesh
            const Dimencion& maxPoint, 
            const vector<vector<Dimencion>>& obstacles);
 
-  list<Vector2f>
-  findPath(Vector2f start, Vector2f end);
+  /**
+   * @brief 
+   * @param  
+   * @return 
+  */
+  bool
+  nodeOfPoint(const Dimencion& point,uint& node);
 
+  /**
+   * @brief adds a pawn that is going to be using the navmesh
+   * @param pawn 
+  */
+  void
+  addPawn(Pawn* pawn);
+
+  /**
+   * @brief finds a path in points 
+   * @param start 
+   * @param end 
+   * @return the path in points
+  */
+  list<Dimencion>
+  findPath(Dimencion start, Dimencion end);
+
+  /**
+   * @brief finds a path form a node to another
+   * @param start 
+   * @param end 
+   * @return a path of nodes
+  */
   vector<uint>
   findPath(uint start, uint end);
 
+  /**
+   * @brief a linetrace using navmesh
+   * @param originalPos 
+   * @param destiny 
+   * @param actualNode 
+   * @param obstacle 
+   * @param normal 
+   * @return 
+  */
+  uint
+  goToNewNode(const Dimencion& originalPos,
+              const Dimencion& destiny, 
+              uint actualNodeId, 
+              Dimencion& obstacle, 
+              Dimencion& normal);
+
+  /**
+   * @brief updates the pawns and in which node they are
+   * @param deltaTime 
+  */
   void
-  update();
+  update(float deltaTime);
 
  public:
 
@@ -64,7 +111,7 @@ class NavMesh
   vector<NavMeshNode> tris;
 
 
-  vector<Pawn*> pawns; 
+  map<Pawn*,uint> pawns; 
   
 };
 

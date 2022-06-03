@@ -7,8 +7,10 @@ class Triangle
 {
  public:
 
-  Triangle(Dimencion p1, Dimencion p2, Dimencion p3) :
-    point1(p1), point2(p2), point3(p3) {}
+  Triangle() = default;
+
+  Triangle(Dimencion p1, Dimencion p2, Dimencion p3);
+    
 
 
   /**
@@ -65,6 +67,22 @@ class Triangle
   */
   bool 
   isPointInside(const Dimencion& point);
+
+  /**
+   * @brief the normal of an edge tooking to the inside of the triangle
+   * @param n 
+   * @return 
+  */
+  Dimencion
+  normalOfEdgeToInside(uint n);
+
+  /**
+   * @brief the normal of an edge tooking to the outside of the triangle
+   * @param n 
+   * @return 
+  */
+  Dimencion
+  normalOfEdgeToOutside(uint n);
 
  public:
   

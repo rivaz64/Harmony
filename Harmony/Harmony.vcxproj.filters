@@ -60,7 +60,10 @@
     <ClInclude Include="Maze.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Memory.h">
+    <ClInclude Include="Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Number.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -98,7 +101,10 @@
     <ClCompile Include="Maze.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Memory.cpp">
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Number.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
