@@ -145,6 +145,7 @@
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Debuger.h" />
     <ClInclude Include="Delegate.h" />
+    <ClInclude Include="DNA.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="NavMesh.h" />
     <ClInclude Include="Number.h" />
@@ -161,6 +162,7 @@
   <ItemGroup>
     <ClCompile Include="BlackBoard.cpp" />
     <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="DNA.cpp" />
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="NavMesh.cpp" />
     <ClCompile Include="Number.cpp" />

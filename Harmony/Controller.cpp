@@ -9,7 +9,7 @@ namespace Harmony{
 Controller::Controller(const map<STATES::E,State*>& states) :
   m_states(states)                                  
 {
-  m_actualState = states.begin()->second;
+  m_actualState = states.begin()->first;
 }
 
 Controller::~Controller()
@@ -39,15 +39,15 @@ Controller::init(vector<DelegatorDesciption> defaultReactions,
     m_states[desc.fromState]->m_reactions[desc.message] = desc.toState;
   }
 
-  m_actualState->onMessage(MESSAGES::OnEnter);
+  m_states[m_actualState]->onMessage(MESSAGES::OnEnter);
 }
 
 void
 Controller::ChangeToState(STATES::E newState)
 {
-  m_actualState->onMessage(MESSAGES::OnExit);
-  m_actualState = m_states[newState];
-  m_actualState->onMessage(MESSAGES::OnEnter);
+  m_states[m_actualState]->onMessage(MESSAGES::OnExit);
+  m_actualState = newState;
+  m_states[m_actualState]->onMessage(MESSAGES::OnEnter);
 }
 
 void 
@@ -55,30 +55,13 @@ Controller::update(float delta)
 {
   deltaTime = delta;
 
-  for(auto memories = m_memory.begin(); memories != m_memory.end(); ++memories){
-    for(auto memory = memories->second.begin(); memory != memories->second.end(); ++memory){
-      auto mem = *memory;
-      m_actualState->onMessage(mem->msg);
-      mem->timeLeft -= delta;
-      if(mem->timeLeft < 0){
-        auto forDelete = memory;
-        --memory;
-        memories->second.erase(forDelete);
-      }
-    }
-
-
-    
-    
-  }
-
-  m_actualState->onMessage(MESSAGES::OnUpdate);
+  m_states[m_actualState]->onMessage(MESSAGES::OnUpdate);
 }
 
 void 
 Controller::message(MESSAGES::E msg)
 {
-  m_actualState->onMessage(msg);
+  m_states[m_actualState]->onMessage(msg);
 }
 
 void 
@@ -218,12 +201,24 @@ Controller::restart()
 }
 
 void 
-Controller::nextPoint()
+Controller::nextPointPath()
 {
   auto& pointToGo = *m_variables.getVariableAs<Vector2f>("pointToGo");
   auto& path = *m_variables.getVariableAs<list<Vector2f>>("path");
   if(path.size()>0){
     pointToGo = path.front();
+    path.pop_front();
+  }
+}
+
+void 
+Controller::nextPointPatrol()
+{
+  auto& pointToGo = *m_variables.getVariableAs<Vector2f>("pointToGo");
+  auto& path = *m_variables.getVariableAs<list<Vector2f>>("path");
+  if(path.size()>0){
+    pointToGo = path.front();
+    path.push_back(pointToGo);
     path.pop_front();
   }
 }

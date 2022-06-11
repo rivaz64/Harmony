@@ -14,7 +14,8 @@ enum E
   OnExit,
   OnFinish,
   OnSeen,
-  OnObstacle
+  OnObstacle,
+  OnDie
 };
 }
 
@@ -24,7 +25,9 @@ enum E
   None,
   Wander,
   Pursue,
-  Attack
+  Attack,
+  Evade,
+  Dead
 };
 }
 
@@ -159,7 +162,13 @@ class Controller
    * @brief goes to the next point when following a path
   */
   void 
-  nextPoint();
+  nextPointPath();
+
+  /**
+   * @brief goes to the next point when patrolling 
+  */
+  void 
+  nextPointPatrol();
 
   /**
    * @brief goes to a point using the system the controller has
@@ -203,7 +212,7 @@ class Controller
   /**
    * @brief the state in which this machine is
   */
-  State* m_actualState;
+  STATES::E m_actualState;
 
   /**
    * @brief all the states this machine can be in

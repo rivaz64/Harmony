@@ -66,6 +66,9 @@
     <ClInclude Include="Number.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DNA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="State.cpp">
@@ -105,6 +108,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Number.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DNA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

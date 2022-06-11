@@ -79,6 +79,11 @@ class BlackBoard
     *m_data[name] = value;
   }
 
+  inline uint 
+  size() const{
+    m_data.size();
+  }
+
  private:
   
   /**
