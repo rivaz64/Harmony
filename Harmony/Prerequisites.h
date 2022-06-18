@@ -30,6 +30,7 @@ using std::map;
 using std::pair;
 using std::string;
 using std::find;
+using std::advance;
 using uint = unsigned int;
 
 #ifdef UNREAL_HARMONY

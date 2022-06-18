@@ -14,7 +14,8 @@ enum E : unsigned char
   UP = 1,
   RIGHT = 2,
   DOWN = 4,
-  LEFT = 8
+  LEFT = 8,
+  ALL = 15
 };
 }
 
@@ -28,15 +29,16 @@ enum E : unsigned char
   DOWN = 8,
   DOWN_LEFT = 16,
   DOWN_RIGHT = 32,
-  UP = 64,
-  DOWN = 128
+  //UP = 64,
+  //DOWN = 128
+  ALL = 255
 };
 }
 
-//struct Coord{
-//  uint x;
-//  uint y;
-//};
+struct Coord{
+  uint x;
+  uint y;
+};
 //
 //struct Coord3D :
 //  public Coord{
@@ -104,8 +106,26 @@ class Grid{
   virtual vector<uint>
   checkMoves(const uint x, const  uint y){return {};}
 
+  /**
+   * @brief get teh moves counting marked cells as collicions
+   * @param x 
+   * @param y 
+   * @return 
+  */
   virtual vector<uint>
   checkMarkedMoves(const uint x, const uint y){return {};}
+
+  /**
+   * @brief get the moves that are not of this cell
+   * @param x 
+   * @param y 
+   * @return 
+  */
+  virtual vector<uint>
+  checknewMoves(const uint x, const uint y){return {};}
+
+  void
+  getRandomCoords(uint& x, uint& y);
 
   uint sizeX;
   uint sizeY;
@@ -155,6 +175,9 @@ class ExelGrid :
 
   vector<uint>
   checkMarkedMoves(const uint x, const uint y) override;
+
+  vector<uint>
+  checknewMoves(const uint x, const uint y) override;
 
  private:
   /**
@@ -209,6 +232,9 @@ class QuadGrid :
   vector<uint>
   checkMarkedMoves(const uint x, const uint y) override;
 
+  vector<uint>
+  checknewMoves(const uint x, const uint y) override;
+
  private:
   /**
    * @brief the grid containing the maze
@@ -225,7 +251,7 @@ class Maze
    * @param grid 
   */
   void
-  init(Grid* grid);
+  init(Grid* grid,uint area);
 
   /**
    * @brief in each cell decides if go up or roght
@@ -249,7 +275,7 @@ class Maze
    * @param seed 
   */
   void
-  backtracker(uint seed);
+  backtracker(uint seed,Grid* backGrid);
 
   /**
    * @brief random walk, connects only if the new cell is not in the maze
@@ -265,9 +291,29 @@ class Maze
   void
   wilson(uint seed);
 
+  /**
+   * @brief adds directions to dead points
+   * @param p the percentage of points to clear
+  */
+  void
+  clearDeadPoints(float p);
+
  private:
   
+  /**
+   * @brief the area to be filled by the maze
+  */
+  uint m_area; 
+
+  /**
+   * @brief the grid where the maze is going to be drawn
+  */
   Grid* m_grid;
+
+  /**
+   * @brief the cells that only have one direction
+  */
+  list<Coord> deadPoints; 
 };
 
 }

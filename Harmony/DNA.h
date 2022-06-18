@@ -2,6 +2,7 @@
 
 #include "Prerequisites.h"
 #include "BlackBoard.h"
+#include "Delegate.h"
 
 namespace Harmony{
 
@@ -26,10 +27,11 @@ class DNA
   */
   DNA(const BlackBoard& genes) : m_genes(genes) {}
 
-  DNA(const DNA& father, const DNA& mother);
+  DNA(DNA& father, DNA& mother);
 
- private:
+ public:
   BlackBoard m_genes;
+  vector<Delegate<void*>> m_mutations;
 };
 
 }

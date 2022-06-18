@@ -21,9 +21,10 @@ operator& (MAZE_CELL::E lhs, MAZE_CELL::E rhs)
 //}
 
 void
-Maze::init(Grid* grid)
+Maze::init(Grid* grid, uint area)
 {
   m_grid = grid;
+  m_area = area;
 }
 
 void
@@ -183,28 +184,31 @@ Maze::sidewinder(uint seed, uint hallLength)
 //}
 
 void 
-Maze::backtracker(uint seed)
+Maze::backtracker(uint seed,Grid* backGrid)
 {
-  //srand(seed);
-  //uint x = rand()%m_grid->sizeX;
-  //uint y = rand()%m_grid->sizeY;
+  srand(seed);
+  uint x = rand()%m_grid->sizeX;
+  uint y = rand()%m_grid->sizeY;
   //uint area = m_grid->sizeX*m_grid->sizeY;
   //Grid* backGrid = new Grid(m_grid->sizeX,m_grid->sizeY);
-  //for(uint i=1; i<area; ++i){
-  //  auto dirs = m_grid->checkMarkedMoves(x,y);
-  //  auto dirsNum = dirs.size();
-  //  while(dirsNum == 0){
-  //    m_grid->move(x, y, backgrid->getValueAt(x,y));
-  //    dirs = checkMoves(x,y,m_grid->sizeX,m_grid->sizeY,grid);
-  //    dirsNum = dirs.size();
-  //  }
-  //  auto random = rand()%dirsNum;
-  //  auto dir = dirs[random];
-  //  m_grid->setValueAt(x, y, dir);
-  //  m_grid->move(x,y,dir);
-  //  m_grid->setValueAt(x,y, inverse(dir));
-  //  backm_grid->setValueAt(x, y, inverse(dir));
-  //}
+  for(uint i=1; i<m_area; ++i){
+    auto dirs = m_grid->checkMarkedMoves(x,y);
+    auto dirsNum = dirs.size();
+    if(dirsNum == 0){
+      deadPoints.push_back({x,y});
+    }
+    while(dirsNum == 0){
+      m_grid->move(x, y, backGrid->getValueAt(x,y));
+      dirs = m_grid->checkMarkedMoves(x,y);
+      dirsNum = dirs.size();
+    }
+    auto random = rand()%dirsNum;
+    auto dir = dirs[random];
+    m_grid->setValueAt(x, y, dir);
+    m_grid->move(x,y,dir);
+    m_grid->setValueAt(x,y, m_grid->inverse(dir));
+    backGrid->setValueAt(x, y, backGrid->inverse(dir));
+  }
 }
 
 
@@ -212,10 +216,11 @@ void
 Maze::aldousBroder(uint seed)
 {
   srand(seed);
-  uint x = rand()%m_grid->sizeX;
-  uint y = rand()%m_grid->sizeY;
+  uint x;
+  uint y;
+  m_grid->getRandomCoords(x,y);
   uint newX = x, newY = y;
-  uint area = m_grid->sizeX*m_grid->sizeY;
+  //uint area = m_grid->sizeX*m_grid->sizeY;
   uint dir;
   auto dirs = m_grid->checkMoves(x,y);
   dir = dirs[rand()%dirs.size()];
@@ -224,7 +229,7 @@ Maze::aldousBroder(uint seed)
   m_grid->setValueAt(newX,newY, m_grid->inverse(dir));
   x = newX;
   y = newY;
-  for(uint i=1; i<area-1; ++i){
+  for(uint i=1; i<m_area-1; ++i){
     while(m_grid->getValueAt(newX, newY) != MAZE_CELL::NONE){
       x = newX;
       y = newY;
@@ -312,6 +317,23 @@ Maze::wilson(uint seed)
   }
 }
 
+void
+Maze::clearDeadPoints(float p)
+{
+  uint totalPoints = static_cast<float>(deadPoints.size())*p;
+  for(int i = 0; i< totalPoints; ++i){
+    uint toQuit = rand()%deadPoints.size();
+    auto at = deadPoints.begin();
+    advance(at,toQuit);
+    auto dirs = m_grid->checknewMoves(at->x,at->y);
+    auto dir = dirs[rand()%dirs.size()];
+    m_grid->setValueAt(at->x,at->y,dir);
+    m_grid->move(at->x,at->y,dir);
+    m_grid->setValueAt(at->x,at->y,m_grid->inverse(dir));
+    deadPoints.erase(at);
+  }
+}
+
 
 void
 ExelGrid::setValueAt(uint x, uint y, uint value)
@@ -394,22 +416,22 @@ vector<uint>
 ExelGrid::checkMoves(const uint x, const uint y)
 {
   vector<uint> ans;
-  if(y!=sizeY-1){
+  if(y!=sizeY-1 && getValueAt(x,y+1)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::UP);
   }
-  if(x!=sizeX-1){
+  if(x!=sizeX-1&& getValueAt(x+1,y)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::DOWN_RIGHT);
   }
-  if(x!=sizeX-1 && y!=sizeY-1){
+  if(x!=sizeX-1 && y!=sizeY-1&& getValueAt(x+1,y+1)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::UP_RIGHT);
   }
-  if(y!=0){
+  if(y!=0&& getValueAt(x,y-1)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::DOWN);
   }
-  if(x!=0){
+  if(x!=0&& getValueAt(x-1,y)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::UP_LEFT);
   }
-  if(x!=0 && y!=0){
+  if(x!=0 && y!=0&& getValueAt(x-1,y-1)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::DOWN_LEFT);
   }
   return ans;
@@ -419,24 +441,69 @@ vector<uint>
 ExelGrid::checkMarkedMoves(const uint x, const uint y)
 {
   vector<uint> ans;
-  if(y!=sizeY-1 && getValueAt(x,y+1)==EXEL_CELL::NONE){
+  if(y!=sizeY-1 && getValueAt(x,y+1)==EXEL_CELL::NONE&& getValueAt(x,y+1)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::UP);
   }
-  if(x!=sizeX-1 && getValueAt(x+1,y)==EXEL_CELL::NONE){
+  if(x!=sizeX-1 && getValueAt(x+1,y)==EXEL_CELL::NONE&& getValueAt(x+1,y)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::DOWN_RIGHT);
   }
-  if(x!=sizeX-1 && y!=sizeY-1 && getValueAt(x+1,y+1)==EXEL_CELL::NONE){
+  if(x!=sizeX-1 && y!=sizeY-1 && getValueAt(x+1,y+1)==EXEL_CELL::NONE&& getValueAt(x+1,y+1)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::UP_RIGHT);
   }
-  if(y!=0 && getValueAt(x,y-1)==EXEL_CELL::NONE){
+  if(y!=0 && getValueAt(x,y-1)==EXEL_CELL::NONE&& getValueAt(x,y-1)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::DOWN);
   }
-  if(x!=0 && getValueAt(x-1,y)==EXEL_CELL::NONE){
+  if(x!=0 && getValueAt(x-1,y)==EXEL_CELL::NONE&& getValueAt(x-1,y)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::UP_LEFT);
   }
-  if(x!=0 && y!=0 && getValueAt(x-1,y-1)==EXEL_CELL::NONE){
+  if(x!=0 && y!=0 && getValueAt(x-1,y-1)==EXEL_CELL::NONE&& getValueAt(x-1,y-1)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::DOWN_LEFT);
   }
+  return ans;
+}
+
+vector<uint> 
+ExelGrid::checknewMoves(const uint x, const uint y)
+{
+  vector<uint> ans;
+  uint dirs;
+  if(y!=sizeY-1){
+    dirs = getValueAt(x,y+1);
+    if(dirs!=EXEL_CELL::ALL && !(dirs & EXEL_CELL::UP)){
+      ans.push_back(EXEL_CELL::UP);
+    }
+  }
+  if(x!=sizeX-1){
+    dirs = getValueAt(x+1,y);
+    if(dirs!=EXEL_CELL::ALL && !(dirs & EXEL_CELL::DOWN_RIGHT)){
+      ans.push_back(EXEL_CELL::DOWN_RIGHT);
+    }
+  }
+  if(x!=sizeX-1 && y!=sizeY-1){
+    dirs = getValueAt(x+1,y+1);
+    if(dirs!=EXEL_CELL::ALL && !(dirs & EXEL_CELL::UP_RIGHT)){
+      ans.push_back(EXEL_CELL::UP_RIGHT);
+    }
+  }
+  if(y!=0){
+    dirs = getValueAt(x,y-1); 
+    if(getValueAt(x,y-1)!=EXEL_CELL::ALL && !(dirs & EXEL_CELL::DOWN)){
+      ans.push_back(EXEL_CELL::DOWN);
+    }
+  }
+  if(x!=0){
+    dirs = getValueAt(x-1,y); 
+    if(getValueAt(x-1,y)!=EXEL_CELL::ALL && !(dirs & EXEL_CELL::UP_LEFT)){
+      ans.push_back(EXEL_CELL::UP_LEFT);
+    }
+  }
+  if(x!=0 && y!=0){
+    dirs = getValueAt(x-1,y-1);
+    if(getValueAt(x-1,y-1)!=EXEL_CELL::ALL && !(dirs & EXEL_CELL::DOWN_LEFT)){
+      ans.push_back(EXEL_CELL::DOWN_LEFT);
+    }
+  }
+  
   return ans;
 }
 
@@ -505,16 +572,16 @@ vector<uint>
 QuadGrid::checkMoves(const uint x, const uint y)
 {
   vector<uint> ans;
-  if(y!=sizeY-1){
+  if(y!=sizeY-1 && getValueAt(x,y+1)!=MAZE_CELL::ALL){
     ans.push_back(MAZE_CELL::UP);
   }
-  if(x!=sizeX-1){
+  if(x!=sizeX-1  && getValueAt(x+1,y)!=MAZE_CELL::ALL){
     ans.push_back(MAZE_CELL::RIGHT);
   }
-  if(y!=0){
+  if(y!=0 && getValueAt(x,y-1)!=MAZE_CELL::ALL){
     ans.push_back(MAZE_CELL::DOWN);
   }
-  if(x!=0){
+  if(x!=0 && getValueAt(x-1,y)!=MAZE_CELL::ALL){
     ans.push_back(MAZE_CELL::LEFT);
   }
 
@@ -525,19 +592,53 @@ vector<uint>
 QuadGrid::checkMarkedMoves(const uint x, const uint y)
 {
   vector<uint> ans;
-  if(y!=sizeY-1 && getValueAt(x,y+1)==MAZE_CELL::NONE){
+  if(y!=sizeY-1 && getValueAt(x,y+1)==MAZE_CELL::NONE && getValueAt(x,y+1)!=MAZE_CELL::ALL){
     ans.push_back(MAZE_CELL::UP);
   }
-  if(x!=sizeX-1 && getValueAt(x+1,y)==MAZE_CELL::NONE){
+  if(x!=sizeX-1 && getValueAt(x+1,y)==MAZE_CELL::NONE && getValueAt(x+1,y)!=MAZE_CELL::ALL){
     ans.push_back(MAZE_CELL::RIGHT);
   }
-  if(y!=0 && getValueAt(x,y-1)==MAZE_CELL::NONE){
+  if(y!=0 && getValueAt(x,y-1)==MAZE_CELL::NONE&& getValueAt(x,y-1)!=MAZE_CELL::ALL){
     ans.push_back(MAZE_CELL::DOWN);
   }
-  if(x!=0 && getValueAt(x-1,y)==MAZE_CELL::NONE){
+  if(x!=0 && getValueAt(x-1,y)==MAZE_CELL::NONE&& getValueAt(x-1,y)!=MAZE_CELL::ALL){
     ans.push_back(MAZE_CELL::LEFT);
   }
 
+  return ans;
+}
+
+vector<uint> QuadGrid::checknewMoves(const uint x, const uint y)
+{
+  vector<uint> ans;
+  uint dirs;
+  if(y!=sizeY-1){
+    dirs = getValueAt(x,y+1);
+    if(dirs!=MAZE_CELL::ALL && !(dirs & MAZE_CELL::UP) ){
+      ans.push_back(MAZE_CELL::UP);
+    }
+  }
+  if(x!=sizeX-1){
+    dirs = getValueAt(x+1,y);
+    if(dirs!=MAZE_CELL::ALL && !(dirs & MAZE_CELL::RIGHT)){
+      ans.push_back(MAZE_CELL::RIGHT);
+    }
+  }
+  
+  if(y!=0){
+    dirs = getValueAt(x,y-1);
+    if(dirs!=MAZE_CELL::ALL && !(dirs & MAZE_CELL::DOWN)){
+      ans.push_back(MAZE_CELL::DOWN);
+    }
+  }
+
+  if(x!=0){
+    dirs = getValueAt(x-1,y);
+    if(dirs!=MAZE_CELL::ALL && !(dirs & MAZE_CELL::LEFT)){
+      ans.push_back(MAZE_CELL::LEFT);
+    }
+  }
+  
   return ans;
 }
 
@@ -548,6 +649,17 @@ QuadGrid::checkMarkedMoves(const uint x, const uint y)
 //  move(newX, newY, dir);
 //  setValueAt(newX,newY, inverse(dir));
 //}
+
+void
+Grid::getRandomCoords(uint& x, uint& y)
+{
+  x = rand()%sizeX;
+  y = rand()%sizeY;
+  while(getValueAt( x,  y) != 0){
+    x = rand()%sizeX;
+    y = rand()%sizeY;
+  }
+}
 
 }
 
