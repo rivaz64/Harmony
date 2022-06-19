@@ -23,6 +23,7 @@ class Message;
 class BlackBoard;
 class Transition;
 class Detector;
+class Grid;
 
 using std::vector;
 using std::list;
