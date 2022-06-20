@@ -30,7 +30,7 @@ class QuadGrid :
 
   QuadGrid() = default;
   
-  QuadGrid(uint x, uint y,float cellSize);
+  QuadGrid(uint x, uint y,float cellSize, const Dimencion& ofset);
 
   void
   setValueAt(uint x, uint y,uint value) override;

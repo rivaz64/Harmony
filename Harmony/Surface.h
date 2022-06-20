@@ -23,7 +23,8 @@ class Surface
   virtual bool
   getCellAt(const Dimencion& point,uint& nodeId){return false;}
 
-
+  virtual const Figure*
+  getFigure(const uint id){return nullptr;}
 
  protected:
 };

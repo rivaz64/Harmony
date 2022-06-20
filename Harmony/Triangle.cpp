@@ -38,7 +38,7 @@ Triangle::Triangle(Dimencion p1, Dimencion p2, Dimencion p3)
 }
 
 uint 
-Triangle::getSide(const Dimencion& point)
+Triangle::getSide(const Dimencion& point) const
 {
   auto center = getCenter();
   auto angle1 = VectorToAngle(point1-center);
@@ -61,7 +61,7 @@ Triangle::getSide(const Dimencion& point)
 }
 
 bool 
-Triangle::isPointInside(const Dimencion& point, uint& side)
+Triangle::isPointInside(const Dimencion& point, uint& side) const
 {
   auto s = getSide(point);
   auto dif = point-m_center;

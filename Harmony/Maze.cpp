@@ -170,8 +170,8 @@ void
 Maze::backtracker(uint seed)
 {
   srand(seed);
-  uint x = rand()%m_grid->sizeX;
-  uint y = rand()%m_grid->sizeY;
+  uint x = rand()%m_grid->getSizeX();
+  uint y = rand()%m_grid->getSizeY();
   list<uint> backTrack;
   for(uint i=1; i<m_area; ++i){
     auto dirs = m_grid->checkMarkedMoves(x,y);
@@ -247,8 +247,8 @@ void
 Maze::wilson(uint seed)
 {
   srand(seed);
-  uint x = rand()%m_grid->sizeX;
-  uint y = rand()%m_grid->sizeY;
+  uint x = rand()%m_grid->getSizeX();
+  uint y = rand()%m_grid->getSizeY();
   uint newX = 0, newY = 0;
   auto dirs = m_grid->checkMoves(x,y);
   auto dir = dirs[rand()%dirs.size()];
@@ -256,14 +256,14 @@ Maze::wilson(uint seed)
   m_grid->move(x, y, dir);
   m_grid->setValueAt(x,y, m_grid->inverse(dir));
   uint cellsFilled = 2;
-  uint area = m_grid->sizeX*m_grid->sizeY;
+  uint area = m_grid->getSizeX()*m_grid->getSizeY();
   while(cellsFilled<area){
 
     list<WilsonNode> actualWalk;
 
     while(m_grid->getValueAt(x,y) != 0){
-      x = rand()%m_grid->sizeX;
-      y = rand()%m_grid->sizeY;
+      x = rand()%m_grid->getSizeX();
+      y = rand()%m_grid->getSizeY();
     }
 
     newX = x;

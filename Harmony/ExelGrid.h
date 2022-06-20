@@ -28,7 +28,7 @@ class ExelGrid :
  public:
   ExelGrid() = default;
   
-  ExelGrid(uint x, uint y,float cellSize);
+  ExelGrid(uint x, uint y,float cellSize, const Dimencion& ofset);
 
   void
   setValueAt(uint x, uint y,uint value) override;

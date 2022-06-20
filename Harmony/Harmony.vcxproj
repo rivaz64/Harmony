@@ -153,7 +153,6 @@
     <ClInclude Include="Maze.h" />
     <ClInclude Include="NavMesh.h" />
     <ClInclude Include="NavSystem.h" />
-    <ClInclude Include="Number.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Pawn.h" />
     <ClInclude Include="Prerequisites.h" />
@@ -178,7 +177,6 @@
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="NavMesh.cpp" />
     <ClCompile Include="NavSystem.cpp" />
-    <ClCompile Include="Number.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Quad.cpp" />

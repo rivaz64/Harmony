@@ -251,11 +251,11 @@ class Vector2f
    * @return if they intersect
   */
   inline static bool
-  intersect(const Dimencion& v1,
-    const Dimencion& v2,
-    const Dimencion& v3,
-    const Dimencion& v4,
-    Dimencion& out)
+  intersect(const Vector2f& v1,
+    const Vector2f& v2,
+    const Vector2f& v3,
+    const Vector2f& v4,
+    Vector2f& out)
   {
     //http://mathworld.wolfram.com/Line-LineIntersection.html
 

@@ -99,6 +99,21 @@ class Grid :
   virtual void
   useFigure(const uint x, const uint y){}
 
+  const Figure*
+  getFigure(const uint id) override;
+
+  inline uint
+  getSizeX()
+  {
+    return m_sizeX;
+  }
+
+  inline uint
+  getSizeY()
+  {
+    return m_sizeY;
+  }
+
  protected:
   /**
    * @brief the number of cells in X

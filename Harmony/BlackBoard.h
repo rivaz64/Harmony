@@ -104,10 +104,10 @@ class BlackBoard
   setVariableAs(const string& name, const T& value)
   {
     
-    if( m_data.find(name) == m_data.end()){
-      return;
-    }
-    *(m_data[name].data) = value;
+    //if( m_data.find(name) == m_data.end()){
+    //  return;
+    //}
+    //*(m_data[name].data) = value;
   }
 
   /**

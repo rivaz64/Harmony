@@ -3,13 +3,14 @@
 
 namespace Harmony{
 
-ExelGrid::ExelGrid(uint x, uint y,float cellSize)
+ExelGrid::ExelGrid(uint x, uint y,float cellSize, const Dimencion& ofset)
 {
   m_sizeX = x;
   m_sizeY = y;
   cells.clear();
   cells.resize(x*y);
   m_figure = new Hexagon();
+  m_offset = ofset;
   reinterpret_cast<Hexagon*>(m_figure)->setSize(cellSize);
 }
 
@@ -190,7 +191,7 @@ ExelGrid::useFigure(const uint x, const uint y)
 {
   auto cellSize = reinterpret_cast<Hexagon*>(m_figure)->getSize();
   m_figure->setCenter({static_cast<float>(x)*cellSize*1.5f+m_offset.x,//+cellSize*.5f+m_offset.x,
-                       static_cast<float>(y)*cellSize*sqrtf(3.f)+m_offset.y+static_cast<float>(x)*cellSize*.5*sqrtf(3.f)});
+                       static_cast<float>(y)*cellSize*sqrtf(3.f)+m_offset.y+static_cast<float>(x)*cellSize*.5f*sqrtf(3.f)});
 }
 
 }

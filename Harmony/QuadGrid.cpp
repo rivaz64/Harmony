@@ -1,13 +1,14 @@
 #include "QuadGrid.h"
 #include "Quad.h"
 namespace Harmony{
-QuadGrid::QuadGrid(uint x, uint y, float cellSize)
+QuadGrid::QuadGrid(uint x, uint y, float cellSize, const Dimencion& ofset)
 {
   m_sizeX = x;
   m_sizeY = y;
   cells.clear();
   cells.resize((x*y)/2);
   m_figure = new Quad();
+  m_offset = ofset;
   reinterpret_cast<Quad*>(m_figure)->setSize(cellSize);
 }
 void

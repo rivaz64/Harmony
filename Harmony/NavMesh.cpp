@@ -5,7 +5,7 @@
 
 namespace Harmony{
 
-#define CENTER(n) tris[n].tri.center()
+#define CENTER(n) tris[n].tri.getCenter()
 #define DISTANCE(n) (CENTER(n)-centerStart).magnitud()
 #define DISTANCE2(n,m) (CENTER(n)-CENTER(m)).magnitud()
 #define INSERT_TO_FIND(n) insertToFind({n,DISTANCE(n)},forsearch)
@@ -149,8 +149,9 @@ bool
 NavMesh::getCellAt(const Dimencion& point, uint& nodeId)
 {
   auto numOfNodes = tris.size();
+  uint side;
   for(uint i=0; i<numOfNodes; ++i){
-    if(tris[i].tri.isPointInside(point)){
+    if(tris[i].tri.isPointInside(point,side)){
       nodeId = i;
       return true;
     }
@@ -158,23 +159,29 @@ NavMesh::getCellAt(const Dimencion& point, uint& nodeId)
   return false;
 }
 
+const 
+Figure* NavMesh::getFigure(const uint id)
+{
+  return &tris[id].tri;
+}
+
 void
 NavMesh::addPawn(Pawn* pawn)
 {
   uint node = 0;
-  nodeOfPoint(pawn->getPosition(),node);
+  getCellAt(pawn->getPosition(),node);
   pawns.insert({pawn,node});
 }
 
 list<Dimencion> 
 NavMesh::findPath(Dimencion start, Dimencion end){
   uint nodeStart = 0, nodeEnd = 0;
-  nodeOfPoint(start,nodeStart);
-  nodeOfPoint(end,nodeEnd);
+  getCellAt(start,nodeStart);
+  getCellAt(end,nodeEnd);
   list<Dimencion> ans;
   auto path = findPath(nodeStart, nodeEnd);
   for(auto& node : path){
-    ans.push_back(tris[node].tri.center());
+    ans.push_back(tris[node].tri.getCenter());
   }
   return ans;
 }
@@ -234,7 +241,8 @@ NavMesh::goToNewNode(const Dimencion& originalPos,
 {
   auto prevNodeId = actualNodeId;
   auto actualNode = tris[actualNodeId];
-  while(!actualNode.tri.isPointInside(destiny)){  
+  uint side;
+  while(!actualNode.tri.isPointInside(destiny,side)){  
     auto ref = &actualNode.tri.point1;
     bool advancing = false;;
     for(uint i = 0; i<3; ++i){
@@ -255,7 +263,7 @@ NavMesh::goToNewNode(const Dimencion& originalPos,
     }
     if(!advancing){
       uint ans;
-      nodeOfPoint(destiny,ans);
+      getCellAt(destiny,ans);
       return ans;
     }
   }

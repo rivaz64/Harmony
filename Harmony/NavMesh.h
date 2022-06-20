@@ -52,6 +52,9 @@ class NavMesh :
   bool
   getCellAt(const Dimencion& point,uint& nodeId) override;
 
+  const Figure*
+  getFigure(const uint id) override;
+
   //bool
   //nodeOfPoint(const Dimencion& point,uint& node);
 

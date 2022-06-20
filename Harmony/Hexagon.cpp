@@ -3,7 +3,7 @@
 namespace Harmony{
 
 bool 
-Hexagon::isPointInside(const Dimencion& point, uint& side)
+Hexagon::isPointInside(const Dimencion& point, uint& side) const
 {
   side = getSide(point);
   auto dif = point-m_center;
@@ -27,7 +27,7 @@ Hexagon::isPointInside(const Dimencion& point, uint& side)
 }
 
 uint 
-Hexagon::getSide(const Dimencion& point)
+Hexagon::getSide(const Dimencion& point) const
 {
   auto dir = point-m_center;
   auto angle = VectorToAngle(dir);

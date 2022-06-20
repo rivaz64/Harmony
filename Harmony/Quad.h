@@ -30,10 +30,10 @@ class Quad :
      m_radius(size/2.f){m_center=center;}
 
   bool
-  isPointInside(const Dimencion& point, uint& side) override;
+  isPointInside(const Dimencion& point, uint& side) const override;
 
   uint 
-  getSide(const Dimencion& point) override;
+  getSide(const Dimencion& point) const override;
 
   inline void
   setSize(float size){

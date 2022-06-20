@@ -16,7 +16,7 @@ class Figure
    * @return 
   */
   virtual uint 
-  getSide(const Dimencion& point) {return 0;}
+  getSide(const Dimencion& point) const {return 0;}
 
   /**
    * @brief if a point is inside the figure
@@ -24,7 +24,7 @@ class Figure
    * @return 
   */
   virtual bool
-  isPointInside(const Dimencion& point, uint& side){return false;}
+  isPointInside(const Dimencion& point, uint& side) const {return false;}
 
   inline void
   setCenter(const Dimencion& center){
@@ -32,7 +32,7 @@ class Figure
   }
 
   inline Dimencion
-  getCenter(){
+  getCenter() const{
     return m_center;
   }
 

@@ -14,10 +14,10 @@ class Triangle :
   Triangle(Dimencion p1, Dimencion p2, Dimencion p3);
     
   uint 
-  getSide(const Dimencion& point) override;
+  getSide(const Dimencion& point) const override;
 
   bool
-  isPointInside(const Dimencion& point, uint& side) override;
+  isPointInside(const Dimencion& point, uint& side) const override;
   
 
   /**
