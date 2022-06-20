@@ -28,12 +28,7 @@ class ExelGrid :
  public:
   ExelGrid() = default;
   
-  ExelGrid(uint x, uint y){
-    sizeX = x;
-    sizeY = y;
-    cells.clear();
-    cells.resize(x*y);
-  }
+  ExelGrid(uint x, uint y,float cellSize);
 
   void
   setValueAt(uint x, uint y,uint value) override;
@@ -55,6 +50,9 @@ class ExelGrid :
 
   vector<uint>
   checknewMoves(const uint x, const uint y) override;
+
+  void
+  useFigure(const uint x, const uint y) override;
 
  private:
   /**

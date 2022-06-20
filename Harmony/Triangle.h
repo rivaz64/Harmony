@@ -14,17 +14,11 @@ class Triangle :
   Triangle(Dimencion p1, Dimencion p2, Dimencion p3);
     
   uint 
-  getSide(Dimencion point) override;
+  getSide(const Dimencion& point) override;
 
   bool
-  isPointInside(Dimencion point, uint& side) override;
-
-  /**
-   * @brief calculates the center of this triangle
-   * @return 
-  */
-  Dimencion
-  getCenter();
+  isPointInside(const Dimencion& point, uint& side) override;
+  
 
   /**
    * @brief calculates the circumcenter of this triangle

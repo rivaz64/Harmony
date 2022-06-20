@@ -93,8 +93,34 @@ class Grid :
   void
   getRandomCoords(uint& x, uint& y);
 
-  uint sizeX;
-  uint sizeY;
+  bool
+  getCellAt(const Dimencion& point,uint& nodeId) override;
+
+  virtual void
+  useFigure(const uint x, const uint y){}
+
+ protected:
+  /**
+   * @brief the number of cells in X
+  */
+  uint m_sizeX;
+
+  /**
+   * @brief the number of cells in Y
+  */
+  uint m_sizeY;
+
+  ///**
+  // * @brief the size of the cells
+  //*/
+  //float m_cellSize;
+
+  /**
+   * @brief where the grid is
+  */
+  Dimencion m_offset;
+
+  Figure* m_figure;
 };
 
 }

@@ -1,20 +1,30 @@
 #include "ExelGrid.h"
+#include "Hexagon.h"
 
 namespace Harmony{
 
+ExelGrid::ExelGrid(uint x, uint y,float cellSize)
+{
+  m_sizeX = x;
+  m_sizeY = y;
+  cells.clear();
+  cells.resize(x*y);
+  m_figure = new Hexagon();
+  reinterpret_cast<Hexagon*>(m_figure)->setSize(cellSize);
+}
 
 void
 ExelGrid::setValueAt(uint x, uint y, uint value)
 {
   //auto coord3D = reinterpret_cast<Coord3D*>(coord);
-  auto oneDimPos = x+y*sizeX;
+  auto oneDimPos = x+y*m_sizeX;
   cells[oneDimPos] = static_cast<EXEL_CELL::E>(cells[oneDimPos] | static_cast<EXEL_CELL::E>(value));
 }
 
 uint
 ExelGrid::getValueAt(uint x, uint y)
 {
-  auto oneDimPos = x+y*sizeX;
+  auto oneDimPos = x+y*m_sizeX;
   return static_cast<unsigned char>(cells[oneDimPos]);
 }
 void 
@@ -84,13 +94,13 @@ vector<uint>
 ExelGrid::checkMoves(const uint x, const uint y)
 {
   vector<uint> ans;
-  if(y!=sizeY-1 && getValueAt(x,y+1)!=EXEL_CELL::ALL){
+  if(y!=m_sizeY-1 && getValueAt(x,y+1)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::UP);
   }
-  if(x!=sizeX-1&& getValueAt(x+1,y)!=EXEL_CELL::ALL){
+  if(x!=m_sizeX-1&& getValueAt(x+1,y)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::DOWN_RIGHT);
   }
-  if(x!=sizeX-1 && y!=sizeY-1&& getValueAt(x+1,y+1)!=EXEL_CELL::ALL){
+  if(x!=m_sizeX-1 && y!=m_sizeY-1&& getValueAt(x+1,y+1)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::UP_RIGHT);
   }
   if(y!=0&& getValueAt(x,y-1)!=EXEL_CELL::ALL){
@@ -109,13 +119,13 @@ vector<uint>
 ExelGrid::checkMarkedMoves(const uint x, const uint y)
 {
   vector<uint> ans;
-  if(y!=sizeY-1 && getValueAt(x,y+1)==EXEL_CELL::NONE&& getValueAt(x,y+1)!=EXEL_CELL::ALL){
+  if(y!=m_sizeY-1 && getValueAt(x,y+1)==EXEL_CELL::NONE&& getValueAt(x,y+1)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::UP);
   }
-  if(x!=sizeX-1 && getValueAt(x+1,y)==EXEL_CELL::NONE&& getValueAt(x+1,y)!=EXEL_CELL::ALL){
+  if(x!=m_sizeX-1 && getValueAt(x+1,y)==EXEL_CELL::NONE&& getValueAt(x+1,y)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::DOWN_RIGHT);
   }
-  if(x!=sizeX-1 && y!=sizeY-1 && getValueAt(x+1,y+1)==EXEL_CELL::NONE&& getValueAt(x+1,y+1)!=EXEL_CELL::ALL){
+  if(x!=m_sizeX-1 && y!=m_sizeY-1 && getValueAt(x+1,y+1)==EXEL_CELL::NONE&& getValueAt(x+1,y+1)!=EXEL_CELL::ALL){
     ans.push_back(EXEL_CELL::UP_RIGHT);
   }
   if(y!=0 && getValueAt(x,y-1)==EXEL_CELL::NONE&& getValueAt(x,y-1)!=EXEL_CELL::ALL){
@@ -135,19 +145,19 @@ ExelGrid::checknewMoves(const uint x, const uint y)
 {
   vector<uint> ans;
   uint dirs;
-  if(y!=sizeY-1){
+  if(y!=m_sizeY-1){
     dirs = getValueAt(x,y+1);
     if(dirs!=EXEL_CELL::ALL && !(dirs & EXEL_CELL::UP)){
       ans.push_back(EXEL_CELL::UP);
     }
   }
-  if(x!=sizeX-1){
+  if(x!=m_sizeX-1){
     dirs = getValueAt(x+1,y);
     if(dirs!=EXEL_CELL::ALL && !(dirs & EXEL_CELL::DOWN_RIGHT)){
       ans.push_back(EXEL_CELL::DOWN_RIGHT);
     }
   }
-  if(x!=sizeX-1 && y!=sizeY-1){
+  if(x!=m_sizeX-1 && y!=m_sizeY-1){
     dirs = getValueAt(x+1,y+1);
     if(dirs!=EXEL_CELL::ALL && !(dirs & EXEL_CELL::UP_RIGHT)){
       ans.push_back(EXEL_CELL::UP_RIGHT);
@@ -175,5 +185,12 @@ ExelGrid::checknewMoves(const uint x, const uint y)
   return ans;
 }
 
+void 
+ExelGrid::useFigure(const uint x, const uint y)
+{
+  auto cellSize = reinterpret_cast<Hexagon*>(m_figure)->getSize();
+  m_figure->setCenter({static_cast<float>(x)*cellSize*1.5f+m_offset.x,//+cellSize*.5f+m_offset.x,
+                       static_cast<float>(y)*cellSize*sqrtf(3.f)+m_offset.y+static_cast<float>(x)*cellSize*.5*sqrtf(3.f)});
+}
 
 }

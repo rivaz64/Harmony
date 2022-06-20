@@ -2,10 +2,10 @@
 #include "Prerequisites.h"
 namespace Harmony{
 
-struct SurfaceNode{
-  uint id;
-  Figure* figure;
-};
+//struct SurfaceNode{
+//  uint id;
+//  Figure* figure;
+//};
 
 /**
  * @brief a 2D surface divided in sections
@@ -14,8 +14,16 @@ class Surface
 {
  public:
   
-  virtual SurfaceNode
-  getCellAt(Dimencion point){return {0,nullptr};}
+  /**
+   * @brief the node at where a point is in
+   * @param point 
+   * @param nodeId 
+   * @return if the point is in the surface
+  */
+  virtual bool
+  getCellAt(const Dimencion& point,uint& nodeId){return false;}
+
+
 
  protected:
 };

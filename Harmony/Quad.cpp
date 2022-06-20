@@ -3,7 +3,7 @@
 namespace Harmony{
 
 bool 
-Quad::isPointInside(Dimencion point, uint& side)
+Quad::isPointInside(const Dimencion& point, uint& side)
 {
   auto s = getSide(point);
   auto dif = point-m_center;
@@ -23,7 +23,7 @@ Quad::isPointInside(Dimencion point, uint& side)
 }
 
 uint
-Quad::getSide(Dimencion point)
+Quad::getSide(const Dimencion& point)
 {
   auto dir = point-m_center;
   if(abs(dir.x)>abs(dir.y)){

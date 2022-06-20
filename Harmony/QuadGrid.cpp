@@ -1,18 +1,26 @@
 #include "QuadGrid.h"
-
+#include "Quad.h"
 namespace Harmony{
-
+QuadGrid::QuadGrid(uint x, uint y, float cellSize)
+{
+  m_sizeX = x;
+  m_sizeY = y;
+  cells.clear();
+  cells.resize((x*y)/2);
+  m_figure = new Quad();
+  reinterpret_cast<Quad*>(m_figure)->setSize(cellSize);
+}
 void
 QuadGrid::setValueAt(uint x, uint y, uint value)
 {
-  auto oneDimPos = x+y*sizeX;
+  auto oneDimPos = x+y*m_sizeX;
   cells[oneDimPos/2] = static_cast<MAZE_CELL::E>(cells[oneDimPos/2] | static_cast<MAZE_CELL::E>(value<<((oneDimPos%2)*4)));
 }
 
 uint 
 QuadGrid::getValueAt(uint x, uint y)
 {
-  auto oneDimPos = x+y*sizeX;
+  auto oneDimPos = x+y*m_sizeX;
   return static_cast<unsigned char>((cells[oneDimPos/2]>>((oneDimPos%2)*4))%16);
 }
 
@@ -66,10 +74,10 @@ vector<uint>
 QuadGrid::checkMoves(const uint x, const uint y)
 {
   vector<uint> ans;
-  if(y!=sizeY-1 && getValueAt(x,y+1)!=MAZE_CELL::ALL){
+  if(y!=m_sizeY-1 && getValueAt(x,y+1)!=MAZE_CELL::ALL){
     ans.push_back(MAZE_CELL::UP);
   }
-  if(x!=sizeX-1  && getValueAt(x+1,y)!=MAZE_CELL::ALL){
+  if(x!=m_sizeX-1  && getValueAt(x+1,y)!=MAZE_CELL::ALL){
     ans.push_back(MAZE_CELL::RIGHT);
   }
   if(y!=0 && getValueAt(x,y-1)!=MAZE_CELL::ALL){
@@ -86,10 +94,10 @@ vector<uint>
 QuadGrid::checkMarkedMoves(const uint x, const uint y)
 {
   vector<uint> ans;
-  if(y!=sizeY-1 && getValueAt(x,y+1)==MAZE_CELL::NONE && getValueAt(x,y+1)!=MAZE_CELL::ALL){
+  if(y!=m_sizeY-1 && getValueAt(x,y+1)==MAZE_CELL::NONE && getValueAt(x,y+1)!=MAZE_CELL::ALL){
     ans.push_back(MAZE_CELL::UP);
   }
-  if(x!=sizeX-1 && getValueAt(x+1,y)==MAZE_CELL::NONE && getValueAt(x+1,y)!=MAZE_CELL::ALL){
+  if(x!=m_sizeX-1 && getValueAt(x+1,y)==MAZE_CELL::NONE && getValueAt(x+1,y)!=MAZE_CELL::ALL){
     ans.push_back(MAZE_CELL::RIGHT);
   }
   if(y!=0 && getValueAt(x,y-1)==MAZE_CELL::NONE&& getValueAt(x,y-1)!=MAZE_CELL::ALL){
@@ -107,13 +115,13 @@ QuadGrid::checknewMoves(const uint x, const uint y)
 {
   vector<uint> ans;
   uint dirs;
-  if(y!=sizeY-1){
+  if(y!=m_sizeY-1){
     dirs = getValueAt(x,y+1);
     if(dirs!=MAZE_CELL::ALL && !(dirs & MAZE_CELL::UP) ){
       ans.push_back(MAZE_CELL::UP);
     }
   }
-  if(x!=sizeX-1){
+  if(x!=m_sizeX-1){
     dirs = getValueAt(x+1,y);
     if(dirs!=MAZE_CELL::ALL && !(dirs & MAZE_CELL::RIGHT)){
       ans.push_back(MAZE_CELL::RIGHT);
@@ -137,10 +145,12 @@ QuadGrid::checknewMoves(const uint x, const uint y)
   return ans;
 }
 
-SurfaceNode 
-QuadGrid::getCellAt(Dimencion point)
+void
+QuadGrid::useFigure(const uint x, const uint y)
 {
-  
+  auto cellSize = reinterpret_cast<Quad*>(m_figure)->getSize();
+  m_figure->setCenter({static_cast<float>(x)*cellSize+cellSize*.5f+m_offset.x,
+                       static_cast<float>(y)*cellSize+cellSize*.5f+m_offset.y});
 }
 
 }

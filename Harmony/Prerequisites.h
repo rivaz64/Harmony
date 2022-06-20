@@ -25,6 +25,8 @@ class Transition;
 class Detector;
 class Grid;
 class Figure;
+class Quad;
+class Hexagon;
 
 using std::vector;
 using std::list;

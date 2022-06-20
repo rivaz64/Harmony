@@ -26,20 +26,28 @@ class Hexagon :
 {
   public:
 
-  Hexagon(Dimencion center, float size) :
-    m_center(center), m_radius(size){}
+  Hexagon() = default;
+
+  Hexagon(const Dimencion& center, float size) :
+    m_radius(size){m_center=center;}
 
   bool
-  isPointInside(Dimencion point, uint& side) override;
+  isPointInside(const Dimencion& point, uint& side) override;
 
   uint 
-  getSide(Dimencion point) override;
+  getSide(const Dimencion& point) override;
+
+  inline void
+  setSize(float size){
+    m_radius = size;
+  }
+
+  inline float
+  getSize(){
+    return m_radius;
+  }
 
  private:
-  /**
-   * @brief the center of the quad
-  */
-  Dimencion m_center;
 
   /**
    * @brief half the size of a side

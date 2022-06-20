@@ -24,21 +24,28 @@ class Quad :
 {
  public:
 
-  Quad(Dimencion center, float size) :
-    m_center(center), m_radius(size/2.f){}
+  Quad() = default;
+
+  Quad(const Dimencion& center, float size) :
+     m_radius(size/2.f){m_center=center;}
 
   bool
-  isPointInside(Dimencion point, uint& side) override;
+  isPointInside(const Dimencion& point, uint& side) override;
 
   uint 
-  getSide(Dimencion point) override;
+  getSide(const Dimencion& point) override;
 
+  inline void
+  setSize(float size){
+    m_radius = size/2.f;
+  }
+
+  inline float
+  getSize(){
+    return m_radius*2.f;
+  }
 
  private:
-  /**
-   * @brief the center of the quad
-  */
-  Dimencion m_center;
 
   /**
    * @brief half the size of a side

@@ -1,4 +1,5 @@
 #pragma once
+#include "Prerequisites.h"
 #include "Grid.h"
 
 namespace Harmony{
@@ -29,12 +30,7 @@ class QuadGrid :
 
   QuadGrid() = default;
   
-  QuadGrid(uint x, uint y){
-    sizeX = x;
-    sizeY = y;
-    cells.clear();
-    cells.resize((x*y)/2);
-  }
+  QuadGrid(uint x, uint y,float cellSize);
 
   void
   setValueAt(uint x, uint y,uint value) override;
@@ -57,14 +53,16 @@ class QuadGrid :
   vector<uint>
   checknewMoves(const uint x, const uint y) override;
 
-  SurfaceNode
-  getCellAt(Dimencion point) override;
+  void
+  useFigure(const uint x, const uint y) override;
 
  private:
   /**
    * @brief the grid containing the maze
   */
   vector<MAZE_CELL::E> cells;
+
+
 };
 
 }

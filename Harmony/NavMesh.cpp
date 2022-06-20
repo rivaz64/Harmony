@@ -145,13 +145,13 @@ NavMesh::generate(const Dimencion& minPoint,
   }
 }
 
-bool 
-NavMesh::nodeOfPoint(const Dimencion& point,uint& node)
+bool
+NavMesh::getCellAt(const Dimencion& point, uint& nodeId)
 {
   auto numOfNodes = tris.size();
   for(uint i=0; i<numOfNodes; ++i){
     if(tris[i].tri.isPointInside(point)){
-      node = i;
+      nodeId = i;
       return true;
     }
   }

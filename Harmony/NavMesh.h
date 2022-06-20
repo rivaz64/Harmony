@@ -1,6 +1,7 @@
 #pragma once
 #include "Prerequisites.h"
 #include "Triangle.h"
+#include "Surface.h"
 
 namespace Harmony{
 
@@ -32,7 +33,8 @@ struct PathFindNode
   float distanceOfPath;
 };
 
-class NavMesh
+class NavMesh :
+  public Surface
 {
  public:
 
@@ -47,13 +49,11 @@ class NavMesh
            const Dimencion& maxPoint, 
            const vector<vector<Dimencion>>& obstacles);
 
-  /**
-   * @brief 
-   * @param  
-   * @return 
-  */
   bool
-  nodeOfPoint(const Dimencion& point,uint& node);
+  getCellAt(const Dimencion& point,uint& nodeId) override;
+
+  //bool
+  //nodeOfPoint(const Dimencion& point,uint& node);
 
   /**
    * @brief adds a pawn that is going to be using the navmesh
