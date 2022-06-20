@@ -1,9 +1,11 @@
 #pragma once
 #include "Prerequisites.h"
+#include "Figure.h"
 
 namespace Harmony{
 
-class Triangle
+class Triangle :
+  public Figure
 {
  public:
 
@@ -11,14 +13,18 @@ class Triangle
 
   Triangle(Dimencion p1, Dimencion p2, Dimencion p3);
     
+  uint 
+  getSide(Dimencion point) override;
 
+  bool
+  isPointInside(Dimencion point, uint& side) override;
 
   /**
    * @brief calculates the center of this triangle
    * @return 
   */
   Dimencion
-  center();
+  getCenter();
 
   /**
    * @brief calculates the circumcenter of this triangle
@@ -60,13 +66,13 @@ class Triangle
   bool
   areAdjacent(const Triangle& tri) const;
 
-  /**
-   * @brief if a point is inside the triange
-   * @param point 
-   * @return 
-  */
-  bool 
-  isPointInside(const Dimencion& point);
+  ///**
+  // * @brief if a point is inside the triange
+  // * @param point 
+  // * @return 
+  //*/
+  //bool 
+  //isPointInside(const Dimencion& point);
 
   /**
    * @brief the normal of an edge tooking to the inside of the triangle

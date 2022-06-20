@@ -137,4 +137,10 @@ QuadGrid::checknewMoves(const uint x, const uint y)
   return ans;
 }
 
+SurfaceNode 
+QuadGrid::getCellAt(Dimencion point)
+{
+  
+}
+
 }

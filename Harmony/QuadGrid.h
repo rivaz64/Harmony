@@ -57,6 +57,9 @@ class QuadGrid :
   vector<uint>
   checknewMoves(const uint x, const uint y) override;
 
+  SurfaceNode
+  getCellAt(Dimencion point) override;
+
  private:
   /**
    * @brief the grid containing the maze

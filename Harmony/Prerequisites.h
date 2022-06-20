@@ -24,6 +24,7 @@ class BlackBoard;
 class Transition;
 class Detector;
 class Grid;
+class Figure;
 
 using std::vector;
 using std::list;
@@ -32,6 +33,7 @@ using std::pair;
 using std::string;
 using std::find;
 using std::advance;
+using std::swap;
 using uint = unsigned int;
 
 #ifdef UNREAL_HARMONY

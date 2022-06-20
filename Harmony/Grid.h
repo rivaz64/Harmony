@@ -1,11 +1,13 @@
 #pragma once
-#include "Prerequisites.h"
+#include "Surface.h"
 namespace Harmony{
 
 /**
  * @brief interface for any kind of grid
 */
-class Grid{
+class Grid :
+  public Surface
+{
 
  public:
   /**
@@ -83,6 +85,11 @@ class Grid{
   virtual vector<uint>
   checknewMoves(const uint x, const uint y){return {};}
 
+  /**
+   * @brief gets a random point in the grid
+   * @param x 
+   * @param y 
+  */
   void
   getRandomCoords(uint& x, uint& y);
 

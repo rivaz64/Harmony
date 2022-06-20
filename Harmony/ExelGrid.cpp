@@ -8,7 +8,7 @@ ExelGrid::setValueAt(uint x, uint y, uint value)
 {
   //auto coord3D = reinterpret_cast<Coord3D*>(coord);
   auto oneDimPos = x+y*sizeX;
-  cells[oneDimPos] = static_cast<EXEL_CELL::E>(cells[oneDimPos] | static_cast<MAZE_CELL::E>(value));
+  cells[oneDimPos] = static_cast<EXEL_CELL::E>(cells[oneDimPos] | static_cast<EXEL_CELL::E>(value));
 }
 
 uint
