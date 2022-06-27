@@ -34,9 +34,26 @@ const
 Figure* Grid::getFigure(const uint id)
 {
   uint x = id%m_sizeX;
-  uint y = id/m_sizeY;
+  uint y = id/m_sizeX;
   useFigure(x,y);
   return m_figure;
+}
+
+map<uint, uint> 
+Grid::getAdjacentCells(const uint id)
+{
+  uint x = id%m_sizeX;
+  uint y = id/m_sizeX;
+
+  auto dirs = checkPosibleMoves(x,y);
+  map<uint, uint> ans;
+  for(auto dir : dirs){
+    uint nx = x;
+    uint ny = y;
+    move(nx,ny,dir);
+    ans.insert({dir,ny*m_sizeX+nx});
+  }
+  return ans;
 }
 
 }

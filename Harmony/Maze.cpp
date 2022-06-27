@@ -300,11 +300,11 @@ void
 Maze::clearDeadPoints(float p)
 {
   uint totalPoints = static_cast<float>(deadPoints.size())*p;
-  for(int i = 0; i< totalPoints; ++i){
+  for(uint i = 0; i< totalPoints; ++i){
     uint toQuit = rand()%deadPoints.size();
     auto at = deadPoints.begin();
     advance(at,toQuit);
-    auto dirs = m_grid->checknewMoves(at->x,at->y);
+    auto dirs = m_grid->checkNewMoves(at->x,at->y);
     auto dir = dirs[rand()%dirs.size()];
     m_grid->setValueAt(at->x,at->y,dir);
     m_grid->move(at->x,at->y,dir);

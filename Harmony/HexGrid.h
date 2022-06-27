@@ -22,13 +22,13 @@ enum E : unsigned char
 /**
  * @brief a grid of exagons
 */
-class ExelGrid :
+class HexGrid :
   public Grid
 {
  public:
-  ExelGrid() = default;
+  HexGrid() = default;
   
-  ExelGrid(uint x, uint y,float cellSize, const Dimencion& ofset);
+  HexGrid(uint x, uint y,float cellSize, const Dimencion& ofset);
 
   void
   setValueAt(uint x, uint y,uint value) override;
@@ -49,7 +49,10 @@ class ExelGrid :
   checkMarkedMoves(const uint x, const uint y) override;
 
   vector<uint>
-  checknewMoves(const uint x, const uint y) override;
+  checkNewMoves(const uint x, const uint y) override;
+
+  vector<uint>
+  checkPosibleMoves(const uint x, const uint y) override;
 
   void
   useFigure(const uint x, const uint y) override;

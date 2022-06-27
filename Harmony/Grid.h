@@ -83,7 +83,16 @@ class Grid :
    * @return 
   */
   virtual vector<uint>
-  checknewMoves(const uint x, const uint y){return {};}
+  checkNewMoves(const uint x, const uint y){return {};}
+
+  /**
+   * @brief get the moves that are of this cell
+   * @param x 
+   * @param y 
+   * @return 
+  */
+  virtual vector<uint>
+  checkPosibleMoves(const uint x, const uint y){return {};}
 
   /**
    * @brief gets a random point in the grid
@@ -101,6 +110,9 @@ class Grid :
 
   const Figure*
   getFigure(const uint id) override;
+
+  map<uint,uint>
+  getAdjacentCells(const uint id) override;
 
   inline uint
   getSizeX()

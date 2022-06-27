@@ -1,9 +1,9 @@
-#include "ExelGrid.h"
+#include "HexGrid.h"
 #include "Hexagon.h"
 
 namespace Harmony{
 
-ExelGrid::ExelGrid(uint x, uint y,float cellSize, const Dimencion& ofset)
+HexGrid::HexGrid(uint x, uint y,float cellSize, const Dimencion& ofset)
 {
   m_sizeX = x;
   m_sizeY = y;
@@ -15,7 +15,7 @@ ExelGrid::ExelGrid(uint x, uint y,float cellSize, const Dimencion& ofset)
 }
 
 void
-ExelGrid::setValueAt(uint x, uint y, uint value)
+HexGrid::setValueAt(uint x, uint y, uint value)
 {
   //auto coord3D = reinterpret_cast<Coord3D*>(coord);
   auto oneDimPos = x+y*m_sizeX;
@@ -23,13 +23,13 @@ ExelGrid::setValueAt(uint x, uint y, uint value)
 }
 
 uint
-ExelGrid::getValueAt(uint x, uint y)
+HexGrid::getValueAt(uint x, uint y)
 {
   auto oneDimPos = x+y*m_sizeX;
   return static_cast<unsigned char>(cells[oneDimPos]);
 }
 void 
-ExelGrid::move(uint& x, uint& y, const uint dir)
+HexGrid::move(uint& x, uint& y, const uint dir)
 {
   switch (dir)
   {
@@ -62,7 +62,7 @@ ExelGrid::move(uint& x, uint& y, const uint dir)
 }
 
 uint 
-ExelGrid::inverse(uint dir)
+HexGrid::inverse(uint dir)
 {
   switch (dir)
   {
@@ -88,11 +88,14 @@ ExelGrid::inverse(uint dir)
   case EXEL_CELL::DOWN_RIGHT:
     return EXEL_CELL::UP_LEFT;
     break;
+
+  default:
+    return 0;
   }
 }
 
 vector<uint> 
-ExelGrid::checkMoves(const uint x, const uint y)
+HexGrid::checkMoves(const uint x, const uint y)
 {
   vector<uint> ans;
   if(y!=m_sizeY-1 && getValueAt(x,y+1)!=EXEL_CELL::ALL){
@@ -117,7 +120,7 @@ ExelGrid::checkMoves(const uint x, const uint y)
 }
 
 vector<uint> 
-ExelGrid::checkMarkedMoves(const uint x, const uint y)
+HexGrid::checkMarkedMoves(const uint x, const uint y)
 {
   vector<uint> ans;
   if(y!=m_sizeY-1 && getValueAt(x,y+1)==EXEL_CELL::NONE&& getValueAt(x,y+1)!=EXEL_CELL::ALL){
@@ -142,7 +145,7 @@ ExelGrid::checkMarkedMoves(const uint x, const uint y)
 }
 
 vector<uint> 
-ExelGrid::checknewMoves(const uint x, const uint y)
+HexGrid::checkNewMoves(const uint x, const uint y)
 {
   vector<uint> ans;
   uint dirs;
@@ -182,16 +185,41 @@ ExelGrid::checknewMoves(const uint x, const uint y)
       ans.push_back(EXEL_CELL::DOWN_LEFT);
     }
   }
-  
+  return ans;
+}
+
+vector<uint> 
+HexGrid::checkPosibleMoves(const uint x, const uint y)
+{
+  vector<uint> ans;
+  uint dirs = getValueAt(x,y);
+  if(dirs & EXEL_CELL::UP){
+    ans.push_back(EXEL_CELL::UP);
+  }
+  if(dirs & EXEL_CELL::DOWN_RIGHT){
+    ans.push_back(EXEL_CELL::DOWN_RIGHT);
+  }
+  if(dirs & EXEL_CELL::UP_RIGHT){
+    ans.push_back(EXEL_CELL::UP_RIGHT);
+  }
+  if(dirs & EXEL_CELL::DOWN){
+    ans.push_back(EXEL_CELL::DOWN);
+  }
+  if(dirs & EXEL_CELL::UP_LEFT){
+    ans.push_back(EXEL_CELL::UP_LEFT);
+  }
+  if(dirs & EXEL_CELL::DOWN_LEFT){
+    ans.push_back(EXEL_CELL::DOWN_LEFT);
+  }
   return ans;
 }
 
 void 
-ExelGrid::useFigure(const uint x, const uint y)
+HexGrid::useFigure(const uint x, const uint y)
 {
   auto cellSize = reinterpret_cast<Hexagon*>(m_figure)->getSize();
   m_figure->setCenter({static_cast<float>(x)*cellSize*1.5f+m_offset.x,//+cellSize*.5f+m_offset.x,
-                       static_cast<float>(y)*cellSize*sqrtf(3.f)+m_offset.y+static_cast<float>(x)*cellSize*.5f*sqrtf(3.f)});
+                       static_cast<float>(y)*cellSize*sqrtf(3.f)+m_offset.y-static_cast<float>(x)*cellSize*.5f*sqrtf(3.f)});
 }
 
 }

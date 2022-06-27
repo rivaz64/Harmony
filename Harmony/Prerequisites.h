@@ -27,6 +27,10 @@ class Grid;
 class Figure;
 class Quad;
 class Hexagon;
+class Surface;
+class Maze;
+class HexGrid;
+class QuadGrid;
 
 using std::vector;
 using std::list;

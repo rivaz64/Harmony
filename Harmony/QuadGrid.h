@@ -51,7 +51,10 @@ class QuadGrid :
   checkMarkedMoves(const uint x, const uint y) override;
 
   vector<uint>
-  checknewMoves(const uint x, const uint y) override;
+  checkNewMoves(const uint x, const uint y) override;
+
+  vector<uint>
+  checkPosibleMoves(const uint x, const uint y) override;
 
   void
   useFigure(const uint x, const uint y) override;

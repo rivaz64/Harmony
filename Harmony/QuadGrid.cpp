@@ -112,7 +112,7 @@ QuadGrid::checkMarkedMoves(const uint x, const uint y)
 }
 
 vector<uint> 
-QuadGrid::checknewMoves(const uint x, const uint y)
+QuadGrid::checkNewMoves(const uint x, const uint y)
 {
   vector<uint> ans;
   uint dirs;
@@ -128,21 +128,37 @@ QuadGrid::checknewMoves(const uint x, const uint y)
       ans.push_back(MAZE_CELL::RIGHT);
     }
   }
-  
   if(y!=0){
     dirs = getValueAt(x,y-1);
     if(dirs!=MAZE_CELL::ALL && !(dirs & MAZE_CELL::DOWN)){
       ans.push_back(MAZE_CELL::DOWN);
     }
   }
-
   if(x!=0){
     dirs = getValueAt(x-1,y);
     if(dirs!=MAZE_CELL::ALL && !(dirs & MAZE_CELL::LEFT)){
       ans.push_back(MAZE_CELL::LEFT);
     }
   }
-  
+  return ans;
+}
+
+vector<uint> QuadGrid::checkPosibleMoves(const uint x, const uint y)
+{
+  vector<uint> ans;
+  uint dirs = getValueAt(x,y);
+  if(dirs & MAZE_CELL::UP){
+    ans.push_back(MAZE_CELL::UP);
+  }
+  if(dirs & MAZE_CELL::RIGHT){
+    ans.push_back(MAZE_CELL::RIGHT);
+  }
+  if(dirs & MAZE_CELL::DOWN){
+    ans.push_back(MAZE_CELL::DOWN);
+  }
+  if(dirs & MAZE_CELL::LEFT){
+     ans.push_back(MAZE_CELL::LEFT);
+  }
   return ans;
 }
 

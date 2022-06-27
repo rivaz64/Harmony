@@ -1,26 +1,24 @@
 #include "DNA.h"
 namespace Harmony{
 
-DNA::DNA(DNA& father, DNA& mother)
+void 
+DNA::addData(void* data, size_t size)
 {
-  //uint size = mother.m_genes.size();
-  uint n = 0;
-  for(auto& g : father.m_genes.m_data){
-    m_genes.addVariableOfSize(g.first,g.second.size);
-    uint d = rand()%2;
-    uint m = rand()%36;
-    if(m!=0){
-      if(d==0){
-        m_genes.setVariableAs(g.first,g.second.data);
-      }
-      else{
-        m_genes.copyVariable(g.first,mother.m_genes.getVariablePointer(g.first));
-      }
+  m_data.push_back({data,size});
+}
+
+void 
+DNA::mixData(const DNA& d1, const DNA& d2)
+{ 
+  size_t size = m_data.size();
+  for(uint i = 0; i<size; ++i){
+    uint selected = rand()%2;
+    if(selected == 0){
+      memcpy(m_data[i].first,d1.m_data[i].first,m_data[i].second);
     }
     else{
-      m_mutations[n](m_genes.getVariablePointer(g.first));
+      memcpy(m_data[i].first,d2.m_data[i].first,m_data[i].second);
     }
-    ++n;
   }
 }
 

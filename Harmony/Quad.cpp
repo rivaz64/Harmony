@@ -5,7 +5,7 @@ namespace Harmony{
 bool 
 Quad::isPointInside(const Dimencion& point, uint& side) const
 {
-  auto s = getSide(point);
+  side = getSide(point);
   auto dif = point-m_center;
   switch (side)
   {

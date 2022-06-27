@@ -26,6 +26,14 @@ class Surface
   virtual const Figure*
   getFigure(const uint id){return nullptr;}
 
+  /**
+   * @brief gets the cells that have acces to this one
+   * @param id 
+   * @return 
+  */
+  virtual map<uint,uint>
+  getAdjacentCells(const uint id){return {};}
+
  protected:
 };
 

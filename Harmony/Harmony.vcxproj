@@ -146,10 +146,11 @@
     <ClInclude Include="Debuger.h" />
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="DNA.h" />
-    <ClInclude Include="ExelGrid.h" />
     <ClInclude Include="Figure.h" />
+    <ClInclude Include="GeneticAlgorithm.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Hexagon.h" />
+    <ClInclude Include="HexGrid.h" />
     <ClInclude Include="Maze.h" />
     <ClInclude Include="NavMesh.h" />
     <ClInclude Include="NavSystem.h" />
@@ -170,10 +171,11 @@
     <ClCompile Include="BlackBoard.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DNA.cpp" />
-    <ClCompile Include="ExelGrid.cpp" />
     <ClCompile Include="Figure.cpp" />
+    <ClCompile Include="GeneticAlgorithm.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="Hexagon.cpp" />
+    <ClCompile Include="HexGrid.cpp" />
     <ClCompile Include="Maze.cpp" />
     <ClCompile Include="NavMesh.cpp" />
     <ClCompile Include="NavSystem.cpp" />

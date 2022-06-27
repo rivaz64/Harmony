@@ -10,28 +10,19 @@ namespace Harmony{
  * @brief the default data for a instance that is a mixture of 2 other instances
 */
 
-namespace GENE{
-enum E{
-FLOAT,
-INT
-};
-}
-
 class DNA
 {
  public:
-  
-  /**
-   * @brief build the base gene with the types is going to have
-   * @param genes 
-  */
-  DNA(const BlackBoard& genes) : m_genes(genes) {}
 
-  DNA(DNA& father, DNA& mother);
+  void
+  addData(void* data, size_t size);
 
- public:
-  BlackBoard m_genes;
-  vector<Delegate<void*>> m_mutations;
+  void
+  mixData(const DNA& d1, const DNA& d2);
+
+ private:
+  vector<pair<void*,size_t>> m_data;
+
 };
 
 }

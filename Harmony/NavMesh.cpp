@@ -165,71 +165,77 @@ Figure* NavMesh::getFigure(const uint id)
   return &tris[id].tri;
 }
 
-void
-NavMesh::addPawn(Pawn* pawn)
+map<uint,uint>
+NavMesh::getAdjacentCells(const uint id)
 {
-  uint node = 0;
-  getCellAt(pawn->getPosition(),node);
-  pawns.insert({pawn,node});
+  return tris[id].adjacents;
 }
 
-list<Dimencion> 
-NavMesh::findPath(Dimencion start, Dimencion end){
-  uint nodeStart = 0, nodeEnd = 0;
-  getCellAt(start,nodeStart);
-  getCellAt(end,nodeEnd);
-  list<Dimencion> ans;
-  auto path = findPath(nodeStart, nodeEnd);
-  for(auto& node : path){
-    ans.push_back(tris[node].tri.getCenter());
-  }
-  return ans;
-}
-
-void 
-insertToFind(PathFindNode newNode, list<PathFindNode>& forsearch){
-  for(auto node = forsearch.begin(); node != forsearch.end(); ++node){
-    if(node->distanceToGoal+node->distanceOfPath > newNode.distanceToGoal+newNode.distanceOfPath){
-      forsearch.insert(node,newNode);
-      return;
-    }
-  }
-  forsearch.push_back(newNode);
-}
-
-
-vector<uint>
-NavMesh::findPath(uint start, uint end)
-{
-  list<PathFindNode> forsearch;
-  //node, parent
-  map<uint,uint> paths;
-  auto centerStart = CENTER(start);
-  insertToFind({end,DISTANCE(end),0},forsearch);
-  paths.insert({end,-1});
-  while(forsearch.size()>0){
-    auto actualAtNode = *forsearch.begin();
-    auto searchAtID = actualAtNode.id;
-    if(searchAtID == start){
-      vector<uint> ans;
-      uint actualNode = start;
-      while(actualNode != end){
-        ans.push_back(actualNode);
-        actualNode = paths[actualNode];
-      }
-      ans.push_back(actualNode);
-      return ans;
-    }
-    auto searchAt = tris[searchAtID];
-    forsearch.pop_front();
-    for(auto& node : searchAt.adjacents){
-      if(paths.find(node.second)==paths.end()){
-        insertToFind({node.second,DISTANCE(node.second),DISTANCE2(node.second,searchAtID)+actualAtNode.distanceOfPath},forsearch);//forsearch.push_back(node.second);
-        paths.insert({node.second,searchAtID});
-      }
-    }
-  }
-}
+//void
+//NavMesh::addPawn(Pawn* pawn)
+//{
+//  uint node = 0;
+//  getCellAt(pawn->getPosition(),node);
+//  pawns.insert({pawn,node});
+//}
+//
+//list<Dimencion> 
+//NavMesh::findPath(Dimencion start, Dimencion end){
+//  uint nodeStart = 0, nodeEnd = 0;
+//  getCellAt(start,nodeStart);
+//  getCellAt(end,nodeEnd);
+//  list<Dimencion> ans;
+//  auto path = findPath(nodeStart, nodeEnd);
+//  for(auto& node : path){
+//    ans.push_back(tris[node].tri.getCenter());
+//  }
+//  return ans;
+//}
+//
+//void 
+//insertToFind(PathFindNode newNode, list<PathFindNode>& forsearch){
+//  for(auto node = forsearch.begin(); node != forsearch.end(); ++node){
+//    if(node->distanceToGoal+node->distanceOfPath > newNode.distanceToGoal+newNode.distanceOfPath){
+//      forsearch.insert(node,newNode);
+//      return;
+//    }
+//  }
+//  forsearch.push_back(newNode);
+//}
+//
+//
+//vector<uint>
+//NavMesh::findPath(uint start, uint end)
+//{
+//  list<PathFindNode> forsearch;
+//  //node, parent
+//  map<uint,uint> paths;
+//  auto centerStart = CENTER(start);
+//  insertToFind({end,DISTANCE(end),0},forsearch);
+//  paths.insert({end,-1});
+//  while(forsearch.size()>0){
+//    auto actualAtNode = *forsearch.begin();
+//    auto searchAtID = actualAtNode.id;
+//    if(searchAtID == start){
+//      vector<uint> ans;
+//      uint actualNode = start;
+//      while(actualNode != end){
+//        ans.push_back(actualNode);
+//        actualNode = paths[actualNode];
+//      }
+//      ans.push_back(actualNode);
+//      return ans;
+//    }
+//    auto searchAt = tris[searchAtID];
+//    forsearch.pop_front();
+//    for(auto& node : searchAt.adjacents){
+//      if(paths.find(node.second)==paths.end()){
+//        insertToFind({node.second,DISTANCE(node.second),DISTANCE2(node.second,searchAtID)+actualAtNode.distanceOfPath},forsearch);//forsearch.push_back(node.second);
+//        paths.insert({node.second,searchAtID});
+//      }
+//    }
+//  }
+//}
 
 
 uint 
