@@ -63,6 +63,9 @@ class Maze
   void
   wilson(uint seed);
 
+  void
+  kruskal(uint seed, uint areas);
+
   /**
    * @brief adds directions to dead points
    * @param p the percentage of points to clear

@@ -116,7 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,7 +145,6 @@
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Debuger.h" />
     <ClInclude Include="Delegate.h" />
-    <ClInclude Include="DNA.h" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="GeneticAlgorithm.h" />
     <ClInclude Include="Grid.h" />
@@ -162,6 +161,7 @@
     <ClInclude Include="Reaction.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Surface.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Transition.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vector2f.h" />
@@ -170,7 +170,6 @@
   <ItemGroup>
     <ClCompile Include="BlackBoard.cpp" />
     <ClCompile Include="Controller.cpp" />
-    <ClCompile Include="DNA.cpp" />
     <ClCompile Include="Figure.cpp" />
     <ClCompile Include="GeneticAlgorithm.cpp" />
     <ClCompile Include="Grid.cpp" />
@@ -187,6 +186,7 @@
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Surface.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transition.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Vector2f.cpp" />

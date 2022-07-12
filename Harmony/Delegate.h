@@ -31,14 +31,14 @@ class Delegate :
       , stub_ptr(0)
   {}
 
-  //template <class DelegatorType, class T,void (T::*TMethod)(_Types...)>
-  //static DelegatorType create(T* object_ptr)
-  //{
-  //    DelegatorType d;
-  //    d.object_ptr = object_ptr;
-  //    d.stub_ptr = &method_stub<T, TMethod>; 
-  //    return d;
-  //}
+  template <class DelegatorType, class T,void (T::*TMethod)(_Types...)>
+  static DelegatorType create(T* object_ptr)
+  {
+      DelegatorType d;
+      d.object_ptr = object_ptr;
+      d.stub_ptr = &method_stub<T, TMethod>; 
+      return d;
+  }
 
   template <class DelegatorType, class T,void (T::*TMethod)(_Types...)>
   static DelegatorType* createPtr(T* object_ptr)
@@ -60,7 +60,7 @@ class Delegate :
 
   void* object_ptr;
   stub_type stub_ptr;
-
+  tuple<_Types> args;
   template <class T, void (T::*TMethod)(_Types...)>
   static void method_stub(void* object_ptr, _Types&&... _Args)
   {

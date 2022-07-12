@@ -232,14 +232,14 @@ struct WilsonNode{
   WilsonNode(uint _x, uint _y, uint _dir):
     x(_x), y(_y), dir(_dir){}
 
-  const bool& 
+  const bool
   operator==(const WilsonNode& other) const
   {
     return x == other.x && y == other.y;
   }
 
   uint x;
-  uint y;
+  uint y; 
   uint dir;
 };
 
@@ -294,6 +294,22 @@ Maze::wilson(uint seed)
       ++cellsFilled;
     }
   }
+}
+
+void 
+Maze::kruskal(uint seed, uint areas)
+{
+  list<vector<uint>> sections;
+  auto total = m_grid->getSizeX()*m_grid->getSizeY();
+  //for(uint i=0; i<sizeX; ++i){
+  //  sections.push_back({i});  
+  //}
+  //while(sections.size()){
+  //  uint selected = rand()%sections.size();
+  //  auto it = sections.begin();
+  //  advance(it,selected);
+  //
+  //}
 }
 
 void
