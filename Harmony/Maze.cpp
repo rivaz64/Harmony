@@ -172,6 +172,7 @@ Maze::backtracker(uint seed)
   srand(seed);
   uint x = rand()%m_grid->getSizeX();
   uint y = rand()%m_grid->getSizeY();
+  deadPoints.push_back({x,y});
   list<uint> backTrack;
   for(uint i=1; i<m_area; ++i){
     auto dirs = m_grid->checkMarkedMoves(x,y);
@@ -191,6 +192,7 @@ Maze::backtracker(uint seed)
     m_grid->move(x,y,dir);
     m_grid->setValueAt(x,y, m_grid->inverse(dir));
     backTrack.push_back(m_grid->inverse(dir));
+    deadPoints.push_back({x,y});
   }
 }
 

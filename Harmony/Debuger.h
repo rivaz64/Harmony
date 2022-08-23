@@ -4,20 +4,17 @@
 
 namespace Harmony{
 
-inline
-void 
+inline void 
 print(const string& v){
-  std::cout<<v<<std::endl;
+  std::cout<<v<<" ";
 }
 
-inline
-void 
+inline void 
 print(const uint v){
   std::cout<<v<<std::endl;
 }
 
-inline
-void 
+inline void 
 print(const int v){
   std::cout<<v<<std::endl;
 }

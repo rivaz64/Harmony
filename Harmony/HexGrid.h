@@ -13,8 +13,8 @@ enum E : unsigned char
   DOWN = 8,
   DOWN_LEFT = 16,
   DOWN_RIGHT = 32,
-  //UP = 64,
-  //DOWN = 128
+  LINK = 64,
+  //DOWN = 128,
   ALL = 255
 };
 }
@@ -32,6 +32,9 @@ class HexGrid :
 
   void
   setValueAt(uint x, uint y,uint value) override;
+
+  void
+  unsetValueAt(uint x, uint y,uint value) override;
 
   uint
   getValueAt(uint x, uint y) override;

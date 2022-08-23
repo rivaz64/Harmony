@@ -8,6 +8,7 @@
 #include <memory>
 #include <algorithm>
 #include <functional>
+#include <memory>
 #include "Vector2f.h"
 #ifdef UNREAL_HARMONY
 #include "CoreMinimal.h"
@@ -19,7 +20,7 @@ namespace Harmony{
 class Vector2f;
 class Object;
 class Pawn;
-class Controller;
+class Controler;
 class State;
 class Message;
 class BlackBoard;
@@ -29,10 +30,16 @@ class Grid;
 class Figure;
 class Quad;
 class Hexagon;
-class Surface;
+class Graph;
 class Maze;
 class HexGrid;
 class QuadGrid;
+class Timer;
+class Action;
+class NavLink;
+class MultiGrid;
+struct SearchNode;
+class Path;
 
 using std::vector;
 using std::list;
@@ -44,7 +51,14 @@ using std::string;
 using std::find;
 using std::advance;
 using std::swap;
+using std::function;
+using std::_Mem_fn;
+using std::_Binder;
+using std::mem_fn;
 using std::bind;
+using std::shared_ptr;
+using std::weak_ptr;
+using std::make_shared;
 using uint = unsigned int;
 
 #ifdef UNREAL_HARMONY

@@ -22,6 +22,15 @@ HexGrid::setValueAt(uint x, uint y, uint value)
   cells[oneDimPos] = static_cast<EXEL_CELL::E>(cells[oneDimPos] | static_cast<EXEL_CELL::E>(value));
 }
 
+void 
+HexGrid::unsetValueAt(uint x, uint y, uint value)
+{
+  auto oneDimPos = x+y*m_sizeX;
+  auto antiValue = !cells[oneDimPos];
+  antiValue = cells[oneDimPos] | static_cast<EXEL_CELL::E>(value);
+  cells[oneDimPos] = static_cast<EXEL_CELL::E>(!antiValue);
+}
+
 uint
 HexGrid::getValueAt(uint x, uint y)
 {

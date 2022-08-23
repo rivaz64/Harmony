@@ -1,4 +1,4 @@
-#include "Controller.h"
+#include "Controler.h"
 #include "State.h"
 #include "Transition.h"
 #include "Pawn.h"
@@ -6,13 +6,16 @@
 
 namespace Harmony{
 
-Controller::Controller(const map<STATES::E,State*>& states) :
-  m_states(states)                                  
+Controler::Controler(const vector<STATES::E>& states)                  
 {
-  m_actualState = states.begin()->first;
+  for(auto state : states){
+    m_states.insert({state,new State});
+  }
+  
+  //m_actualState = states.begin()->first;
 }
 
-Controller::~Controller()
+Controler::~Controler()
 {
   for(auto& state : m_states){
     delete state.second;
@@ -22,10 +25,10 @@ Controller::~Controller()
 }
 
 void 
-Controller::init(vector<DelegatorDesciption> defaultReactions, 
+Controler::init(vector<DelegatorDesciption> defaultReactions, 
                  vector<DelegatorDesciption> specificReactions)
 {
-  map<uint,vector<Delegator*>> defaults;
+  map<uint,vector<Action*>> defaults;
 
   for(auto& desc : defaultReactions){
     defaults.insert({desc.message,desc.toState});
@@ -39,33 +42,33 @@ Controller::init(vector<DelegatorDesciption> defaultReactions,
     m_states[desc.fromState]->m_reactions[desc.message] = desc.toState;
   }
 
-  m_states[m_actualState]->onMessage(MESSAGES::OnEnter);
+  m_states[m_actualState]->onMessage(this,MESSAGES::OnEnter);
 }
 
 void
-Controller::ChangeToState(STATES::E newState)
+Controler::changeToState(STATES::E newState)
 {
-  m_states[m_actualState]->onMessage(MESSAGES::OnExit);
+  m_states[m_actualState]->onMessage(this,MESSAGES::OnExit);
   m_actualState = newState;
-  m_states[m_actualState]->onMessage(MESSAGES::OnEnter);
+  m_states[m_actualState]->onMessage(this,MESSAGES::OnEnter);
 }
 
 void 
-Controller::update(float delta)
+Controler::update(float delta)
 {
   deltaTime = delta;
 
-  m_states[m_actualState]->onMessage(MESSAGES::OnUpdate);
+  m_states[m_actualState]->onMessage(this,MESSAGES::OnUpdate);
 }
 
 void 
-Controller::message(MESSAGES::E msg)
+Controler::message(MESSAGES::E msg)
 {
-  m_states[m_actualState]->onMessage(msg);
+  m_states[m_actualState]->onMessage(this,msg);
 }
 
 void 
-Controller::remember(MEMENTOS::E type, Memento* memory)
+Controler::remember(MEMENTOS::E type, Memento* memory)
 {
   if(m_memory.find(type) == m_memory.end()){
     m_memory.insert({type,{}});
@@ -74,7 +77,7 @@ Controller::remember(MEMENTOS::E type, Memento* memory)
 }
 
 void
-Controller::newRandomPointToGo()
+Controler::newRandomPointToGo()
 {
   auto location = m_pawn->getPosition();
   auto direction = m_pawn->getDirection();
@@ -85,7 +88,7 @@ Controller::newRandomPointToGo()
 }
 
 void
-Controller::separate()
+Controler::separate()
 {
   const auto& separationForze = *m_variables.getVariableAs<float>("separationForze");
   auto pawn = getPawn();
@@ -106,7 +109,7 @@ Controller::separate()
 }
 
 void 
-Controller::align()
+Controler::align()
 {
   auto pawn = getPawn();
   auto pos = pawn->getPosition();
@@ -125,7 +128,7 @@ Controller::align()
 }
 
 void
-Controller::coher()
+Controler::coher()
 {
   const auto& cohercionForze = *m_variables.getVariableAs<float>("cohercionForze");
   auto pawn = getPawn();
@@ -143,8 +146,9 @@ Controller::coher()
   center /= static_cast<float>(viewed->size());
   pawn->acelerate((center-pos).normalized()*cohercionForze);
 }
+
 void 
-Controller::goToPoint()
+Controler::goToPoint()
 {
   auto position = m_pawn->getPosition();
   auto pointToGo = m_variables.getVariableAs<Dimencion>("pointToGo");
@@ -164,7 +168,7 @@ Controller::goToPoint()
 }
 
 void 
-Controller::lookTo()
+Controler::lookTo()
 {
   auto pawn = getPawn();
   auto position = pawn->getPosition();
@@ -182,7 +186,7 @@ Controller::lookTo()
 }
 
 void 
-Controller::wait()
+Controler::wait()
 {
   auto& timer = *m_variables.getVariableAs<float>("timer");
   auto& timeToWait = *m_variables.getVariableAs<float>("timeToWait");
@@ -194,14 +198,14 @@ Controller::wait()
 }
 
 void 
-Controller::restart()
+Controler::restart()
 {
   auto& timer = *m_variables.getVariableAs<float>("timer");
   timer = 0;
 }
 
 void 
-Controller::nextPointPath()
+Controler::nextPointPath()
 {
   auto& pointToGo = *m_variables.getVariableAs<Vector2f>("pointToGo");
   auto& path = *m_variables.getVariableAs<list<Vector2f>>("path");
@@ -212,7 +216,7 @@ Controller::nextPointPath()
 }
 
 void 
-Controller::nextPointPatrol()
+Controler::nextPointPatrol()
 {
   auto& pointToGo = *m_variables.getVariableAs<Vector2f>("pointToGo");
   auto& path = *m_variables.getVariableAs<list<Vector2f>>("path");
@@ -224,13 +228,13 @@ Controller::nextPointPatrol()
 }
 
 void
-Controller::goToPoint(const Dimencion& point)
+Controler::goToPoint(const Dimencion& point)
 {
   print("goToPoint does nothing");
 }
 
 Dimencion 
-Controller::reachablePointInRadius(const Dimencion& point, float radius)
+Controler::reachablePointInRadius(const Dimencion& point, float radius)
 {
   print("reachablePointInRadius nothing");
   return Dimencion();

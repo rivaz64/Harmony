@@ -1,7 +1,12 @@
 #pragma once
+#include "Prerequisites.h"
+
+namespace Harmony{
+
+}
 #ifndef DELEGATE_HPP
 # define DELEGATE_HPP
-#include "Prerequisites.h"
+
 #include "Debuger.h"
 namespace Harmony{
 
@@ -60,7 +65,7 @@ class Delegate :
 
   void* object_ptr;
   stub_type stub_ptr;
-  tuple<_Types> args;
+  //tuple<_Types> args;
   template <class T, void (T::*TMethod)(_Types...)>
   static void method_stub(void* object_ptr, _Types&&... _Args)
   {

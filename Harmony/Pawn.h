@@ -60,13 +60,13 @@ class Pawn
   virtual void
   rotate(float);
 
-  inline Controller*
+  inline Controler*
   getController(){
     return m_controller;
   }
 
   inline void
-  setController(Controller* controller){
+  setController(Controler* controller){
     m_controller = controller;
   }
 
@@ -75,7 +75,7 @@ class Pawn
   /**
    * @brief this is controlling this pawn
   */
-  Controller* m_controller; 
+  Controler* m_controller; 
 
   friend class Manager;
 };

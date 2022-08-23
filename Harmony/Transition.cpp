@@ -1,11 +1,11 @@
 #include "Transition.h"
-#include "Controller.h"
+#include "Controler.h"
 namespace Harmony{
 
-void
-Transition::execute()
+void 
+Transition::execute(Controler* control)
 {
-  (*this)(m_newState);
+  control->changeToState(m_newState);
 }
 
 }

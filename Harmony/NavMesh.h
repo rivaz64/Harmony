@@ -1,7 +1,7 @@
 #pragma once
 #include "Prerequisites.h"
 #include "Triangle.h"
-#include "Surface.h"
+#include "Graph.h"
 
 namespace Harmony{
 
@@ -19,7 +19,7 @@ struct NavMeshNode
 };
 
 class NavMesh :
-  public Surface
+  public Graph
 {
  public:
 
@@ -41,7 +41,7 @@ class NavMesh :
   getFigure(const uint id) override;
 
   map<uint,uint>
-  getAdjacentCells(const uint id) override;
+  getAdjacentNodes(const uint id) override;
 
   //bool
   //nodeOfPoint(const Dimencion& point,uint& node);

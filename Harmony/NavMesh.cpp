@@ -1,7 +1,7 @@
 #include "NavMesh.h"
 #include "Pawn.h"
 #include "VectorUtilities.h"
-#include "Controller.h"
+#include "Controler.h"
 
 namespace Harmony{
 
@@ -166,7 +166,7 @@ Figure* NavMesh::getFigure(const uint id)
 }
 
 map<uint,uint>
-NavMesh::getAdjacentCells(const uint id)
+NavMesh::getAdjacentNodes(const uint id)
 {
   return tris[id].adjacents;
 }

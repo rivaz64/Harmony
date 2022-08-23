@@ -1,6 +1,6 @@
 #include "Prerequisites.h"
 #include "GeneticAlgorithm.h"
-
+#include "Debuger.h"
 
 
 class Randomizer{
@@ -36,9 +36,16 @@ Harmony::string goal = "hello world";
 };
 
 
+class var{
+public:
+void foo()
+{
+  Harmony::print("foo");
+}
+};
+
 int main(int argc, char* argv[])
 {
-  Harmony::bind()
   //Randomizer *r = new Randomizer;
   //auto mutation = Harmony::Delegate<char*>::createPtr<Harmony::Delegate<char*>,Randomizer,&Randomizer::randomLetter>(r);
   //auto goal = Harmony::Delegate<char*,Harmony::uint*>::createPtr<Harmony::Delegate<char*,Harmony::uint*>,Randomizer,&Randomizer::isAns>(r);
@@ -79,5 +86,5 @@ int main(int argc, char* argv[])
   //  Harmony::print("");
   //  std::cin>>a;
   //}
-  
+  //auto binding = Harmony::bind
 }

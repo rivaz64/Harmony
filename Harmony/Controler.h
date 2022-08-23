@@ -42,7 +42,7 @@ enum E
 struct DelegatorDesciption{
   STATES::E fromState;
   MESSAGES::E message;
-  vector<Delegator*> toState;
+  vector<Action*> toState;
 };
 
 struct Memento{
@@ -70,14 +70,14 @@ struct Memory:
 /**
  * @brief a state machine that controlls a pawn
 */
-class Controller
+class Controler
 {
  public:
   
-  Controller(const map<STATES::E,State*>& states);
+  Controler(const vector<STATES::E>& states);
 
   virtual 
-  ~Controller();
+  ~Controler();
 
   void
   init(vector<DelegatorDesciption> defaultReactions,
@@ -88,7 +88,7 @@ class Controller
    * @param newState the state to where is changing
   */
   void
-  ChangeToState(STATES::E newState);
+  changeToState(STATES::E newState);
 
   /**
    * @brief updates the state machine

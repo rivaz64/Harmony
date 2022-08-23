@@ -1,12 +1,12 @@
 #pragma once
-#include "Surface.h"
+#include "Graph.h"
 namespace Harmony{
 
 /**
  * @brief interface for any kind of grid
 */
 class Grid :
-  public Surface
+  public Graph
 {
 
  public:
@@ -18,6 +18,15 @@ class Grid :
   */
   virtual void
   setValueAt(uint x, uint y,uint value){}
+
+  /**
+   * @brief blocks a passage to this position
+   * @param x 
+   * @param y 
+   * @param value 
+  */
+  virtual void
+  unsetValueAt(uint x, uint y,uint value){}
 
   /**
    * @brief gets the passages at this position
@@ -111,8 +120,8 @@ class Grid :
   const Figure*
   getFigure(const uint id) override;
 
-  map<uint,uint>
-  getAdjacentCells(const uint id) override;
+  virtual map<uint,uint>
+  getAdjacentNodes(const uint id) override;
 
   inline uint
   getSizeX()

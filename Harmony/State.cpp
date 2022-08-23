@@ -3,8 +3,7 @@
 
 namespace Harmony{
 
-void 
-State::onMessage(uint msg)
+void State::onMessage(Controler* control,uint msg)
 {
   #ifdef _DEBUG
   if(m_reactions.find(msg)==m_reactions.end()){
@@ -14,9 +13,8 @@ State::onMessage(uint msg)
   }
   #endif
   for(auto& reaction : m_reactions[msg]){
-    reaction->execute();
+    reaction->execute(control);
   }
-  
 }
 
 }

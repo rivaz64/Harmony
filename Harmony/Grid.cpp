@@ -40,7 +40,7 @@ Figure* Grid::getFigure(const uint id)
 }
 
 map<uint, uint> 
-Grid::getAdjacentCells(const uint id)
+Grid::getAdjacentNodes(const uint id)
 {
   uint x = id%m_sizeX;
   uint y = id/m_sizeX;
