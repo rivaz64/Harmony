@@ -57,7 +57,7 @@ class NavSystem
   findPath(uint startId, uint goalId, Path& path);
 
   virtual bool
-  isBetterPath(weak_ptr<SearchNode> node, weak_ptr<SearchNode> newParent) {}
+  isBetterPath(weak_ptr<SearchNode> node, weak_ptr<SearchNode> newParent) {return false;}
 
   virtual void
   addDataToNode(weak_ptr<SearchNode> node, weak_ptr<SearchNode> parent) {}

@@ -9,6 +9,11 @@ class AStar :
 {
  public:
 
+  AStar() = default;
+
+  AStar(weak_ptr<Graph> Graph) :
+    NavSystem(Graph) {}
+
   bool
   isBetterPath(weak_ptr<SearchNode> node, weak_ptr<SearchNode> newParent);
 

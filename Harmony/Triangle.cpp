@@ -12,17 +12,17 @@ Triangle::Triangle(Dimencion p1, Dimencion p2, Dimencion p3)
   point1 = p1;
   point2 = p2;
   point3 = p3;
-  if(angle2>angle1){
+   if(angle2>angle1){
     swap(point1,point2);
     swap(angle1,angle2);
-  }
-  if(angle3>angle2){
-    swap(point3,point2);
-    swap(angle3,angle2);
   }
   if(angle3>angle1){
     swap(point1,point3);
     swap(angle1,angle3);
+  }
+  if(angle3>angle2){
+    swap(point3,point2);
+    swap(angle3,angle2);
   }
   m_center = (point1+point2+point3)/3.f;
   //auto v1 = (p2-p1);
@@ -63,17 +63,17 @@ Triangle::getSide(const Dimencion& point) const
 bool 
 Triangle::isPointInside(const Dimencion& point, uint& side) const
 {
-  auto s = getSide(point);
+  side = getSide(point);
   auto dif = point-m_center;
   Vector2f intersection;
   switch (side)
   {
   case 1:
-    return Vector2f::intersect(point1,point2,m_center,point,intersection);
+    return !Vector2f::intersect(point1,point2,m_center,point,intersection);
   case 2:
-    return Vector2f::intersect(point2,point3,m_center,point,intersection);
+    return !Vector2f::intersect(point2,point3,m_center,point,intersection);
   case 3:
-    return Vector2f::intersect(point3,point1,m_center,point,intersection);
+    return !Vector2f::intersect(point3,point1,m_center,point,intersection);
   }
 }
 
