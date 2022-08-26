@@ -4,6 +4,7 @@
 #include "Figure.h"
 #include "Path.h"
 
+
 namespace Harmony{
 
 void 
@@ -11,17 +12,6 @@ NavSystem::addPawn(Pawn* pawn)
 {
   
 }
-
-//void 
-//insertToFind(PathFindNode newNode, list<PathFindNode>& forsearch){
-//  for(auto node = forsearch.begin(); node != forsearch.end(); ++node){
-//    if(node->distanceToGoal+node->distanceOfPath > newNode.distanceToGoal+newNode.distanceOfPath){
-//      forsearch.insert(node,newNode);
-//      return;
-//    }
-//  }
-//  forsearch.push_back(newNode);
-//}
 
 bool 
 NavSystem::findPath(uint startId, uint goalId, Path& path)
@@ -48,6 +38,8 @@ NavSystem::step()
   auto adjacents = graph->getAdjacentNodes(node->id);
   weak_ptr<SearchNode> adjacentNode;
 
+  m_openList.pop_front();
+
   if(graph->isAt(node->id,goalId)){
     return SEARCH_STATE::Finish;
   }
@@ -59,9 +51,10 @@ NavSystem::step()
     else{
       auto newNode = make_shared<SearchNode>(adjacent.second);
       m_closedList.insert({adjacent.second,newNode});
+      newNode->parent = node;
       adjacentNode = newNode;
       addDataToNode(adjacentNode,node);
-      addToOpenList(node);
+      addToOpenList(adjacentNode);
       continue;
     }
     if(isBetterPath(adjacentNode,node)){
@@ -87,9 +80,10 @@ NavSystem::getPath(uint id)
   if(m_closedList.find(id) == m_closedList.end()) return path;
   auto node = m_closedList[id];
   path.m_nodes.push_back(node);
+  node = node->parent.lock();
   while(node){
-    node = node->parent.lock();
     path.m_nodes.push_back(node);
+    node = node->parent.lock();
   }
   return path;
 }

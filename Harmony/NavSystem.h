@@ -93,6 +93,10 @@ class NavSystem
   {
     m_openList.clear();
     m_closedList.clear();
+    auto newNode = make_shared<SearchNode>(startId);
+    m_closedList.insert({startId,newNode});
+    addDataToNode(newNode,weak_ptr<SearchNode>());
+    addToOpenList(newNode);
   }
 
   Path

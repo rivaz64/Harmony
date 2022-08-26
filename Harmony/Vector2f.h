@@ -281,9 +281,6 @@ class Vector2f
     auto LineLen1 = (v2-v1).magnitud();
     auto LineLen2 = (v4-v3).magnitud();
 
-    auto LineLen1 = (v2-v1).magnitud();
-    auto LineLen2 = (v4-v3).magnitud();
-
     if((out-v1).magnitud()<LineLen1 && (out-v2).magnitud()<LineLen1 &&
        (out-v3).magnitud()<LineLen2 && (out-v4).magnitud()<LineLen2){
       return true;
