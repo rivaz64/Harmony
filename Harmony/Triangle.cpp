@@ -5,14 +5,14 @@ namespace Harmony{
 
 Triangle::Triangle(Dimencion p1, Dimencion p2, Dimencion p3) 
 { 
-  auto center = (p1+p2+p3)/3.f;
-  auto angle1 = VectorToAngle(p1-center);
-  auto angle2 = VectorToAngle(p2-center);
-  auto angle3 = VectorToAngle(p3-center);
+  m_center = (p1+p2+p3)/3.f;
+  auto angle1 = VectorToAngle(p1-m_center);
+  auto angle2 = VectorToAngle(p2-m_center);
+  auto angle3 = VectorToAngle(p3-m_center);
   point1 = p1;
   point2 = p2;
   point3 = p3;
-   if(angle2>angle1){
+  if(angle2>angle1){
     swap(point1,point2);
     swap(angle1,angle2);
   }
@@ -24,17 +24,6 @@ Triangle::Triangle(Dimencion p1, Dimencion p2, Dimencion p3)
     swap(point3,point2);
     swap(angle3,angle2);
   }
-  m_center = (point1+point2+point3)/3.f;
-  //auto v1 = (p2-p1);
-  //auto v2 = (p3-p1);
-  //if(Vector2f::cross(v1,v2)>0.0f){
-  //  point2 = p2;
-  //  point3 = p3;
-  //}
-  //else{
-  //  point2 = p3;
-  //  point3 = p2;
-  //}
 }
 
 uint 
@@ -158,6 +147,19 @@ Triangle::normalOfEdgeToOutside(uint n)
   auto vec = *(ref+(n+1)%3)-*(ref+n);
   vec.normalize();
   return Dimencion(vec.y,-vec.x);
+}
+
+float 
+Triangle::angle(uint n)
+{
+  auto point = getPoint(n);
+  auto vec1 = getPoint(n%3+1)-point;
+  auto vec2 = getPoint((n+1)%3+1)-point;
+  auto dot = Vector2f::dot(vec1,vec2);
+  dot/=vec1.magnitud();
+  dot/=vec2.magnitud();
+  auto angle = acos(dot);
+  return angle;
 }
 
 }

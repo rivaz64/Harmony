@@ -35,7 +35,7 @@ class Figure
   getCenter() const{
     return m_center;
   }
-
+ 
  protected:
   /**
    * @brief the center of the figure

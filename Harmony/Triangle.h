@@ -84,11 +84,28 @@ class Triangle :
   Dimencion
   normalOfEdgeToOutside(uint n);
 
+  float
+  angle(uint n);
+
+  inline Dimencion 
+  getPoint(int n)
+  {
+    return *(&point1+n-1);
+  }
+
+  inline uint 
+  getId(const Dimencion& n)
+  {
+    return (1*(point1==n))+(2*(point2==n))+(3*(point3==n));
+  }
+
  public:
   
   Dimencion point1;
   Dimencion point2;
   Dimencion point3;
+
+  friend class ConvexFigure;
 };
 
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include "Prerequisites.h"
-#include "Triangle.h"
+#include "ConvexFigure.h"
 #include "Graph.h"
 
 namespace Harmony{
@@ -10,7 +10,7 @@ struct NavMeshNode
   /**
    * @brief the triangle representing this node
   */
-  Triangle tri;
+  ConvexFigure fig;
 
   /**
    * @brief the nodes that can be reached from this node, key is the direction, value is the other node
@@ -52,24 +52,6 @@ class NavMesh :
   */
   //void
   //addPawn(Pawn* pawn);
-  //
-  ///**
-  // * @brief finds a path in points 
-  // * @param start 
-  // * @param end 
-  // * @return the path in points
-  //*/
-  //list<Dimencion>
-  //findPath(Dimencion start, Dimencion end);
-  //
-  ///**
-  // * @brief finds a path form a node to another
-  // * @param start 
-  // * @param end 
-  // * @return a path of nodes
-  //*/
-  //vector<uint>
-  //findPath(uint start, uint end);
 
   /**
    * @brief a linetrace using navmesh
@@ -99,7 +81,7 @@ class NavMesh :
   /**
    * @brief the tris of the navMesh
   */
-  vector<NavMeshNode> tris;
+  vector<NavMeshNode> m_nodes;
 
 
   map<Pawn*,uint> pawns; 

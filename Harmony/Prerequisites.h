@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <functional>
 #include <memory>
+#include <set>
 #include "Vector2f.h"
 #ifdef UNREAL_HARMONY
 #include "CoreMinimal.h"
@@ -40,12 +41,15 @@ class NavLink;
 class MultiGrid;
 struct SearchNode;
 class Path;
+class Triangle;
+class ConvexFigure;
 
 using std::vector;
 using std::list;
 using std::map;
 using std::pair;
 using std::tuple;
+using std::set;
 using std::move;
 using std::string;
 using std::find;

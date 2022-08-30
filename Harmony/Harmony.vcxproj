@@ -145,6 +145,7 @@
     <ClInclude Include="AStar.h" />
     <ClInclude Include="BlackBoard.h" />
     <ClInclude Include="Controler.h" />
+    <ClInclude Include="ConvexFigure.h" />
     <ClInclude Include="Debuger.h" />
     <ClInclude Include="Delegate.h" />
     <ClInclude Include="Figure.h" />
@@ -177,6 +178,7 @@
     <ClCompile Include="AStar.cpp" />
     <ClCompile Include="BlackBoard.cpp" />
     <ClCompile Include="Controler.cpp" />
+    <ClCompile Include="ConvexFigure.cpp" />
     <ClCompile Include="Figure.cpp" />
     <ClCompile Include="GeneticAlgorithm.cpp" />
     <ClCompile Include="Graph.cpp" />

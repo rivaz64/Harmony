@@ -2,6 +2,7 @@
 #include "Pawn.h"
 #include "VectorUtilities.h"
 #include "Controler.h"
+#include "Triangle.h"
 
 namespace Harmony{
 
@@ -9,6 +10,19 @@ namespace Harmony{
 #define DISTANCE(n) (CENTER(n)-centerStart).magnitud()
 #define DISTANCE2(n,m) (CENTER(n)-CENTER(m)).magnitud()
 #define INSERT_TO_FIND(n) insertToFind({n,DISTANCE(n)},forsearch)
+
+struct TriangulationNode
+{
+  /**
+   * @brief the triangle representing this node
+  */
+  Triangle tri;
+
+  /**
+   * @brief the nodes that can be reached from this node, key is the direction, value is the other node
+  */
+  map<uint,uint> adjacents;
+};
 
 void
 addPoint(const Harmony::Vector2f& point, vector<Triangle>& triangulation){
@@ -96,11 +110,12 @@ isTriInFigs(const Triangle& tri,const vector<vector<Dimencion>>& figs){
   return false;
 }
 
-void 
-NavMesh::generate(const Dimencion& minPoint, 
-                            const Dimencion& maxPoint, 
-                            const vector<vector<Dimencion>>& obstacles)
+vector<TriangulationNode>
+generateTriangulation(const Dimencion& minPoint, 
+                      const Dimencion& maxPoint, 
+                      const vector<vector<Dimencion>>& obstacles)
 {
+  vector<TriangulationNode> tris;
   vector<Dimencion> points;
   vector<Triangle> triangulation;
   uint numOfPoints = 0;
@@ -143,15 +158,54 @@ NavMesh::generate(const Dimencion& minPoint,
       }
     }
   }
+  return tris;
+}
+
+void
+addTriToFig(int numOfSide, vector<TriangulationNode>& tris,int i,set<uint>& used,NavMeshNode& newNode)
+{
+  if(tris[i].adjacents.find(numOfSide) != tris[i].adjacents.end() && 
+     used.find(tris[i].adjacents[numOfSide]) == used.end()){
+    auto& otherTri = tris[tris[i].adjacents[numOfSide]].tri;
+    auto side = otherTri.getSide(tris[i].tri.getCenter());
+    auto thisSide = tris[i].tri.getId(otherTri.getPoint(side));
+    if(otherTri.angle(side)+tris[i].tri.angle(thisSide)>PI) return;
+    thisSide = tris[i].tri.getId(otherTri.getPoint(side%3+1));
+    if(otherTri.angle(side%3+1)+tris[i].tri.angle(thisSide)>PI) return;
+    auto otherPoint = otherTri.getPoint((otherTri.getSide(tris[i].tri.getCenter())+1)%3+1);
+    newNode.fig.addPoint(otherPoint);
+    used.insert(tris[i].adjacents[numOfSide]);
+  }
+}
+
+void
+NavMesh::generate(const Dimencion& minPoint, 
+           const Dimencion& maxPoint, 
+           const vector<vector<Dimencion>>& obstacles)
+{
+  auto tris = generateTriangulation(minPoint,maxPoint,obstacles);
+  set<uint> used;
+  for(int i = 0; i<tris.size(); ++i){
+    if(used.find(i) != used.end()) continue;
+    NavMeshNode newNode;
+    newNode.fig = tris[i].tri;
+    newNode.adjacents = tris[i].adjacents;
+    used.insert(i);
+    addTriToFig(1,tris,i,used,newNode);
+    addTriToFig(2,tris,i,used,newNode);
+    addTriToFig(3,tris,i,used,newNode);
+    
+    m_nodes.push_back(newNode);
+  }
 }
 
 bool
 NavMesh::getCellAt(const Dimencion& point, uint& nodeId)
 {
-  auto numOfNodes = tris.size();
+  auto numOfNodes = m_nodes.size();
   uint side;
   for(uint i=0; i<numOfNodes; ++i){
-    if(tris[i].tri.isPointInside(point,side)){
+    if(m_nodes[i].fig.isPointInside(point,side)){
       nodeId = i;
       return true;
     }
@@ -162,81 +216,14 @@ NavMesh::getCellAt(const Dimencion& point, uint& nodeId)
 const 
 Figure* NavMesh::getFigure(const uint id)
 {
-  return &tris[id].tri;
+  return &m_nodes[id].fig;
 }
 
 map<uint,uint>
 NavMesh::getAdjacentNodes(const uint id)
 {
-  return tris[id].adjacents;
+  return m_nodes[id].adjacents;
 }
-
-//void
-//NavMesh::addPawn(Pawn* pawn)
-//{
-//  uint node = 0;
-//  getCellAt(pawn->getPosition(),node);
-//  pawns.insert({pawn,node});
-//}
-//
-//list<Dimencion> 
-//NavMesh::findPath(Dimencion start, Dimencion end){
-//  uint nodeStart = 0, nodeEnd = 0;
-//  getCellAt(start,nodeStart);
-//  getCellAt(end,nodeEnd);
-//  list<Dimencion> ans;
-//  auto path = findPath(nodeStart, nodeEnd);
-//  for(auto& node : path){
-//    ans.push_back(tris[node].tri.getCenter());
-//  }
-//  return ans;
-//}
-//
-//void 
-//insertToFind(PathFindNode newNode, list<PathFindNode>& forsearch){
-//  for(auto node = forsearch.begin(); node != forsearch.end(); ++node){
-//    if(node->distanceToGoal+node->distanceOfPath > newNode.distanceToGoal+newNode.distanceOfPath){
-//      forsearch.insert(node,newNode);
-//      return;
-//    }
-//  }
-//  forsearch.push_back(newNode);
-//}
-//
-//
-//vector<uint>
-//NavMesh::findPath(uint start, uint end)
-//{
-//  list<PathFindNode> forsearch;
-//  //node, parent
-//  map<uint,uint> paths;
-//  auto centerStart = CENTER(start);
-//  insertToFind({end,DISTANCE(end),0},forsearch);
-//  paths.insert({end,-1});
-//  while(forsearch.size()>0){
-//    auto actualAtNode = *forsearch.begin();
-//    auto searchAtID = actualAtNode.id;
-//    if(searchAtID == start){
-//      vector<uint> ans;
-//      uint actualNode = start;
-//      while(actualNode != end){
-//        ans.push_back(actualNode);
-//        actualNode = paths[actualNode];
-//      }
-//      ans.push_back(actualNode);
-//      return ans;
-//    }
-//    auto searchAt = tris[searchAtID];
-//    forsearch.pop_front();
-//    for(auto& node : searchAt.adjacents){
-//      if(paths.find(node.second)==paths.end()){
-//        insertToFind({node.second,DISTANCE(node.second),DISTANCE2(node.second,searchAtID)+actualAtNode.distanceOfPath},forsearch);//forsearch.push_back(node.second);
-//        paths.insert({node.second,searchAtID});
-//      }
-//    }
-//  }
-//}
-
 
 uint 
 NavMesh::goToNewNode(const Dimencion& originalPos,
@@ -245,35 +232,36 @@ NavMesh::goToNewNode(const Dimencion& originalPos,
                      Dimencion& obstacle, 
                      Dimencion& normal)
 {
-  auto prevNodeId = actualNodeId;
-  auto actualNode = tris[actualNodeId];
-  uint side;
-  while(!actualNode.tri.isPointInside(destiny,side)){  
-    auto ref = &actualNode.tri.point1;
-    bool advancing = false;;
-    for(uint i = 0; i<3; ++i){
-      if(Vector2f::intersect(*(ref+i),*(ref+(1+i)%3),originalPos,destiny,obstacle)){
-        advancing = true;
-        if(actualNode.adjacents.find(i) == actualNode.adjacents.end()){
-          normal = actualNode.tri.normalOfEdgeToInside(i);
-          return -1;
-        }
-        if(prevNodeId == actualNode.adjacents[i]){
-          continue;
-        }
-        prevNodeId = actualNodeId;
-        actualNodeId = actualNode.adjacents[i];
-        actualNode = tris[actualNodeId];
-        break;
-      }
-    }
-    if(!advancing){
-      uint ans;
-      getCellAt(destiny,ans);
-      return ans;
-    }
-  }
-  return actualNodeId;
+  //auto prevNodeId = actualNodeId;
+  //auto actualNode = tris[actualNodeId];
+  //uint side;
+  //while(!actualNode.tri.isPointInside(destiny,side)){  
+  //  auto ref = &actualNode.tri.point1;
+  //  bool advancing = false;;
+  //  for(uint i = 0; i<3; ++i){
+  //    if(Vector2f::intersect(*(ref+i),*(ref+(1+i)%3),originalPos,destiny,obstacle)){
+  //      advancing = true;
+  //      if(actualNode.adjacents.find(i) == actualNode.adjacents.end()){
+  //        normal = actualNode.tri.normalOfEdgeToInside(i);
+  //        return -1;
+  //      }
+  //      if(prevNodeId == actualNode.adjacents[i]){
+  //        continue;
+  //      }
+  //      prevNodeId = actualNodeId;
+  //      actualNodeId = actualNode.adjacents[i];
+  //      actualNode = tris[actualNodeId];
+  //      break;
+  //    }
+  //  }
+  //  if(!advancing){
+  //    uint ans;
+  //    getCellAt(destiny,ans);
+  //    return ans;
+  //  }
+  //}
+  //return actualNodeId;
+  return 0;
 }
 
 float sign (Dimencion p1, Dimencion p2, Dimencion p3)
