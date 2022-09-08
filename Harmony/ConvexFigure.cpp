@@ -6,21 +6,23 @@ namespace Harmony
 
 ConvexFigure::ConvexFigure(const Triangle& tri)
 {
-  m_points.resize(3);
-  m_points[0] = tri.point1;
-  m_points[1] = tri.point2;
-  m_points[2] = tri.point3;
-  m_center = tri.m_center;
+  vector<Dimencion> points;
+  points.resize(3);
+  points[0] = tri.point1;
+  points[1] = tri.point2;
+  points[2] = tri.point3;
+  addPoints(points);
 }
 
 void 
 ConvexFigure::operator=(const Triangle& tri)
 {
-  m_points.resize(3);
-  m_points[0] = tri.point1;
-  m_points[1] = tri.point2;
-  m_points[2] = tri.point3;
-  m_center = tri.m_center;
+  vector<Dimencion> points;
+  points.resize(3);
+  points[0] = tri.point1;
+  points[1] = tri.point2;
+  points[2] = tri.point3;
+  addPoints(points);
 }
 
 uint

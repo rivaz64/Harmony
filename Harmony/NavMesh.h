@@ -81,7 +81,7 @@ class NavMesh :
   /**
    * @brief the tris of the navMesh
   */
-  vector<NavMeshNode> m_nodes;
+  map<int,NavMeshNode> m_nodes;
 
 
   map<Pawn*,uint> pawns; 
@@ -89,5 +89,4 @@ class NavMesh :
 };
 
 }
-
 

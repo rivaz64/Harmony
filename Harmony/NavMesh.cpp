@@ -148,35 +148,98 @@ generateTriangulation(const Dimencion& minPoint,
       auto& actualTri = tris[i];
       auto& comparingTri = tris[o];
       if(comparingTri.tri.hasEdge(actualTri.tri.point1,actualTri.tri.point2)){
-        tris[i].adjacents.insert({0,o});
-      }
-      if(comparingTri.tri.hasEdge(actualTri.tri.point2,actualTri.tri.point3)){
         tris[i].adjacents.insert({1,o});
       }
-      if(comparingTri.tri.hasEdge(actualTri.tri.point3,actualTri.tri.point1)){
+      if(comparingTri.tri.hasEdge(actualTri.tri.point2,actualTri.tri.point3)){
         tris[i].adjacents.insert({2,o});
+      }
+      if(comparingTri.tri.hasEdge(actualTri.tri.point3,actualTri.tri.point1)){
+        tris[i].adjacents.insert({3,o});
       }
     }
   }
   return tris;
 }
 
-void
-addTriToFig(int numOfSide, vector<TriangulationNode>& tris,int i,set<uint>& used,NavMeshNode& newNode)
+
+uint 
+findBackLink(uint firstId, map<uint,uint>& adjacents)
 {
-  if(tris[i].adjacents.find(numOfSide) != tris[i].adjacents.end() && 
-     used.find(tris[i].adjacents[numOfSide]) == used.end()){
-    auto& otherTri = tris[tris[i].adjacents[numOfSide]].tri;
-    auto side = otherTri.getSide(tris[i].tri.getCenter());
-    auto thisSide = tris[i].tri.getId(otherTri.getPoint(side));
-    if(otherTri.angle(side)+tris[i].tri.angle(thisSide)>PI) return;
-    thisSide = tris[i].tri.getId(otherTri.getPoint(side%3+1));
-    if(otherTri.angle(side%3+1)+tris[i].tri.angle(thisSide)>PI) return;
-    auto otherPoint = otherTri.getPoint((otherTri.getSide(tris[i].tri.getCenter())+1)%3+1);
-    newNode.fig.addPoint(otherPoint);
-    used.insert(tris[i].adjacents[numOfSide]);
+  for(auto& link : adjacents){
+    if(link.second == firstId){
+      return link.first;
+    }
   }
 }
+
+void 
+disapearTri(NavMesh* nm,vector<TriangulationNode>& tris,int triToDisapear, int integratedTo)
+{
+  auto adjacents = tris[triToDisapear].adjacents;
+  for(auto& adj : adjacents){
+    if(adj.second == integratedTo) continue;
+    auto& otherTri = tris[adj.second];
+    otherTri.adjacents[findBackLink(triToDisapear,otherTri.adjacents)] = integratedTo;
+    if(nm->m_nodes.find(adj.second)!=nm->m_nodes.end()){
+      nm->m_nodes[adj.second].adjacents[findBackLink(triToDisapear,nm->m_nodes[adj.second].adjacents)] = integratedTo;
+    }
+  }
+}
+
+bool
+addTriToFig(NavMesh* nm,int numOfSide, vector<TriangulationNode>& tris,int i,set<uint>& used,NavMeshNode& newNode)
+{
+  auto& thisNode = tris[i];
+  auto& thisAdjacent = thisNode.adjacents;
+  uint otherId = thisAdjacent[numOfSide];
+  if(used.find(otherId) == used.end()){
+    auto& otherNode = tris[otherId];
+    auto& otherTri = otherNode.tri;
+    auto& thisTri = thisNode.tri;
+    
+    auto side = findBackLink(i, otherNode.adjacents);;
+    auto thisSide = thisNode.tri.getId(otherTri.getPoint(side));
+    if(otherTri.angle(side)+thisNode.tri.angle(thisSide)>PI) return false;
+    thisSide = thisNode.tri.getId(otherTri.getPoint(side%3+1));
+    if(otherTri.angle(side%3+1)+thisNode.tri.angle(thisSide)>PI) return false;
+    auto otherPoint = otherTri.getPoint((otherTri.getSide(thisNode.tri.getCenter())+1)%3+1);
+    newNode.fig.addPoint(otherPoint);
+    used.insert(otherId);
+    disapearTri(nm,tris,otherId,i);
+    return true;
+  }
+  return false;
+}
+
+void
+mergeNode(NavMesh* nm,int numOfSide, vector<TriangulationNode>& tris,int i,set<uint>& used,NavMeshNode& newNode,uint& actualSide)
+{
+  if(tris[i].adjacents.find(numOfSide) != tris[i].adjacents.end()){
+    auto& otherAdjacents = tris[tris[i].adjacents[numOfSide]].adjacents;
+    if(addTriToFig(nm,numOfSide,tris,i,used,newNode)){
+  
+      uint backLink = findBackLink(i, otherAdjacents);
+      backLink = backLink%3+1;
+      if(otherAdjacents.find(backLink) != otherAdjacents.end())
+      newNode.adjacents.insert({actualSide,otherAdjacents[backLink]});
+      ++actualSide;
+  
+      backLink = backLink%3+1;
+      if(otherAdjacents.find(backLink) != otherAdjacents.end())
+      newNode.adjacents.insert({actualSide,otherAdjacents[backLink]});
+      ++actualSide;
+    }
+    else{
+      newNode.adjacents.insert({actualSide,tris[i].adjacents[numOfSide]});
+      ++actualSide;
+    }
+  }
+  else{
+    ++actualSide;
+  }
+}
+
+
 
 void
 NavMesh::generate(const Dimencion& minPoint, 
@@ -189,13 +252,15 @@ NavMesh::generate(const Dimencion& minPoint,
     if(used.find(i) != used.end()) continue;
     NavMeshNode newNode;
     newNode.fig = tris[i].tri;
-    newNode.adjacents = tris[i].adjacents;
     used.insert(i);
-    addTriToFig(1,tris,i,used,newNode);
-    addTriToFig(2,tris,i,used,newNode);
-    addTriToFig(3,tris,i,used,newNode);
+    vector<uint> newAdjacents;
+    uint actualSide = 0;
+
+    mergeNode(this,1,tris,i,used,newNode,actualSide);
+    mergeNode(this,2,tris,i,used,newNode,actualSide);
+    mergeNode(this,3,tris,i,used,newNode,actualSide);
     
-    m_nodes.push_back(newNode);
+    m_nodes.insert({i,newNode});
   }
 }
 
@@ -204,9 +269,9 @@ NavMesh::getCellAt(const Dimencion& point, uint& nodeId)
 {
   auto numOfNodes = m_nodes.size();
   uint side;
-  for(uint i=0; i<numOfNodes; ++i){
-    if(m_nodes[i].fig.isPointInside(point,side)){
-      nodeId = i;
+  for(auto node: m_nodes){
+    if(node.second.fig.isPointInside(point,side)){
+      nodeId = node.first;
       return true;
     }
   }
@@ -297,4 +362,3 @@ NavMesh::update(float deltaTime)
 }
 
 }
-
