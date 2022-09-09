@@ -51,5 +51,23 @@ Hexagon::getSide(const Dimencion& point) const
   }
 }
 
+vector<Dimencion> 
+Hexagon::getPoints()
+{
+  float externRadius = m_radius*2.f/sqrt(3);
+  return {m_center+Dimencion(externRadius,0),
+          m_center+Dimencion(externRadius*cos(PI/3.f),externRadius*sin(PI/3.f)),
+          m_center+Dimencion(externRadius*cos(2.f*PI/3.f),externRadius*sin(2.f*PI/3.f)),
+          m_center+Dimencion(-externRadius,0),
+          m_center+Dimencion(externRadius*cos(4.f*PI/3.f),externRadius*sin(4.f*PI/3.f)),
+          m_center+Dimencion(externRadius*cos(5.f*PI/3.f),externRadius*sin(5.f*PI/3.f))};
+}
+
+vector<Triangle*> 
+Hexagon::triangulate()
+{
+  return {};
+}
+
 
 }

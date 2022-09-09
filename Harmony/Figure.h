@@ -35,6 +35,12 @@ class Figure
   getCenter() const{
     return m_center;
   }
+
+  virtual vector<Dimencion>
+  getPoints() {return {};}
+
+  virtual vector<Triangle*>
+  triangulate() {return {};}
  
  protected:
   /**

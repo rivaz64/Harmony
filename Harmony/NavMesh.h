@@ -25,14 +25,12 @@ class NavMesh :
 
   /**
    * @brief generates the navmesh 
-   * @param minPoint the minpoint of the box for generating the navmesh
-   * @param maxPoint the maxpoint of the box for generating the navmesh
+   * @param area is the area to take in consideration when generating the nav mesh
    * @param obstacles the places the pawn can not be
   */
   void
-  generate(const Dimencion& minPoint, 
-           const Dimencion& maxPoint, 
-           const vector<vector<Dimencion>>& obstacles);
+  generate(Figure* area, 
+           const vector<Figure*>& obstacles);
 
   bool
   getCellAt(const Dimencion& point,uint& nodeId) override;

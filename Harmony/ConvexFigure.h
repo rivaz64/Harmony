@@ -24,6 +24,14 @@ class ConvexFigure :
   isPointInside(const Dimencion& point, uint& side) const override;
 
   inline void
+  deletePoint(const Dimencion& point)
+  {
+    m_points.erase(find(m_points.begin(),m_points.end(),point));
+    calcCenter();
+    orderPoints();
+  }
+
+  inline void
   addPoint(const Dimencion& point)
   {
     m_points.push_back(point);
@@ -39,6 +47,11 @@ class ConvexFigure :
     orderPoints();
   }
 
+  vector<Dimencion>
+  getPoints() override
+  {
+    return m_points;
+  }
  protected:
   
   /**

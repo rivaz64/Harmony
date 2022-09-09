@@ -99,6 +99,12 @@ class Triangle :
     return (1*(point1==n))+(2*(point2==n))+(3*(point3==n));
   }
 
+  vector<Dimencion>
+  getPoints() override;
+
+  vector<Triangle*>
+  triangulate() override;
+
  public:
   
   Dimencion point1;

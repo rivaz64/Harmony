@@ -47,6 +47,12 @@ class Hexagon :
     return m_radius;
   }
 
+  vector<Dimencion>
+  getPoints() override;
+
+  vector<Triangle*>
+  triangulate() override;
+
  private:
 
   /**

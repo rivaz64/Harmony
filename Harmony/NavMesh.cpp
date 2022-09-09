@@ -3,6 +3,8 @@
 #include "VectorUtilities.h"
 #include "Controler.h"
 #include "Triangle.h"
+#include "Figure.h"
+#include "ConvexFigure.h"
 
 namespace Harmony{
 
@@ -89,19 +91,20 @@ delauniTriangulation(const vector<Dimencion>& points, vector<Triangle>& tris)
 
 
 bool
-isPointInFig(const Dimencion& tri,const vector<Dimencion>& fig){
-  return find(fig.begin(),fig.end(),tri) != fig.end();
+isPointInFig(const Dimencion& tri, Figure* fig){
+  auto points = fig->getPoints();
+  return find(points.begin(),points.end(),tri) != points.end();
 }
 
 bool
-isTriInFig(const Triangle& tri,const vector<Dimencion>& fig){
+isTriInFig(const Triangle& tri, Figure* fig){
   return isPointInFig(tri.point1,fig) &&
          isPointInFig(tri.point2,fig) &&
          isPointInFig(tri.point3,fig);
 }
 
 bool
-isTriInFigs(const Triangle& tri,const vector<vector<Dimencion>>& figs){
+isTriInFigs(const Triangle& tri,const vector<Figure*>& figs){
   for(auto& fig : figs){
     if(isTriInFig(tri,fig)){
       return true;
@@ -111,26 +114,30 @@ isTriInFigs(const Triangle& tri,const vector<vector<Dimencion>>& figs){
 }
 
 vector<TriangulationNode>
-generateTriangulation(const Dimencion& minPoint, 
-                      const Dimencion& maxPoint, 
-                      const vector<vector<Dimencion>>& obstacles)
+generateTriangulation(Figure* area, 
+                      const vector<Figure*>& obstacles)
 {
   vector<TriangulationNode> tris;
   vector<Dimencion> points;
   vector<Triangle> triangulation;
+
   uint numOfPoints = 0;
   for(auto& obstacle : obstacles){
-    numOfPoints += obstacle.size();
+    numOfPoints += obstacle->getPoints().size();
   }
   uint actualPoints = 0;
   points.resize(numOfPoints);
   for(auto& obstacle : obstacles){
-    uint numOfPointsInObstacle = obstacle.size();
-    memcpy(points.data()+actualPoints,obstacle.data(),sizeof(Dimencion)*numOfPointsInObstacle);
+    uint numOfPointsInObstacle = obstacle->getPoints().size();
+    memcpy(points.data()+actualPoints,obstacle->getPoints().data(),sizeof(Dimencion)*numOfPointsInObstacle);
     actualPoints += numOfPointsInObstacle;
   }
-  triangulation.push_back(Triangle(minPoint,maxPoint,Dimencion(minPoint.x,maxPoint.y)));
-  triangulation.push_back(Triangle(minPoint,maxPoint,Dimencion(maxPoint.x,minPoint.y)));
+
+  auto areaTriangulated = area->triangulate();
+
+  for(auto& areaTri : areaTriangulated){
+    triangulation.push_back(*areaTri);
+  }
 
   delauniTriangulation(points,triangulation);
 
@@ -237,16 +244,26 @@ mergeNode(NavMesh* nm,int numOfSide, vector<TriangulationNode>& tris,int i,set<u
   else{
     ++actualSide;
   }
+
 }
 
-
+void 
+onlyInside(Figure* area, vector<Figure*>& obstacles)
+{
+  for(auto obs : obstacles){
+    auto fig = reinterpret_cast<ConvexFigure*>(obs);
+    auto points = fig->getPoints();
+    for(auto& point : points){
+    
+    }
+  }
+}
 
 void
-NavMesh::generate(const Dimencion& minPoint, 
-           const Dimencion& maxPoint, 
-           const vector<vector<Dimencion>>& obstacles)
+NavMesh::generate(Figure* area, const vector<Figure*>& obstacles)
 {
-  auto tris = generateTriangulation(minPoint,maxPoint,obstacles);
+
+  auto tris = generateTriangulation(area,obstacles);
   set<uint> used;
   for(int i = 0; i<tris.size(); ++i){
     if(used.find(i) != used.end()) continue;

@@ -45,6 +45,12 @@ class Quad :
     return m_radius*2.f;
   }
 
+  vector<Dimencion>
+  getPoints() override;
+
+  vector<Triangle*>
+  triangulate() override;
+
  private:
 
   /**

@@ -162,5 +162,17 @@ Triangle::angle(uint n)
   return angle;
 }
 
+vector<Dimencion> 
+Triangle::getPoints()
+{
+  return {point1,point2,point3};
+}
+
+vector<Triangle*>
+Triangle::triangulate()
+{
+  return {this};
+}
+
 }
 

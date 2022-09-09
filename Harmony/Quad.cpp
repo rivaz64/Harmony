@@ -1,4 +1,5 @@
 #include "Quad.h"
+#include "Triangle.h"
 
 namespace Harmony{
 
@@ -42,6 +43,23 @@ Quad::getSide(const Dimencion& point) const
       return QUAD_SIDE::DOWN;
     }
   }
+}
+
+vector<Dimencion> 
+Quad::getPoints()
+{
+  return {m_center+Dimencion(m_radius,m_radius),
+          m_center+Dimencion(-m_radius,m_radius),
+          m_center+Dimencion(-m_radius,-m_radius),
+          m_center+Dimencion(m_radius,-m_radius)};
+}
+
+vector<Triangle*> 
+Quad::triangulate()
+{
+  auto points = getPoints();
+  return {new Triangle(points[0],points[1],points[2]),
+          new Triangle(points[2],points[3],points[0])};
 }
 
 }
